@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+body {
+    /* background-color: #021024; */
+    max-width: 1440px;
+    width: 80%;
+    
+    margin: 0 auto;
+    border: 1px solid var(--deep-light-blue);
+    overflow-x: hidden;
+}
+body{
+    @apply dark:bg-[#021024] bg-[#5483b3]
+}
+:root {
+      --deep-dark-blue: #021024;
+      --deep-light-blue: #052959;
+      --sky-blue-500: #5483b3;
+      --sky-blue-300: #7DA0C4;
+      --creamy-white: #C1E8FF;
+  }
+
+@theme{
+    --deep-dark-blue : #021024;
+    --deep-light-blue : #052959;
+    --sky-blue-500 : #5483b3;
+    --sky-blue-300 : #7DA0C4;
+    --creamy-white : #C1E8FF;
+}
+
+.bg-primary{
+    background-color: var(--deep-dark-blue);
+    /* for the body */
+}
+.bg-secondary{
+    /* header aside cards ... */
+    background-color: var(--deep-light-blue);
+}
+.bg-accent-primary{
+    /* buttons  */
+    background-color: var(--sky-blue-500);
+    
+}
+.bg-accent-primary-300{
+    /* buttons  */
+    background-color: var(--sky-blue-500);
+    
+}
+.text-primary{
+    color: var(--creamy-white);
+}
+.text-scondary{
+    color: var(--sky-blue-300);
+}
+.text-accent-primary{
+    color: var(--sky-blue-500);
+}
+
+.nav-link{
+    @apply mb-4 rounded-[4px] hover:bg-[var(--sky-blue-500)] w-full p-2 transition duration-300 ease-in-out;
+}
+
+.input-bg{
+    background-image: url('../icons/loop.svg');
+    background-repeat: no-repeat;
+    background-size: 22px;
+    background-position: 96% center;
+    transition: border 300ms ease-in-out;
+}
+.input-bg:focus{
+    outline: none;
+    border-left: none;
+    border-right: none;
+    
+    border-bottom: 2px solid var(--sky-blue-300);
+    
+
+}
