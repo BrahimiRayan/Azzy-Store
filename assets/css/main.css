@@ -3,61 +3,52 @@
 body {
     /* background-color: #021024; */
     max-width: 1440px;
-    width: 80%;
+    width: 90%;
     
     margin: 0 auto;
-    border: 1px solid var(--deep-light-blue);
+  
     overflow-x: hidden;
 }
-body{
-    @apply dark:bg-[#021024] bg-[#5483b3]
+@media (width<=768px){
+    body{
+        width: 100%;
+    }
+    
 }
 :root {
-      --deep-dark-blue: #021024;
-      --deep-light-blue: #052959;
-      --sky-blue-500: #5483b3;
-      --sky-blue-300: #7DA0C4;
-      --creamy-white: #C1E8FF;
+      --deep-dark-blue: #0f172b;
+      --green-grace: #0bb40b;
+      --creamy-white: #e1e6e9;
   }
 
-@theme{
-    --deep-dark-blue : #021024;
-    --deep-light-blue : #052959;
-    --sky-blue-500 : #5483b3;
-    --sky-blue-300 : #7DA0C4;
-    --creamy-white : #C1E8FF;
+  body{
+    @apply dark:bg-[var(--deep-dark-blue)] bg-[var(--creamy-white)]
 }
-
 .bg-primary{
     background-color: var(--deep-dark-blue);
     /* for the body */
 }
 .bg-secondary{
     /* header aside cards ... */
-    background-color: var(--deep-light-blue);
+    background-color: var(--green-grace);
 }
-.bg-accent-primary{
-    /* buttons  */
-    background-color: var(--sky-blue-500);
-    
+.bg-light-primary{
+    background-color: var(--creamy-white);
 }
-.bg-accent-primary-300{
-    /* buttons  */
-    background-color: var(--sky-blue-500);
-    
-}
+
 .text-primary{
     color: var(--creamy-white);
 }
-.text-scondary{
-    color: var(--sky-blue-300);
+.text-secondary{
+    color : var(--green-grace);
 }
-.text-accent-primary{
-    color: var(--sky-blue-500);
+
+.text-light-primary{
+    color: var(--deep-dark-blue);
 }
 
 .nav-link{
-    @apply mb-4 rounded-[4px] hover:bg-[var(--sky-blue-500)] w-full p-2 transition duration-300 ease-in-out;
+    @apply mb-4 rounded-[4px] hover:bg-[var(--green-grace)] w-full p-2 transition duration-300 ease-in-out;
 }
 
 .input-bg{
@@ -72,7 +63,25 @@ body{
     border-left: none;
     border-right: none;
     
-    border-bottom: 2px solid var(--sky-blue-300);
+    border-bottom: 2px solid var(--green-grace);
     
 
+}
+
+.costumDark , .costumLight{
+    /* position: relative; */
+    border-radius: 11px;
+    display: block;
+    width: 45px;
+    text-align: center;
+    height: 25px;
+    flex-shrink: 0;
+    border: 1px solid var(--creamy-white);
+    background-color: var(--green-grace);
+    transition: border-color .25s !important;
+
+}
+.costumLight{
+    background-color: rgb(255, 255, 255);
+    border: 1px solid var(--deep-dark-blue);
 }

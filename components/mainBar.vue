@@ -1,48 +1,70 @@
 <template>
-    <nav class="flex shadow-xs shadow-blue-600 justify-between w-full mx-auto py-2 px-5">
+    <nav class="sticky top-0 h-[62px] border-b border-amber-50/60 flex items-center backdrop-blur text-primary justify-between w-full mx-auto py-2 px-5">
       <div class="flex gap-8">
         <UButton 
-          :class="[isDark ?'bg-secondary' : 'bg-accent-primary-300']" 
+          :class="[isDark ?'bg-transparent text-secondary font-extrabold' : 'bg-light-primary text-light-primary']" 
           color="neutral" 
           variant="subtle" 
           icon="i-ic-round-menu-open"  
           @click="toggleDrawer"
+          
         />
         <h1>Logo</h1>
       </div>
-      <div>
-        <input
-          type="text"
-          class="p-2 cursor-pointer border-b-2 bg-primary text-primary text-[1rem] indent-1 input-bg w-xs"
-          placeholder="Rechercher un produit"
-        />
-      </div>
-      <ul class="flex gap-4">
-        <li>
+     
+      
+      <Transition name="fade">
+        <ProductSearchBar v-if="$route.path ==='/Produits'" :isDark="isDark"/>
+        
+      </Transition>
+      
+      <ul class="flex items-center gap-8">
+        <li class="border-l border-r px-2.5 light:border-l-black light:border-r-black">
           <USwitch 
             @click="isDark = !isDark"
-            color="neutral"
-            label="dark/light"
+            :color="'neutral'"
             unchecked-icon="i-circum-dark"
             checked-icon="i-circum-light"
-            
+            :class="[isDark ? 'costumDark' : 'costumLight' ]"
+            variant ='outline'
             
             :ui="{
               base: 'bg-red-500',
               icon: isDark ? 'bg-white' : 'bg-black', 
               thumb: !isDark ? 'bg-yellow-500' : 'bg-primary',
-              label: 'text-xs text-center',
-              description : 'bg-yellow-500'
+              label: 'text-xs mt-1 ',
+              
             }"
             size="xl"
           />
+        </li>
+
+        <li>
+          <!-- manipulate the show fieled to when he didn't mark a note as done to be shown -->
+          <USlideover
+           title="Slideover with title"
+           :ui="{
+                content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+            }"
+           >
+            <!-- <UButton label="Open" color="neutral" variant="subtle" /> -->
+              
+          <UChip color="success" :show="true">  
+            <UButton :class="['bg-primary' , 'h-7 w-7 flex  justify-center text-black bg-white dark:text-[var(--green-grace)] dark:bg-transparent border-yellow-400 ']" icon="i-lucide-mail" color="neutral" variant="subtle" />
+          </UChip>
+            <template #body>
+              <Placeholder class="h-full" />
+            </template>
+          </USlideover>
+          
+        
         </li>
       </ul>
     </nav>
   </template>
   
   <script setup lang="ts">
-  
+
   const props = defineProps({
     isOpen: Boolean
   });
@@ -54,15 +76,25 @@
   };
 
   
-  const colorMode = useColorMode()
+const colorMode = useColorMode()
+ const isDark = ref<boolean>(true);
 
-const isDark = computed({
-  get() {
-    return colorMode.value === 'dark'
-  },
-  set() {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-  }
-})
-
+ watch(isDark, (newValue) => {
+    if(newValue) colorMode.value = 'dark';
+    else colorMode.value = 'light'; 
+  });
   </script>
+
+  <style scoped>
+    .fade-enter-active, .fade-leave-active {
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .fade-enter, .fade-leave-to {
+      transition: opacity 0.5s ease-in;
+
+      opacity: 0;
+    }
+    
+
+  </style>
