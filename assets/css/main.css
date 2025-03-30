@@ -1,23 +1,30 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 body {
-    /* background-color: #021024; */
     max-width: 1440px;
-    width: 90%;
-    
+    padding-inline: 5%;
     margin: 0 auto;
-  
     overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+
+}
+::-webkit-scrollbar {
+    display: none;
 }
 @media (width<=768px){
     body{
-        width: 100%;
+        /* width: 100%; */
+        padding-inline: 0;
     }
     
 }
 :root {
       --deep-dark-blue: #0f172b;
-      --green-grace: #0bb40b;
+      --green-grace: #05df72;
       --creamy-white: #e1e6e9;
   }
 

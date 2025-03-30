@@ -1,5 +1,5 @@
 <template>
-    <nav class="sticky top-0 h-[62px] border-b border-amber-50/60 flex items-center backdrop-blur text-primary justify-between w-full mx-auto py-2 px-5">
+    <nav class="sticky z-50 top-0 h-[64px] border-b border-amber-50/60 flex items-center backdrop-blur-md text-primary justify-between w-full mx-auto py-2 px-5">
       <div class="flex gap-8">
         <UButton 
           :class="[isDark ?'bg-transparent text-secondary font-extrabold' : 'bg-light-primary text-light-primary']" 
@@ -42,18 +42,18 @@
         <li>
           <!-- manipulate the show fieled to when he didn't mark a note as done to be shown -->
           <USlideover
-           title="Slideover with title"
+           title="🔔 Mes notes "
+           icon="i-lucide-bell"
            :ui="{
+                overlay: 'bg-black/50',
                 content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
             }"
-           >
-            <!-- <UButton label="Open" color="neutral" variant="subtle" /> -->
-              
+           >   
           <UChip color="success" :show="true">  
             <UButton :class="['bg-primary' , 'h-7 w-7 flex  justify-center text-black bg-white dark:text-[var(--green-grace)] dark:bg-transparent border-yellow-400 ']" icon="i-lucide-mail" color="neutral" variant="subtle" />
           </UChip>
             <template #body>
-              <Placeholder class="h-full" />
+              <NontificationNoteCard />
             </template>
           </USlideover>
           
@@ -64,7 +64,6 @@
   </template>
   
   <script setup lang="ts">
-
   const props = defineProps({
     isOpen: Boolean
   });
