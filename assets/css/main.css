@@ -25,11 +25,14 @@ html {
 :root {
       --deep-dark-blue: #0f172b;
       --green-grace: #05df72;
+      --deep-green: #07ac59;
       --creamy-white: #e1e6e9;
+
+      --pale-moon: #e8ecf2;
   }
 
   body{
-    @apply dark:bg-[var(--deep-dark-blue)] bg-[var(--creamy-white)]
+    @apply dark:bg-[var(--deep-dark-blue)] dark:text-[var(--creamy-white)] bg-[var(--pale-moon)] light:text-[var(--deep-dark-blue)]
 }
 .bg-primary{
     background-color: var(--deep-dark-blue);

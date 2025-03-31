@@ -6,14 +6,15 @@
               :dismissible="true" 
               :overlay="false" 
               :handle="false" 
+
               :ui="{
-                content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+                content: 'bg-[var(--green-grace)] text-[var(--deep-dark-blue)] dark:bg-[var(--deep-dark-blue)] dark:text-[var(--creamy-white)]', 
             }"
         >
             
 
             <template #content>
-             <UButton class="absolute top-0 right-0" color="neutral" :class="['bg-transparent' ,'text-primary' ,'hover:bg-red-600']" variant="solid" icon="i-lucide-x" @click="open = false" />
+             <UButton class="absolute top-1 right-1" color="neutral" :class="['bg-transparent' ,'text-primary' ,'hover:bg-red-600/90' , 'rounded-3xl']" variant="solid" icon="i-lucide-x" @click="open = false" size="sm" />
   
             <div class="w-60 min-h-full size-full m-6 flex flex-col" >
                 <div class="w-[90%] bg-light-primary rounded-2xl self-center flex p-3 items-center">
@@ -25,11 +26,11 @@
                 </div>
 
                 <nav class="flex items-start flex-col justify-around mt-10 h-[300px]">
-                    <NuxtLink class="nav-link" v-for="(route, index) in Routes" :key="index" :to="route.path">
+                    <NuxtLink class="flex items-center w-full py-3 pl-3 rounded-xl dark:hover:bg-[var(--green-grace)]/80 light:hover:bg-[var(--pale-moon)] transition-all duration-350 ease-in-out" v-for="(route, index) in Routes" :key="index" :to="route.path">
                         <UIcon class="mr-5 size-5" :name="route.icon" />
                         {{ route.name }}
                     </NuxtLink>
-                    <NuxtLink class="nav-link" v-if="isAdmin" to="/gestion">
+                    <NuxtLink class="flex items-center w-full py-3 pl-3 rounded-xl dark:hover:bg-[var(--green-grace)]/80 light:hover:bg-[var(--pale-moon)] transition-all duration-350 ease-in-out" v-if="isAdmin" to="/gestion">
                         <UIcon class="mr-5 size-5" name="i-material-symbols-person-outline-rounded" />
                         Gestion des comptes
                     </NuxtLink>

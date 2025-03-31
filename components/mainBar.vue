@@ -1,5 +1,5 @@
 <template>
-    <nav class="sticky z-50 top-0 h-[64px] border-b border-amber-50/60 flex items-center backdrop-blur-md text-primary justify-between w-full mx-auto py-2 px-5">
+    <nav class="sticky z-50 top-0 h-[64px] light:bg-[var(--pale-moon)] dark:bg-[var(--deep-dark-blue)] border-b light:border-black/10 dark:border-white/10 flex items-center text-primary justify-between w-full mx-auto py-2 px-5">
       <div class="flex gap-8">
         <UButton 
           :class="[isDark ?'bg-transparent text-secondary font-extrabold' : 'bg-light-primary text-light-primary']" 
@@ -30,7 +30,7 @@
             
             :ui="{
               base: 'bg-red-500',
-              icon: isDark ? 'bg-white' : 'bg-black', 
+              icon: isDark ? 'bg-white' : 'bg-black ml-[2px] ', 
               thumb: !isDark ? 'bg-yellow-500' : 'bg-primary',
               label: 'text-xs mt-1 ',
               
@@ -46,11 +46,11 @@
            icon="i-lucide-bell"
            :ui="{
                 overlay: 'bg-black/50',
-                content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+                content: 'dark:bg-[var(--deep-dark-blue)] dark:text-[var(--creamy-white)  bg-[var(--green-grace)] text-[var(--deep-dark-blue)]]', 
             }"
            >   
           <UChip color="success" :show="true">  
-            <UButton :class="['bg-primary' , 'h-7 w-7 flex  justify-center text-black bg-white dark:text-[var(--green-grace)] dark:bg-transparent border-yellow-400 ']" icon="i-lucide-mail" color="neutral" variant="subtle" />
+            <UButton :class="['h-7 w-7 flex  justify-center text-black bg-transparent dark:text-[var(--green-grace)] dark:bg-transparent']" icon="i-lucide-mail" color="neutral" variant="subtle" />
           </UChip>
             <template #body>
               <NontificationNoteCard />
