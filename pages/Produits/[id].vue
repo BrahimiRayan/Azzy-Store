@@ -7,8 +7,6 @@
 <script setup lang='ts'>
 import type { chartData } from '~/types/GeneraleT';
 
-
-
   const data : chartData ={
     labels: [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -33,7 +31,6 @@ import type { chartData } from '~/types/GeneraleT';
         data: [0, 0, 0, 0, 0, 1000, 10, 0, 100000, 100000, 100000, 100000],
         borderColor: '#F1C40F',
         backgroundColor: '#F1C40F',
-
     }
     ]
   }  

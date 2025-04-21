@@ -59,13 +59,11 @@
 
 <script setup lang="ts">
 import Toasting from '~/Composables/useMyToast';
+import type { Produit } from '~/types/GeneraleT';
 
-// TODO: FIX props by adding ts
-const props = defineProps({
-  produits: {
-    type: Array,
-  },
-});
+const props = defineProps<{
+  produits : Produit[]
+}>(); 
 
 //variables
 const openSell = ref(false);
