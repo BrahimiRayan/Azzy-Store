@@ -108,10 +108,15 @@ import Toasting from '~/Composables/useMyToast';
 
 const item: BreadcrumbItem[] =
   [
-    {
-      label: 'Produits',
-      icon: 'i-fluent-mdl2-product-variant',
-    },
+  {
+    label: 'Dashboard',
+    icon: 'i-material-symbols-dashboard-outline',
+    to: '/'
+  },
+  {
+    label: 'Produits',
+    icon: 'i-lucide-box',
+  },
   ]
 
 // expanding the card container

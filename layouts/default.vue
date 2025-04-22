@@ -2,6 +2,7 @@
         <MainBar :is-open="open" @update-open="handleDrawerToggle"/>
         <UDrawer 
             v-model:open="open"
+            description="openning menu"
              direction="left"
               :dismissible="true" 
               :overlay="false" 
@@ -12,7 +13,6 @@
             }"
         >
             
-
             <template #content>
              <UButton class="absolute top-1 right-1" color="neutral" :class="['bg-transparent' ,'text-primary' ,'hover:bg-red-600/90' , 'rounded-3xl']" variant="solid" icon="i-lucide-x" @click="open = false" size="sm" />
   
