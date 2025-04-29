@@ -72,8 +72,8 @@ const Routes :route [] = [
             icon : 'i-fluent-mdl2-product-variant'
         },
         {
-            name : 'Commander',
-            path : '/Commander' ,
+            name : 'Commande',
+            path : '/Commande' ,
             icon : 'i-lsicon-order-outline'
         },
         {

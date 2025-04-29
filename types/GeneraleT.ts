@@ -30,5 +30,21 @@ type chartData = {
         backgroundColor: string,
     }[]
 }
+type datasetType = {
+    label: string,
+    data: number[],
+    backgroundColor: string,
+    borderColor: string,
+    borderWidth: number,
+    tension: number,
+    fill?: boolean
 
-export type { Produit , Transaction ,chartData } ;
+  }
+
+
+  type LinechartData = {
+    labels : string[] , 
+    datasets : datasetType[]
+
+  }
+export type { Produit , Transaction ,chartData , LinechartData } ;

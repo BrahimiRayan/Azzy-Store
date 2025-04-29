@@ -7,6 +7,6 @@ export default defineNuxtConfig({
   vite : {
     plugins : [tailwindcss()]
   },
-  modules: ['@nuxt/ui', "@nuxt/image" , 'nuxt-highcharts'],
+  modules: ['@nuxt/ui', "@nuxt/image" ],
 
 })
