@@ -3,8 +3,9 @@
         <div class="lg:w-[90%]">
                 <LineChart :chartData :chartTitle="title"/>
         </div>
-
-        <CommandTabs class="w-full mt-8" />
+        <div class="w-full mt-16">
+                <CommandTabs />
+        </div>
 
 
 </template>
