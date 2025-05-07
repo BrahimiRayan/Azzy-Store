@@ -76,30 +76,68 @@
             <div v-if="formData.length === 0" class="text-center text-sm text-white/60">
               Aucune commande ajoutée
             </div>
+          </div>
         </div>
-      </div>
     </div>
-
+    
 
     </template>
-
+    
     <template #commandHistory="{ item }">
+      
+      <div v-if="cmds.length > 0" class="flex flex-col gap-5">
+        <div class="flex justify-between items-center mb-6">
+          <p class="text-sm">Total des commandes: 
+            <span class="font-bold text-green-500 ml-1">{{ cmds.length }}</span>
+          </p>
+  
+          <URadioGroup orientation="horizontal" v-model="orderChoise" :items="order" />
+        </div>
 
-      <div class="h-30">
+        <div v-for="(item, index) in cmds" :key="index"
+          class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
+          <div class="flex justify-between items-center mb-3">
+            <div>
+              <p class="text-sm">Fournisseur: 
+                <span class="font-bold text-green-500 ml-1">{{ item.fournisseur }}</span>
+              </p>
+              <p class="text-sm">Date: 
+                <span class="font-bold text-green-500 ml-1">{{ item.date }}</span>
+              </p>
+            </div>
+
+            <UButton label="Imprimer" icon="lucide-printer" @click="exportCommand" class="bg-red-500 hover:bg-red-600 font-bold" />
+          </div>
+
+
+          <p class="text-sm my-3">Produits : </p>
+          <div class="flex items-center gap-2">
+              <span v-for="(prod, _ ) in item.produits" :key="prod.id" class="font-bold text-green-500 ml-1 bg-gray-900 px-2 py-1 rounded-lg">
+                {{ prod.name }} <span class="text-xs text-white/90"> x{{ prod.quantity }} </span> </span>
+          </div>
+        </div>
+      </div>
+
+
+      <div v-else class="h-30">
         <p class="text-center text-lg text-white/60">
           Historique des commandes est vide .
         </p>
       </div>
+
+
     </template>
   </UTabs>
 </template>
 
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
+import type { Cammande } from '~/types/GeneraleT';
 const toast = useToast()
-// this from the db
+//TODO: this from the db
 const Products = ref<string[]>(['Backlog', 'Todo', 'In Progress', 'Done'])
 const fournisseur = ref<string>('') ;
+
 interface FormItem {
   product: string;
   quantity: number | 0;
@@ -114,6 +152,8 @@ const AddForm = () => {
   });
 };
 
+
+//TODO: check this function ... 
 function addCommand() {
   let isValid = true;
   let products : FormItem[] = [] ;
@@ -158,7 +198,89 @@ function addCommand() {
 }
 
 
+// commands
+//TODO: get commandes from the db 
 
+const cmds : Cammande[] = [
+{
+  id: 1,
+  date: '2023-10-01',
+  fournisseur: 'Fournisseur A',
+  produits: [
+    {id : 1 , 
+    name : "Produit A", 
+    category : "Alimentaire" ,
+    pua : 12 , 
+    puv : 13 ,
+    quantity : 77 ,
+  },
+  {id : 2 , 
+    name : "Produit B", 
+    category : "Alimentaire" ,
+    pua : 12 , 
+    puv : 13 ,
+    quantity : 203 ,
+  },
+  ]
+},
+{
+  id: 2,
+  date: '2023-10-02',
+  fournisseur: 'Fournisseur B',
+  produits : [
+    {id : 1 , 
+    name : "Produit C", 
+    category : "Alimentaire" ,
+    pua : 12 , 
+    puv : 13 ,
+    quantity : 32 ,
+  },
+  {id : 2 , 
+    name : "Produit D", 
+    category : "Alimentaire" ,
+    pua : 12 , 
+    puv : 13 ,
+    quantity : 19 ,
+  },
+  ]
+}
+
+] 
+
+// order by date 
+import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
+
+
+const order = ref<RadioGroupItem[]>([
+  {
+    label: 'La plus récente',
+    value: 'asc'
+  },
+  {
+    label: 'La plus ancienne',
+    value: 'desc'
+  }
+]);
+
+const orderChoise = ref<RadioGroupValue>('asc');
+// TODO: check IF THIS WAY BETTER OR MAKING A REQUEST TO THE DB IS BETTER
+// order by date
+watch(orderChoise, (newValue) => {
+  if (newValue === 'asc') {
+    cmds.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } else {
+    cmds.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+});
+
+
+
+//TODO: make a function that export the command to pdf
+// export command to pdf
+const exportCommand = () => {
+  console.log('Exporting command...');
+ 
+};
 
 const items = [
   {

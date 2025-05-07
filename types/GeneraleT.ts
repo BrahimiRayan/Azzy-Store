@@ -47,4 +47,11 @@ type datasetType = {
     datasets : datasetType[]
 
   }
-export type { Produit , Transaction ,chartData , LinechartData } ;
+
+  type Cammande = {
+    id : number | string ,
+    date : Date  | string,
+    fournisseur? : string ,
+    produits : Produit[] ,
+  }
+export type { Produit , Transaction ,chartData , LinechartData , Cammande} ;
