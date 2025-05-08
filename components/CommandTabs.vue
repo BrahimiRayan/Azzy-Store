@@ -106,7 +106,7 @@
               </p>
             </div>
 
-            <UButton label="Imprimer" icon="lucide-printer" @click="exportCommand" class="bg-red-500 hover:bg-red-600 font-bold" />
+            <UButton label="Imprimer" icon="lucide-printer" @click="exportCommand(index)" class="bg-red-500 hover:bg-red-600 font-bold" />
           </div>
 
 
@@ -200,7 +200,7 @@ function addCommand() {
 
 // commands
 //TODO: get commandes from the db 
-
+// dumy data ... 
 const cmds : Cammande[] = [
 {
   id: 1,
@@ -210,15 +210,11 @@ const cmds : Cammande[] = [
     {id : 1 , 
     name : "Produit A", 
     category : "Alimentaire" ,
-    pua : 12 , 
-    puv : 13 ,
     quantity : 77 ,
   },
   {id : 2 , 
     name : "Produit B", 
     category : "Alimentaire" ,
-    pua : 12 , 
-    puv : 13 ,
     quantity : 203 ,
   },
   ]
@@ -231,15 +227,11 @@ const cmds : Cammande[] = [
     {id : 1 , 
     name : "Produit C", 
     category : "Alimentaire" ,
-    pua : 12 , 
-    puv : 13 ,
     quantity : 32 ,
   },
   {id : 2 , 
     name : "Produit D", 
     category : "Alimentaire" ,
-    pua : 12 , 
-    puv : 13 ,
     quantity : 19 ,
   },
   ]
@@ -249,6 +241,7 @@ const cmds : Cammande[] = [
 
 // order by date 
 import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
+import { genererPDFCommande } from '~/Utils/exportorderPdf';
 
 
 const order = ref<RadioGroupItem[]>([
@@ -266,20 +259,18 @@ const orderChoise = ref<RadioGroupValue>('asc');
 // TODO: check IF THIS WAY BETTER OR MAKING A REQUEST TO THE DB IS BETTER
 // order by date
 watch(orderChoise, (newValue) => {
-  if (newValue === 'asc') {
-    cmds.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  } else {
-    cmds.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  }
+  if (newValue) {
+    cmds.reverse();
+  } 
 });
 
 
 
 //TODO: make a function that export the command to pdf
 // export command to pdf
-const exportCommand = () => {
+const exportCommand = (index : number) => {
   console.log('Exporting command...');
- 
+  genererPDFCommande(cmds[index]);
 };
 
 const items = [

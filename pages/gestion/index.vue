@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <h1>History</h1>
-    </div>
+        gg
 </template>
     
 <script setup lang='ts'>

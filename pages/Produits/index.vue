@@ -104,7 +104,7 @@ import type { BreadcrumbItem } from '@nuxt/ui';
 import type { Produit } from '~/types/GeneraleT';
 import { Catecolor } from '~/Composables/useTheme';
 import { NormalDateformat } from '~/Utils/dateFormat';
-import Toasting from '~/Composables/useMyToast';
+
 
 const item: BreadcrumbItem[] =
   [
@@ -221,10 +221,18 @@ const produits  = ref<Produit[] | []>( [
     quantity: 100,
   },
 ])
-
+const toast = useToast(); 
 const DownloadCsv = ()=>{
   if(produits.value.length === 0) {
-    Toasting('Problème', 'Aucun produit à exporter', 'error', 'E');
+    toast.add({
+        title: 'Problème',
+        description: 'Aucun produit à exporter',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
     return
   }
   const datas : object[] = [];
@@ -249,7 +257,16 @@ const DownloadCsv = ()=>{
 const DownloadPdf =()=>{
 
   if(produits.value.length === 0) {
-    Toasting('Problème', 'Aucun produit à exporter', 'error', 'E');
+
+    toast.add({
+        title: 'Problème',
+        description: 'Aucun produit à exporter',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
     return
   }
   const datas : object[] = [];

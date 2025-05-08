@@ -48,10 +48,31 @@ type datasetType = {
 
   }
 
+  type ProductOfCommand = {
+    id : number | string ,
+    name : string ,
+    category : category ,
+    quantity : number ,
+  }
+
   type Cammande = {
     id : number | string ,
     date : Date  | string,
     fournisseur? : string ,
-    produits : Produit[] ,
+    produits : ProductOfCommand[] ,
   }
-export type { Produit , Transaction ,chartData , LinechartData , Cammande} ;
+
+  interface shopConfT {
+    name : string,
+    description : string,
+    bg?: string,
+    fb_url? : string,
+    ig_url?: string,
+    phone : string,
+    email : string,
+    address? : string,
+    xcor?: number,
+    ycor? : number
+}
+
+export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT} ;

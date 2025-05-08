@@ -77,9 +77,9 @@ const Routes :route [] = [
             icon : 'i-lsicon-order-outline'
         },
         {
-            name : 'History',
-            path : '/Histoire' , 
-            icon : 'i-material-symbols-light-history-rounded'
+            name : 'Boutique en ligne',
+            path : '/OnlineShop' , 
+            icon : 'i-solar-shop-linear'
         }
 ];
 

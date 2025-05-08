@@ -58,7 +58,6 @@
 
 
 <script setup lang="ts">
-import Toasting from '~/Composables/useMyToast';
 import type { Produit } from '~/types/GeneraleT';
 
 const props = defineProps<{
@@ -75,15 +74,33 @@ const Selleditem = ref<string[]>([]);
     Selleditem.value.push(product.name);
   });
 // functions
+const toast = useToast();
   const submitSelles = ()=>{
     if (product.value === '' || selledQ.value === 0) {
-      Toasting('Erreur', 'Veuillez remplir tous les champs' , 'error' ,'E');
+
+      toast.add({
+        title: 'Erreur',
+        description:'Veuillez remplir tous les champs',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
       return;
     }
     // supabase logic to add the product to the database
     console.log('produit vendu : ', product.value);
     console.log('quantité vendu : ', selledQ.value);
-    Toasting('Succès', 'Operation est bien effectue' , 'success' ,'S');
+    toast.add({
+    title: 'Succès',
+    description: 'Operation est bien effectue',
+    color: 'success',
+    icon: 'lucide-check-circle',
+    ui: {
+      root: 'bg-green-500/90 rounded-lg p-4',
+    },
+  });
     // reset the form
     product.value = '';
     selledQ.value = 0;

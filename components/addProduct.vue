@@ -58,10 +58,8 @@
   </UModal>
 </template>
 
-
-
 <script setup lang="ts">
-import Toasting from '~/Composables/useMyToast';
+
 import type { Produit } from '~/types/GeneraleT';
 const open = ref(false);
 const items = ref(['Autre', 'Alimentaire', 'Electronique', 'Vêtement', 'Meuble', 'Accessoire', 'Beauté', 'Sport', 'Livre']);
@@ -74,15 +72,32 @@ const NewProduct = ref<Produit>({
   puv: 0,
   quantity: 0,
 })
+const toast = useToast();
 const addProduit = () => {
   if (NewProduct.value.name && NewProduct.value.category && NewProduct.value.pua > 0 && NewProduct.value.puv > 0 && NewProduct.value.quantity > 0) {
     console.log('Produit ajouté:', { ...NewProduct.value });
     console.log('name du produit:', NewProduct.value.name);
     resetProduct();
-    Toasting('Succès', 'Produit ajouté avec succès', 'success' , 'S');
+    toast.add({
+    title: 'Succès',
+    description: 'Produit ajouté avec succès',
+    color: 'success',
+    icon: 'lucide-check-circle',
+    ui: {
+      root: 'bg-green-500/90 rounded-lg p-4',
+    },
+  });
   } else {
     console.error('Produit non valide');
-    Toasting('Erreur', 'Produit non valide , svpl remplire les champs restant...', 'error' , 'E');
+    toast.add({
+        title: 'Erreur',
+        description: 'Produit non valide , svpl remplire les champs restant...',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
   }
 }
 

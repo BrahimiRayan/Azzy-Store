@@ -73,7 +73,6 @@
 
 
 <script setup lang="ts">
-import Toasting from '~/Composables/useMyToast';
 import type { Produit } from '~/types/GeneraleT';
 
 // props
@@ -86,7 +85,7 @@ const Bproduct = ref<string>('');
 const BoughtQ = ref<number>(0);
 const pua = ref<number>(0);
 const puv = ref<number>(0);
-
+const toast = useToast();
 const Boughtitems = ref<string[]>([]);
 props.produits?.forEach((product : Produit) => {
   Boughtitems.value.push(product.name);
@@ -94,7 +93,15 @@ props.produits?.forEach((product : Produit) => {
 // functions
 const submitBought = ()=>{
   if (Bproduct.value === '' || BoughtQ.value === 0 || pua.value === 0 || puv.value === 0) {
-    Toasting('Erreur', 'Veuillez remplir tous les champs' , 'error' ,'E');
+    toast.add({
+        title: 'Erreur',
+        description: 'Veuillez remplir tous les champs',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
     return;
   }
 
@@ -105,7 +112,15 @@ const submitBought = ()=>{
   console.log('quantité vendu : ', BoughtQ.value);
   console.log('prix unitaire d\'achat : ', pua.value);
   console.log('prix unitaire de vente : ', puv.value);
-  Toasting('Succès', 'Operation est bien effectue' , 'success' ,'S');
+  toast.add({
+    title: 'Succès',
+    description: 'Operation est bien effectue',
+    color: 'success',
+    icon: 'lucide-check-circle',
+    ui: {
+      root: 'bg-green-500/90 rounded-lg p-4',
+    },
+  });
   // reset the form
   Bproduct.value = '';
   BoughtQ.value = 0;
