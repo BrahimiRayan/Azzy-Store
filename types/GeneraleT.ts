@@ -65,6 +65,8 @@ type datasetType = {
   interface shopConfT {
     name : string,
     description : string,
+    Products : string[],
+    textColor? : string,
     bg?: string,
     fb_url? : string,
     ig_url?: string,
