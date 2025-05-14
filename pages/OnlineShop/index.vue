@@ -8,56 +8,69 @@
            }"
            :overlay="true"
         >
-            <UButton label="Open" color="neutral" variant="subtle" />
+        <div class="flex items-center justify-end my-6">
+
+            <UButton label="Configurer votre boutique" icon="i-vaadin-touch" class="" variant="subtle" />
+        </div>
 
             <template #content>
                 <div>
-                    <h1>Costumer votre boutique ... </h1>
+                    <div class="border border-yellow-500 flex items-center justify-center p-6">
+                        <h1 class="text-xl ">Costumer votre boutique ... </h1>
+                    </div>
 
                     <form>
-                        <div class="flex flex-col gap-5">
-                            <UFormField label="Nom de la boutique" required :ui="{
+                        <div class="flex flex-col gap-5 p-5">
+                            <!-- name  -->
+                            <UFormField label="Nom " required hint="(obligatoire)" :ui="{
                                 label: 'text-white/60',
                             }">
-                                <UInput type="text" placeholder="Nom de la boutique" v-model="shopConfig.name" required class="w-60" />
+                                <UInput type="text" placeholder="Nom de la boutique" v-model="shopConfig.name" required class="w-full" />
                             </UFormField>
-
-                            <UFormField label="Description de la boutique" required :ui="{
+                            <!-- description -->
+                            <UFormField label="Description " hint="(optionel)" :ui="{
                                 label: 'text-white/60',
                             }">
-                                <UInput type="text" placeholder="Description de la boutique" v-model="shopConfig.description" required class="w-60" />
+                                 <UTextarea v-model="shopConfig.description" autoresize class="w-full" placeholder="Description de votre boutique enligne ... "/>
                             </UFormField>
-
-                            <UFormField label="Couleur de fond" required :ui="{
+                            <!-- color picker  -->
+                            <UFormField label="Couleur de fond" hint="(optionel)" :ui="{
                                 label: 'text-white/60',
                             }">
-                                <UInput type="color" placeholder="Couleur de fond" v-model="shopConfig.bg" required class="w-60" />
+                                <UColorPicker v-model="shopConfig.bg" />
+                                
                             </UFormField>
+                            <!-- social urls -->
+                            <h3>Information de contacts : </h3>
+                             <div class="p-4 flex flex-col gap-3">
+                                    <!-- facebook -->
+                                    <UFormField label="Lien Facebook" hint="(optionel)" :ui="{
+                                        label: 'text-white/60',
+                                    }">
+                                        <UInput icon="i-dashicons-facebook" size="md" type="url" placeholder="Facebook URL" v-model="shopConfig.fb_url" class="w-full" />
+                                    </UFormField>
 
-                            <UFormField label="Facebook URL" required :ui="{
-                                label: 'text-white/60',
-                            }">
-                                <UInput type="url" placeholder="Facebook URL" v-model="shopConfig.fb_url" required class="w-60" />
-                            </UFormField>
+                                    <!-- instagram -->
+                                    <UFormField label="Lien Instagram" hint="(optionel)" :ui="{
+                                        label: 'text-white/60',
+                                    }">
+                                        <UInput icon="i-dashicons-instagram" size="md" type="url" placeholder="Instagram URL" v-model="shopConfig.ig_url" class="w-full" />
+                                    </UFormField>
 
-                            <UFormField label="Instagram URL" required :ui="{
-                                label: 'text-white/60',
-                            }">
-                                <UInput type="url" placeholder="Instagram URL" v-model="shopConfig.ig_url" required class="w-60" />
-                            </UFormField>
+                                    <UFormField label="Téléphone" required hint="(obligatoire)" :ui="{
+                                        label: 'text-white/60',
+                                    }">
+                                        <UInput icon="i-proicons-phone" size="md" type="tel" placeholder="Téléphone" v-model="shopConfig.phone" required class="w-full" />
+                                    </UFormField>
 
-                            <UFormField label="Téléphone" required :ui="{
-                                label: 'text-white/60',
-                            }">
-                                <UInput type="tel" placeholder="Téléphone" v-model="shopConfig.phone" required class="w-60" />
-                            </UFormField>
+                                    <UFormField label="Email de contact" required hint="(obligatoire)" :ui="{
+                                        label: 'text-white/60',
+                                    }">
+                                        <UInput icon="i-dashicons-email-alt" size-md type="email" placeholder="Email de boutique" v-model="shopConfig.email" required class="w-full" />
+                                    </UFormField>
 
-                            <UFormField label="Email de contact" required :ui="{
-                                label: 'text-white/60',
-                            }">
-                                <UInput type="email" placeholder="Email de contact" v-model="shopConfig.email" required class="w-60" />
-                            </UFormField>
-
+                             </div>
+                            
                             <UFormField label="Adresse de la boutique (Google Maps)" required :ui="{ 
                                 label: 'text-white/60',
                              }">
