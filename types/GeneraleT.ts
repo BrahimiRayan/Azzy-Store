@@ -62,10 +62,14 @@ type datasetType = {
     produits : ProductOfCommand[] ,
   }
 
+  type card_t = "A" | "B" | "C" | "D";
+
   interface shopConfT {
     name : string,
     description : string,
     Products : string[],
+    livraison : boolean,
+    cardType? : card_t, 
     textColor? : string,
     bg?: string,
     fb_url? : string,
@@ -77,4 +81,4 @@ type datasetType = {
     ycor? : number
 }
 
-export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT} ;
+export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t} ;
