@@ -67,6 +67,7 @@ type datasetType = {
   interface shopConfT {
     name : string,
     description : string,
+    logo? : string,
     Products : string[],
     livraison : boolean,
     cardType? : card_t, 

@@ -7,7 +7,7 @@
         }" :overlay="true">
             <div class="flex items-center ml-auto my-6 w-max">
 
-                <UButton label="Configurer votre boutique" icon="i-vaadin-touch" variant="subtle" class="border"/>
+                <UButton label="Configurer votre boutique" icon="i-vaadin-touch" variant="subtle" class="border bg-green-500/80"/>
             </div>
 
             <template #content>
@@ -56,7 +56,7 @@
                         <div class="flex flex-col gap-5 p-5">
 
                             <USeparator label=" Apperence de boutique" class="w-ful text-green-500" :ui="{
-                                label: 'border border-green-500 p-2 rounded-xl',
+                                label: 'border-2 border-green-500 p-2 rounded-xl',
                             }" icon="i-simple-icons-nuxtdotjs" />
                             <!-- name  -->
                             <UFormField label="Nom " required hint="(obligatoire)" :ui="{
@@ -118,7 +118,7 @@
                             </UFormField>
                             <!-- social urls -->
                             <USeparator label="Information de contacts " class="w-ful text-green-500" :ui="{
-                                label: 'border border-green-500 p-2 rounded-xl',
+                                label: 'border-2 border-green-500 p-2 rounded-xl',
                             }" />
 
                             <div class="p-4 flex flex-col gap-3">
@@ -156,7 +156,7 @@
                             </div>
 
                             <USeparator label="Localisation " class="w-ful text-green-500" :ui="{
-                                label: 'border border-green-500 p-2 rounded-xl',
+                                label: 'border-2 border-green-500 p-2 rounded-xl',
                             }" />
 
                             <UFormField label="Adresse de la boutique (Google Maps)" hint="(optionel)" :ui="{
@@ -234,7 +234,7 @@ const ProductsList = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
 const ismap = ref(false);
 
 const shopConfig = ref<shopConfT>({
-    name: '',
+    name: 'generic shop',
     description: '',
     Products: ["product1", "product2", "product3"],
     livraison: false,
