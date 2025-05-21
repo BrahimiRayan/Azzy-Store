@@ -7,7 +7,7 @@
         }" :overlay="true">
             <div class="flex items-center ml-auto my-6 w-max">
 
-                <UButton label="Configurer votre boutique" icon="i-vaadin-touch" variant="subtle" class="border bg-green-500/80"/>
+                <UButton label="Configurer votre boutique" icon="i-vaadin-touch" variant="subtle" class="border"/>
             </div>
 
             <template #content>
@@ -221,6 +221,7 @@ import desing2 from '~/assets/pics/design2.png';
 import desing3 from '~/assets/pics/design3.png';
 import desing4 from '~/assets/pics/design4.png';
 
+
 const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
   { value: 'A', label: 'Option A' , src : desing1},
   { value: 'B', label: 'Option B' , src : desing2},
@@ -254,10 +255,10 @@ const shopConfig = ref<shopConfT>({
 
 const fetchedConf = ref<shopConfT>({
     name: 'My Shop',
-    description: 'This is my shop',
+    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam odio modi delectus dolores aliquid voluptas aperiam molestias rerum laboriosam. Pariatur accusantium magni placeat libero enim odio soluta tempore quasi ad!',
     Products: ["product1", "product2", "product3", "product4"],
     livraison: true,
-    cardType : "B",
+    cardType : "A",
     bg: '#4563f1',
     fb_url: 'https://facebook.com/myshop',
     ig_url: 'https://instagram.com/myshop',

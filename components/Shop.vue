@@ -1,5 +1,5 @@
 <template>
-    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ; --text-color: ${conf.textColor};`" class="wrapper rounded-xl p-5 border">
+    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ; --text-color: ${conf.textColor}; --bg-pub : ${conf.bg}B3 ;`" class="wrapper rounded-xl p-5 border">
         
         <div v-if="conf.logo" class="flex justify-center">
             <img :src="conf.logo" alt="logo" class="w-1/2 h-auto"/>
@@ -29,7 +29,7 @@
 
     <main>
         <!-- pub -->
-        <section class="wrapper grid grid-cols-2 place-items-center gap-5 my-12 border h-120 w-[80%] mx-auto rounded-xl">
+        <section class="PubColor grid grid-cols-2 place-items-center gap-5 my-12 border h-120 w-[80%] mx-auto rounded-xl">
             <!-- carosel and description-->
              <div class="w-[100%] ml-5">
                 <h2 class="logo font-extrabold text-6xl mb-10 ml-4">{{ conf.name }}</h2>
@@ -40,7 +40,7 @@
                  <UCarousel
                     v-slot="{ item }"
                     loop
-                    :autoplay="{ delay: 2000 }"
+                    :autoplay="{ delay: 5000 }"
                     :items="ProdPics"
                     :ui="{}"
                 >
@@ -50,10 +50,17 @@
         </section>
 
         <section>
-            <div id="products_holder">
-                <div v-for="product in conf.Products">
-                    <div v-if="conf.cardType ==='A' ">
-                        <!-- A TYPE COMPONENET -->
+            <h2 class="logo font-extrabold text-6xl mb-10 ml-4">Nos produits</h2>
+            <div id="products_holder" class="grid grid-cols-3 gap-5">
+                <div v-for="product in Products"  :key="product.id">
+                    <div v-if="conf.cardType ==='A'" >
+                        <CardsTypeA 
+                            :product="product"
+                            :fb="conf.fb_url"
+                            :ig="conf.ig_url"
+                            :email="conf.email"
+                            :phone="conf.phone"
+                        />
                     </div>
 
                     <div v-else-if="conf.cardType ==='B'">
@@ -72,7 +79,7 @@
         </section>
     </main>
 
-    <footer class="flex items-center justify-between mt-10">
+    <footer class="flex items-center justify-between mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bg};`">
         <div>
             <h2>Nos contacts</h2>
         <ul>
@@ -86,6 +93,7 @@
         
         <div v-if="conf.xcor !== 0 && conf.ycor !==0">
             <div id="map">
+                
                 <!-- map from leflet -->
             </div>
 
@@ -104,7 +112,8 @@
 </template>
     
 <script setup lang='ts'>
-import type { shopConfT } from '~/types/GeneraleT';
+import type { Produit, shopConfT } from '~/types/GeneraleT';
+
 
     defineProps<{
         conf :shopConfT,
@@ -118,9 +127,50 @@ import type { shopConfT } from '~/types/GeneraleT';
   'https://picsum.photos/468/468?random=5',
   'https://picsum.photos/468/468?random=6'
 ]
+
+
+//TODO: find a way to get the products using conf.products ... 
+const Products : Produit[] = [
+    {
+        id: 1,
+        name: 'Product 1',
+        img: 'https://picsum.photos/468/468?random=1',
+        category: 'Accessoire',
+        pua: 10,
+        puv: 10,
+        quantity: 10,
+    },
+    {
+        id: 2,
+        name: 'Product 2',
+        img: 'https://picsum.photos/468/468?random=2',
+        category: 'Accessoire',
+        pua: 20,
+        puv: 20,
+        quantity: 20,
+    },
+    {
+        id: 3,
+        name: 'Product 3',
+        img: 'https://picsum.photos/468/468?random=3',
+        category: 'Accessoire',
+        pua: 30,
+        puv: 30,
+        quantity: 30,
+    },
+    {
+        id: 4,
+        name: 'Product 4',
+        img: 'https://picsum.photos/468/468?random=4',
+        category: 'Accessoire',
+        pua: 40,
+        puv: 40,
+        quantity: 40,
+    },]
+        
 </script>
 
-<style scooped>
+<style scoped>
 
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
@@ -136,5 +186,9 @@ import type { shopConfT } from '~/types/GeneraleT';
 
     .wrapper{
         background-color: var(--bg-color);
+    }
+
+    .PubColor{
+        background-color: var(--bg-pub);
     }
 </style>
