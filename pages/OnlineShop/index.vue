@@ -206,7 +206,7 @@
         </USlideover>
     </div>
 
-    <Shop :conf="shopConfig"/>
+    <Shop :conf="shopConfig" :shopProd="shopProd"/>
     
 </template>
 
@@ -215,7 +215,7 @@
 // make a check function for the shop name max 2 words 32 caracters.
 
 
-import type { card_t, shopConfT } from '~/types/GeneraleT';
+import type { card_t, Produit, shopConfT } from '~/types/GeneraleT';
 import desing1 from '~/assets/pics/design1.png';
 import desing2 from '~/assets/pics/design2.png';
 import desing3 from '~/assets/pics/design3.png';
@@ -231,13 +231,84 @@ const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
 
 
 
-const ProductsList = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
+const ProductsList = ref<string[]>([])
+
+//TODO: fetch the products from the server
+const ProductsL =ref<Produit[]>([
+    {
+            id: 1,
+            name: 'Product 1',
+            img: 'https://picsum.photos/468/468?random=1',
+            category: 'Accessoire',
+            pua: 10,
+            puv: 10,
+            quantity: 10,
+        },
+        {
+            id: 2,
+            name: 'Product 2',
+            img: 'https://picsum.photos/468/468?random=2',
+            category: 'Accessoire',
+            pua: 10,
+            puv: 10,
+            quantity: 10,
+        },
+        {
+            id: 3,
+            name: 'Product 3',
+            img: 'https://picsum.photos/468/468?random=3',
+            category: 'Accessoire',
+            pua: 10,
+            puv: 10,
+            quantity: 10,
+        },
+        {
+            id: 4,
+            name: 'Product 4',
+            img: 'https://picsum.photos/468/468?random=4',
+            category: 'Accessoire',
+            pua: 10,
+            puv: 10,
+            quantity: 10,
+        },
+        {
+            id: 5,
+            name: 'Product 5',
+            img: 'https://picsum.photos/468/468?random=5',
+            category: 'Accessoire',
+            pua: 10,
+            puv: 10,
+            quantity: 10,
+        },
+        {
+            id: 6,
+            name: 'Product 6',
+            img: 'https://picsum.photos/468/468?random=6',
+            category: 'Accessoire',
+            pua: 10,
+            puv: 10,
+            quantity: 10,
+        },
+   ]
+)
+// TODO: find a way to get the products using conf.products ...
+ProductsList.value = ProductsL.value.map((product) : string => {
+    return product.name;
+});
+
+
+//
+
+
+// const Products = ref<Produit[]>(ProductsL.value.map((product : Produit) => {
+    
+// }));
 const ismap = ref(false);
 
 const shopConfig = ref<shopConfT>({
     name: 'generic shop',
     description: '',
-    Products: ["product1", "product2", "product3"],
+    Products: [],
     livraison: false,
     cardType : "B",
     bg: '',
@@ -252,11 +323,11 @@ const shopConfig = ref<shopConfT>({
 });
 
 
-
+//TODO: fetch the shop config from the server
 const fetchedConf = ref<shopConfT>({
     name: 'My Shop',
     description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam odio modi delectus dolores aliquid voluptas aperiam molestias rerum laboriosam. Pariatur accusantium magni placeat libero enim odio soluta tempore quasi ad!',
-    Products: ["product1", "product2", "product3", "product4"],
+    Products: ['Product 1', 'Product 2', 'Product 3', 'Product 4'],
     livraison: true,
     cardType : "A",
     bg: '#4563f1',
@@ -269,6 +340,25 @@ const fetchedConf = ref<shopConfT>({
     ycor: -7.223453,
 });
 
+
+// the products that will be shown in the shop ... 
+const shopProd = ref<Produit[]>([]);
+
+// Update shopProd using filter fixes my code and i think that niether forEach nor map will work here
+// because i need to filter the products based on the selected products in the shopConfig
+// and then update the shopProd with the filtered products
+const updateShopProd = () => {
+  shopProd.value = ProductsL.value.filter(product => 
+    shopConfig.value.Products.includes(product.name)
+);
+}
+
+// Proper watcher with getter function
+watch(() => shopConfig.value.Products, (newVal) => {
+  console.log('Products updated:', newVal);
+  updateShopProd();
+}, { immediate: true });
+
 const selectedOption = ref(fetchedConf.value?.cardType || "A");
 
 const selectOption = (value : card_t) => {
@@ -279,6 +369,14 @@ const selectOption = (value : card_t) => {
 watch( selectedOption , (newval)=>{
     shopConfig.value.cardType = newval ;
 })
+
+watch(shopConfig.value.Products, (newVal) => {
+        if (newVal) {
+            console.log('Products updated:', newVal);
+            // Update the shopProd based on the selected products
+
+        }
+    }, { immediate: true });
 
 const SubmitConfig = ()=>{
     console.log(shopConfig.value)

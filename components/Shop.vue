@@ -1,5 +1,5 @@
 <template>
-    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ; --text-color: ${conf.textColor}; --bg-pub : ${conf.bg}B3 ;`" class="wrapper rounded-xl p-5 border">
+    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ;--bg-card :${conf.bg}50 ; --text-color: ${conf.textColor}; --bg-pub : ${conf.bg}B3 ;`" class="wrapper rounded-xl p-5 border">
         
         <div v-if="conf.logo" class="flex justify-center">
             <img :src="conf.logo" alt="logo" class="w-1/2 h-auto"/>
@@ -50,9 +50,9 @@
         </section>
 
         <section>
-            <h2 class="logo font-extrabold text-6xl mb-10 ml-4">Nos produits</h2>
+            <h2 class="logo font-extrabold text-6xl mb-10 ml-4 underline">Nos produits</h2>
             <div id="products_holder" class="grid grid-cols-3 gap-5">
-                <div v-for="product in Products"  :key="product.id">
+                <div v-for="product in shopProd"  :key="product.id">
                     <div v-if="conf.cardType ==='A'" >
                         <CardsTypeA 
                             :product="product"
@@ -60,15 +60,38 @@
                             :ig="conf.ig_url"
                             :email="conf.email"
                             :phone="conf.phone"
+                            :address="conf.address"
+                            :shipping="conf.livraison"
+                            :style="`--font-style: 'Great Vibes', cursive;`"
                         />
                     </div>
 
                     <div v-else-if="conf.cardType ==='B'">
                         <!-- B TYPE COMPONENET -->
+                        <CardsTypeB 
+                            :product="product"
+                            :fb="conf.fb_url"
+                            :ig="conf.ig_url"
+                            :email="conf.email"
+                            :phone="conf.phone"
+                            :address="conf.address"
+                            :shipping="conf.livraison"
+                            :style="`--font-style: 'Great Vibes', cursive;`"
+                        />    
                     </div>
 
                     <div v-else-if="conf.cardType ==='C' ">
                         <!-- C TYPE COMPONENET -->
+                         <CardsTypeC 
+                            :product="product"
+                            :fb="conf.fb_url"
+                            :ig="conf.ig_url"
+                            :email="conf.email"
+                            :phone="conf.phone"
+                            :address="conf.address"
+                            :shipping="conf.livraison"
+                            :style="`--font-style: 'Great Vibes', cursive;`"
+                        />    
                     </div>
 
                     <div v-else-if="conf.cardType ==='D' ">
@@ -115,8 +138,9 @@
 import type { Produit, shopConfT } from '~/types/GeneraleT';
 
 
-    defineProps<{
+    const props = defineProps<{
         conf :shopConfT,
+        shopProd : Produit[],
     }>()
 
     const ProdPics = [
@@ -130,44 +154,9 @@ import type { Produit, shopConfT } from '~/types/GeneraleT';
 
 
 //TODO: find a way to get the products using conf.products ... 
-const Products : Produit[] = [
-    {
-        id: 1,
-        name: 'Product 1',
-        img: 'https://picsum.photos/468/468?random=1',
-        category: 'Accessoire',
-        pua: 10,
-        puv: 10,
-        quantity: 10,
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        img: 'https://picsum.photos/468/468?random=2',
-        category: 'Accessoire',
-        pua: 20,
-        puv: 20,
-        quantity: 20,
-    },
-    {
-        id: 3,
-        name: 'Product 3',
-        img: 'https://picsum.photos/468/468?random=3',
-        category: 'Accessoire',
-        pua: 30,
-        puv: 30,
-        quantity: 30,
-    },
-    {
-        id: 4,
-        name: 'Product 4',
-        img: 'https://picsum.photos/468/468?random=4',
-        category: 'Accessoire',
-        pua: 40,
-        puv: 40,
-        quantity: 40,
-    },]
+
         
+    
 </script>
 
 <style scoped>
@@ -180,8 +169,8 @@ const Products : Produit[] = [
     }
 
     .logo{
-         font-family: "Great Vibes", cursive;
-            font-style: normal;
+        font-family: "Great Vibes", cursive;
+        font-style: normal;
     }
 
     .wrapper{
@@ -190,5 +179,8 @@ const Products : Produit[] = [
 
     .PubColor{
         background-color: var(--bg-pub);
+    }
+    .CardColor{
+        background-color: var(--bg-card);
     }
 </style>

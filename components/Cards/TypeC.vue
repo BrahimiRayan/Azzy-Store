@@ -1,13 +1,11 @@
 <template>
-        <div class="border-2 rounded-lg p-4 flex flex-col items-center CardColor relative shadow-lg shadow-black/80 hover:shadow-white/50 transition-all duration-300 ease-in-out">
-            <div class="w-[100px] h-[100px] bg-white absolute right-0 top-0 rotate-12 -z-10" 
+        <div class="border-2 rounded-lg p-4 flex flex-col items-center CardColor relative shadow-lg shadow-black/80 hover:shadow-white/50 transition-all duration-300 ease-in-out" >
+            <div class="w-[100px] h-[100px] bg-white absolute right-0 bottom-50 rotate-12 -z-10" 
                 style="clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);">
 
             </div>
-            <div class="w-max p-2 self-start font-[--font-style] flex items-center gap-2">
-                <UIcon name="i-grommet-icons-money" class="text-md text-yellow-400" />
-                <p class="text-[11px]"><span class="text-2xl font-extrabold ">{{ product.puv }}</span> DZD</p>
-            </div>
+
+          
 
             <div class="relative">
                 <img v-if="product.img" :src="product.img" :alt="product.name" class="h-[98%] border-2 rounded-md w-[98%] object-center" />
@@ -31,10 +29,15 @@
                 </UModal>
             </div>
 
+
             <div class="mt-4 mb-2">
                 <p class="text-xl font-bold">{{ product.name }}</p>
             </div>
 
+              <div class="w-max p-2 self-start font-[--font-style] flex items-center gap-2">
+                <UIcon name="i-grommet-icons-money" class="text-md text-yellow-400" />
+                <p class="text-[11px]"><span class="text-2xl font-extrabold ">{{ product.puv }}</span> DZD</p>
+            </div>
             <div class="self-start border-t-2 w-full pt-3 ">
                 <p class="font-extrabold flex items-center gap-2"><span class="flex items-center gap-1"><UIcon name="i-carbon-delivery"/> Livraison :</span>
                     <span v-if="shipping" class="bg-green-500 rounded mt-1 text-center px-1 text-sm flex items-center justify-center gap-1"> OUI <UIcon name="i-mdi-check" class="text-white" /></span>
