@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/image": "^1.10.0",
     "@nuxt/ui": "^3.0.2",
+    "@nuxtjs/leaflet": "^1.2.6",
     "chart.js": "^4.4.9",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",

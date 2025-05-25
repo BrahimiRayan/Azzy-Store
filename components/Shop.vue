@@ -122,25 +122,47 @@
         </section>
     </main>
 
-    <footer class="flex items-center justify-between mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bg};`">
+    <footer class="flex items-center overflow-hidden justify-between mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bg};`">
         <div>
-            <h2>Nos contacts</h2>
-        <ul>
-            <li>email</li>
-            <li>phone</li>
-            <li v-if="conf.fb_url">facebook</li>
-            <li v-if="conf.ig_url">Instagram</li>
-        </ul>
+            <p class="logo text-3xl my-3 font-extrabold">{{ conf.name }}</p>
+            <h2 class="py-1 px-2 rounded bg-black/30 w-max">Nos contacts</h2>
+ 
+            <ul class="flex gap-3 align-center justify-center mt-6 mb-3">
+
+                    <li v-if="conf.fb_url">
+                        <a :href="conf.fb_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-[#3b5998] rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                            <UIcon name="i-mdi-facebook" class="text-2xl" />                            
+                        </a>
+                    </li>
+
+                    <li v-if="conf.ig_url">
+                        <a :href="conf.ig_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-400 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
+                           <UIcon name="i-hugeicons-instagram" class="text-2xl" />                                                        
+                        </a>
+                    </li>
+
+                     <li >
+                        <a :href="`mailto:${conf.email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-red-500 to bg-red-700 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
+                           <UIcon name="i-material-symbols-mail" class="text-2xl" />
+                        </a>
+                    </li>
+                </ul>
+
 
         </div>
         
         <div v-if="conf.xcor !== 0 && conf.ycor !==0">
-            <div id="map">
-                
+            
+            <div class=" w-[300px] rounded-2xl border overflow-hidden">
+                <Map 
+                    :xcor="conf.xcor" 
+                    :ycor="conf.ycor" 
+                    :nom="conf.name"
+                />
                 <!-- map from leflet -->
             </div>
 
-            <p v-if="conf.address">
+            <p v-if="conf.address" class="mt-2 text-sm">
                 {{ conf.address }}
             </p>
         </div>
@@ -155,7 +177,6 @@
 </template>
     
 <script setup lang='ts'>
-import Card from '@nuxt/ui/runtime/components/Card.vue';
 import type { Produit, shopConfT } from '~/types/GeneraleT';
 
 
@@ -163,15 +184,6 @@ import type { Produit, shopConfT } from '~/types/GeneraleT';
         conf :shopConfT,
         shopProd : Produit[],
     }>()
-
-//     const ProdPics = [
-//   'https://picsum.photos/468/468?random=1',
-//   'https://picsum.photos/468/468?random=2',
-//   'https://picsum.photos/468/468?random=3',
-//   'https://picsum.photos/468/468?random=4',
-//   'https://picsum.photos/468/468?random=5',
-//   'https://picsum.photos/468/468?random=6'
-// ]
 
 const ProdPics = [
   'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',  // Backpack
