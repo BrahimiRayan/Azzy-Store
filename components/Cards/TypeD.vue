@@ -1,13 +1,38 @@
 <template>
-        <div class="border-2 rounded-lg p-4 flex flex-col items-center CardColor relative shadow-lg shadow-black/80 hover:shadow-white/50 transition-all duration-300 ease-in-out">
-            <div class="w-[100px] h-[100px] bg-white absolute right-0 top-0 rotate-12 -z-10" 
+        <div class="rounded-lg p-4 flex flex-col items-center CardColor relative bg-[var(--deep-dark-blue)] shadow-lg shadow-black/80 hover:shadow-white/50 transition-all duration-300 ease-in-out curve">
+            <div class="w-[100px] h-[100px] bg-white absolute right-0 bottom-0 rotate-12 -z-10" 
                 style="clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);">
 
             </div>
-            <div class="w-max p-2 self-start font-[--font-style] flex items-center gap-2">
-                <UIcon name="i-grommet-icons-money" class="text-md text-yellow-400" />
-                <p class="text-[11px]"><span class="text-2xl font-extrabold ">{{ product.puv }}</span> DZD</p>
-            </div>
+
+
+<div class="flex items-center justify-between w-full mb-3 ">
+
+    <ul class="flex gap-3 items-center">
+
+              <li v-if="fb">
+                  <a :href="fb" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-[#3b5998] rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                      <UIcon name="i-mdi-facebook" class="text-2xl" />                            
+                  </a>
+              </li>
+
+              <li v-if="ig">
+                  <a :href="ig" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-400 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
+                     <UIcon name="i-hugeicons-instagram" class="text-2xl" />                                                        
+                  </a>
+              </li>
+
+               <li >
+                  <a :href="`mailto:${email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-red-500 to bg-red-700 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
+                     <UIcon name="i-material-symbols-mail" class="text-2xl" />
+                  </a>
+              </li>
+    </ul>
+        <div class="w-max p-1 rounded font-[--font-style] flex items-center gap-2 bg-black/30 ">
+            <p class="text-[11px]"><span class="text-lg font-extrabold ">{{ product.puv }}</span> DZD</p>
+            
+        </div>
+</div>
 
             <div class="relative">
                 <img v-if="product.img" :src="product.img" :alt="product.name" class="w-[100%] h-[300px] border-2 rounded-3xl  object-contain" />
@@ -31,10 +56,11 @@
                     </template>
                 </UModal>
             </div>
-
+            
             <div class="mt-4 mb-2">
                 <p class="text-xl font-bold">{{ product.name }}</p>
             </div>
+
 
             <div class="self-start border-t-2 w-full pt-3 ">
                 <p class="font-extrabold flex items-center gap-2"><span class="flex items-center gap-1"><UIcon name="i-carbon-delivery"/> Livraison :</span>
@@ -43,27 +69,8 @@
                 </p>
 
                 <p class="font-extrabold flex items-center gap-2 mb-3" v-if="address"><span class="flex items-center gap-1"><UIcon name="i-entypo-address"/> Addresse :</span> <span class="text-sm">{{ address }}</span></p>
-                <span class="text-sm w-max px-2 py-1 rounded bg-white/10 flex items-center gap-1"><UIcon name="grommet-icons:contact" /> Contactez nous sur</span>
-                <ul class="flex gap-3 align-center justify-center mt-6 mb-3">
-
-                    <li v-if="fb">
-                        <a :href="fb" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-[#3b5998] rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
-                            <UIcon name="i-mdi-facebook" class="text-2xl" />                            
-                        </a>
-                    </li>
-
-                    <li v-if="ig">
-                        <a :href="ig" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-400 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
-                           <UIcon name="i-hugeicons-instagram" class="text-2xl" />                                                        
-                        </a>
-                    </li>
-
-                     <li >
-                        <a :href="`mailto:${email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-red-500 to bg-red-700 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
-                           <UIcon name="i-material-symbols-mail" class="text-2xl" />
-                        </a>
-                    </li>
-                </ul>
+              
+                
 
                     <span class="text-sm font-extrabold w-max px-2 py-1 rounded bg-white/10">OU Appelez nous</span>
                     <div class="mt-6">
@@ -91,7 +98,12 @@ import type { Produit } from '~/types/GeneraleT';
         shipping : boolean,
     }>()
 </script>
-    
-<style>
+      
+<style scoped>
+.curve{
 
+     clip-path: path (M 10,20 L 68,20 A 10,18 0,0,0 70,10 L 70,10 A 10,10 0,0,1 80,0 L 140,0 A 10,10 0,0,1 150,10 L 158,190 A 10,10 0,0,1 148,200 L 10,200 A 10,10 0,0,1 0,190 L 0,30 A 10,10 0,0,1 10,20 Z);
+     overflow: hidden;
+    
+}
 </style>

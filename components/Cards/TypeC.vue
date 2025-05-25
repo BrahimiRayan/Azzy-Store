@@ -8,22 +8,23 @@
           
 
             <div class="relative">
-                <img v-if="product.img" :src="product.img" :alt="product.name" class="h-[98%] border-2 rounded-md w-[98%] object-center" />
+                <img v-if="product.img" :src="product.img" :alt="product.name" class="w-[100%] h-[300px] border-2 rounded-3xl  object-contain" />
                 <UModal  
-
+                 fullscreen
                 :ui="{
                     overlay: 'bg-black/80',
-                    body: 'bg-[var(--deep-dark-blue)] border-none outline-none ',
-                    header: 'bg-[var(--deep-dark-blue)] border border-none ',
+                    body: 'bg-black/10 border-none outline-none ',
+                    header: 'bg-black/90 border border-none ',
                     close : 'bg-red-500 hover:bg-red-600',
-                    content: 'border rounded-sm',
+                    content: 'border-0 rounded-sm',
+                    wrapper:'border-0'
                 }"
                 >
                     <UButton class="absolute bottom-2 right-4 bg-black/60 hover:bg-black/70 text-white" icon="i-majesticons-open"/>
 
                     <template #body>
                         <div class="w-[100%] h-[100%] flex justify-center items-center">
-                            <img v-if="product.img" :src="product.img" :alt="product.name" class="w-[90%]" />
+                            <img v-if="product.img" :src="product.img" :alt="product.name" class="w-[90%] h-[90%] object-contain" />
                         </div>
                     </template>
                 </UModal>

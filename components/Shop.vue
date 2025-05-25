@@ -1,5 +1,5 @@
 <template>
-    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ;--bg-card :${conf.bg}50 ; --text-color: ${conf.textColor}; --bg-pub : ${conf.bg}B3 ;`" class="wrapper rounded-xl p-5 border">
+    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ;--bg-card :${conf.bg}50 ; --text-color: ${conf.textColor}; --bg-pub : ${conf.bg}B3 ; --bg : ${conf.bg}`" class="wrapper rounded-xl p-5 border">
         
         <div v-if="conf.logo" class="flex justify-center">
             <img :src="conf.logo" alt="logo" class="w-1/2 h-auto"/>
@@ -10,18 +10,20 @@
 
         <nav class="flex items-center justify-around gap-10">
             <UInput type="text" icon="i-line-md-search" placeholder="Rechercher ... " 
+                variant="none"
                 :ui="{
-                    base: 'border-white/70 rounded-md placeholder:text-white/60',
+                    base: 'rounded-md placeholder:text-white/60',
+                    root: 'border-2 rounded-lg hover:border-white/60 focus-within:border-white/60 transition-all duration-300 ease-in-out',
                 }"
             />
 
             <ul class="flex items-center gap-3 mr-3">
                 <li>
-                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
+                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
                 </li>
                 
                 <li>
-                    <UButton icon="i-lineicons-phone" label="phone" :to="`tel:${conf.phone}`" class="bg-white/50 hover:bg-blue-500 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
+                    <UButton icon="i-lineicons-phone" label="phone" :to="`tel:${conf.phone}`" class="bg-white/50 hover:bg-blue-500 shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
                 </li>
             </ul>
         </nav>
@@ -35,18 +37,26 @@
                 <h2 class="logo font-extrabold text-6xl mb-10 ml-4">{{ conf.name }}</h2>
                 <p>{{ conf.description }}</p>
                 <address v-if="conf.address" class="border border-white/40 cursor-pointer rounded-xl bg-black/20 p-2 w-max mt-8">{{ conf.address }}</address>
-             </div>
-             <div>
-                 <UCarousel
+            </div>
+                        
+            <div class="border-l-2 border-white/30 border-dashed w-full h-full overflow-hidden flex items-center justify-center ">
+                <UCarousel
                     v-slot="{ item }"
                     loop
                     :autoplay="{ delay: 5000 }"
                     :items="ProdPics"
-                    :ui="{}"
+                    :ui="{ item: 'w-full h-full' }"
                 >
-                    <img :src="item" class="h-[98%] border-4 rounded-2xl w-[98%] object-center" alt="product image" />
+                    <!-- Container to constrain image dimensions -->
+                    <div class="w-full h-full flex items-center justify-center p-1">
+                    <img 
+                        :src="item" 
+                        class="w-[500px] aspect-square object-scale-down rounded-2xl"
+                        alt="product image" 
+                    />
+                    </div>
                 </UCarousel>
-             </div>
+            </div>
         </section>
 
         <section>
@@ -96,6 +106,16 @@
 
                     <div v-else-if="conf.cardType ==='D' ">
                         <!-- D TYPE COMPONENET -->
+                         <CardsTypeD 
+                            :product="product"
+                            :fb="conf.fb_url"
+                            :ig="conf.ig_url"
+                            :email="conf.email"
+                            :phone="conf.phone"
+                            :address="conf.address"
+                            :shipping="conf.livraison"
+                            :style="`--font-style: 'Great Vibes', cursive;`"
+                        />
                     </div>
                 </div>
             </div>
@@ -135,6 +155,7 @@
 </template>
     
 <script setup lang='ts'>
+import Card from '@nuxt/ui/runtime/components/Card.vue';
 import type { Produit, shopConfT } from '~/types/GeneraleT';
 
 
@@ -143,14 +164,23 @@ import type { Produit, shopConfT } from '~/types/GeneraleT';
         shopProd : Produit[],
     }>()
 
-    const ProdPics = [
-  'https://picsum.photos/468/468?random=1',
-  'https://picsum.photos/468/468?random=2',
-  'https://picsum.photos/468/468?random=3',
-  'https://picsum.photos/468/468?random=4',
-  'https://picsum.photos/468/468?random=5',
-  'https://picsum.photos/468/468?random=6'
-]
+//     const ProdPics = [
+//   'https://picsum.photos/468/468?random=1',
+//   'https://picsum.photos/468/468?random=2',
+//   'https://picsum.photos/468/468?random=3',
+//   'https://picsum.photos/468/468?random=4',
+//   'https://picsum.photos/468/468?random=5',
+//   'https://picsum.photos/468/468?random=6'
+// ]
+
+const ProdPics = [
+  'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',  // Backpack
+  'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',  // Shirt
+  'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg',  // Jeans
+  'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',  // Tech
+  'https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_.jpg',  // Jewelry
+  'https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg'  // Electronics
+];
 
 
 //TODO: find a way to get the products using conf.products ... 

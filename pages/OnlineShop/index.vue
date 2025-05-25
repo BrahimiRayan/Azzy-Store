@@ -234,11 +234,18 @@ const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
 const ProductsList = ref<string[]>([])
 
 //TODO: fetch the products from the server
+  
+  
+  
+  
+  
+  
+
 const ProductsL =ref<Produit[]>([
     {
             id: 1,
             name: 'Product 1',
-            img: 'https://picsum.photos/468/468?random=1',
+            img: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',  // Backpack,
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -247,7 +254,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 2,
             name: 'Product 2',
-            img: 'https://picsum.photos/468/468?random=2',
+            img:'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',  // Shirt,
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -256,7 +263,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 3,
             name: 'Product 3',
-            img: 'https://picsum.photos/468/468?random=3',
+            img:'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg',  // Jeans,
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -265,7 +272,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 4,
             name: 'Product 4',
-            img: 'https://picsum.photos/468/468?random=4',
+            img:'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',  // Tech,
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -274,7 +281,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 5,
             name: 'Product 5',
-            img: 'https://picsum.photos/468/468?random=5',
+            img:'https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_.jpg',  // Jewelry,
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -283,7 +290,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 6,
             name: 'Product 6',
-            img: 'https://picsum.photos/468/468?random=6',
+            img:'https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg' ,// Electronics
             category: 'Accessoire',
             pua: 10,
             puv: 10,
