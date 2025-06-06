@@ -63,7 +63,7 @@
                 <UIcon name="i-icon-park-outline-view-list" class=" size-8" />
                 <h2 class="text-purple-500 font-bold my-1 text-xl">Totale Commandes effectuées </h2>
                 <p class="text-purple-400 text-5xl mb-3 font-extrabold">48<span class="text-gray-400 text-xs">Commandes</span></p>
-               <NuxtLink to="/Histoire"><p class="text-purple-400 tracking-wider underline text-sm rounded">voir plus</p></NuxtLink> 
+               <NuxtLink to="/Commande"><p class="text-purple-400 tracking-wider underline text-sm rounded">voir plus</p></NuxtLink> 
             </div>
         </div>
     </div>
