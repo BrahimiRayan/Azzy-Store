@@ -2,11 +2,11 @@
 // and then run `npx drizzle-kit migrate` to apply migrations
 // to the database
 import { sql } from "drizzle-orm";
-import { pgTable, uuid, varchar, timestamp, pgEnum, boolean, date, json, real, integer } from "drizzle-orm/pg-core";
-import type { shopConfT } from "~/types/GeneraleT";
+import { pgTable, uuid, varchar, timestamp, pgEnum, boolean, date, json, real, integer, text } from "drizzle-orm/pg-core";
 
-export const UserTypeEnum = pgEnum("UserType", ["Admin", "Employee"]);
-export const NoteTypeEnum = pgEnum("NoteType", ["Personal", "Work"]);
+
+export const SubTypeEnum = pgEnum("SubType", ["Free", "Premium"]);
+export const NoteTypeEnum = pgEnum("NoteType", ["Important", "Reminder"]);
 export const ProductsTypeEnum = pgEnum("Category", [
   "Alimentaire",
   "Electronique",
@@ -18,72 +18,103 @@ export const ProductsTypeEnum = pgEnum("Category", [
   "Livre",
   "Autre"
 ]);
+export const TransactionTypeEnum = pgEnum("TransactionType", ["A", "V"]);
+export const CardTypeEnum = pgEnum("CardType", ["A", "B", "C", "D"]);
+// Define the schema for the database tables
 
-
-
-export const usersTable = pgTable("users", {
+export const ownersTable = pgTable("owners", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   name: varchar({ length: 255 }).notNull(),
   createdAt: timestamp().defaultNow().notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
+  password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
   phoneNumber: varchar({ length: 20 }).notNull(),
-  type: UserTypeEnum("Employee").notNull().default("Employee"),
+});
 
-  worksfor: uuid().notNull().references(() => shopTable.id, { onDelete: "cascade" }),
+export const shopsTable = pgTable("shops", {
+  id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+  isOnline : boolean().default(false).notNull(),
+  subcreptionType : SubTypeEnum().default("Free").notNull(),
+  idOwner: uuid().notNull().references(() => ownersTable.id, { onDelete: "cascade" }),
+  // shop configuration
+  idConf: uuid().notNull().references(() => shopConfTable.id, { onDelete: "cascade" }),
 });
 
 
-export const shopTable = pgTable("shop", {
+export const employeesTable = pgTable("employees", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-  isPaid: boolean().notNull().default(false),
-})
+  name: varchar({ length: 255 }).notNull(),
+  email: varchar({ length: 255 }).notNull().unique(),
+  password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
+  idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
+  idOwner: uuid().notNull().references(() => ownersTable.id, { onDelete: "cascade" }),
+});
 
-export const userNotesTable = pgTable("user_notes", {
+export const notesTable = pgTable("notes", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   date: date().defaultNow().notNull(),
   title: varchar({ length: 255 }).notNull(),
-  body: varchar({ length: 1000 }).notNull(),
-  type: NoteTypeEnum("Personal").notNull().default("Personal"),
-
-  userId: uuid().notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  content: text().notNull(),
+  type: NoteTypeEnum().default("Important").notNull(),
+  idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
+  idEmployee: uuid().references(() => employeesTable.id, { onDelete: "cascade" }),
+  idOwner: uuid().references(() => ownersTable.id, { onDelete: "cascade" }),
 });
 
-
-const defaultShopConfig: shopConfT = {
-  name: 'generic shop',
-  description: '',
-  Products: [],
-  livraison: false,
-  cardType: "B",
-  bg: '',
-  textColor: '',
-  fb_url: '',
-  ig_url: '',
-  phone: '',
-  email: '',
-  address: '',
-  xcor: 0,
-  ycor: 0,
-}
-
-export const Online_shop = pgTable("online_shop", {
+export const productsTable = pgTable("products", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-  shop_config: json().default(defaultShopConfig).notNull(),// JSON stringified object for shop configuration
-  products: uuid().array().default([]), // JSON stringified array of products
-
+  name: varchar({ length: 255 }).notNull(),
+  image: varchar({ length: 255 }).notNull().default("/no-image.png"),
+  type: ProductsTypeEnum().default("Autre").notNull(),
+  pua : real().notNull(),
+  puv: real().notNull(),
+  qte: integer().notNull(),
+  idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
 });
 
-
-export const ProductsTable = pgTable("Products", {
+export const ordersTable = pgTable("orders", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-  img: varchar({ length: 255 }),
-  categorie : ProductsTypeEnum("Alimentaire").notNull().default("Autre"),
-  pua: real().default(0).notNull(), // prix unitaire d'achat
-  puv: real().default(0).notNull(), // prix unitaire de vente
-  qte_totale: integer().default(0).notNull(), // quantité totale en stock
-
-  store : uuid().notNull().references(() => Online_shop.id, { onDelete: "cascade" }), // reference to the online shop
+  date: date().defaultNow().notNull(),
+  forniseur: varchar({ length: 255 }).default("Unknown"),
+  remarque : text().default(""),
+  idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
 });
 
+export const orderProductsTable = pgTable("order_products", {
+  idOrder: uuid().notNull().references(() => ordersTable.id, { onDelete: "cascade" }),
+  idProduct: uuid().notNull().references(() => productsTable.id, { onDelete: "cascade" }),
+  qte: integer().notNull(),
+}, (table) => ({
+  pk: sql`PRIMARY KEY (${table.idOrder}, ${table.idProduct})` 
+}));
 
 
+export const transactionsTable = pgTable("transactions", {
+  id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+  date: date().defaultNow().notNull(),
+  qte: real().notNull(),
+  type: TransactionTypeEnum().notNull(),
+  pua_t : real().notNull(),
+  puv_t: real().notNull(),
+  idProduct: uuid().notNull().references(() => productsTable.id, { onDelete: "cascade" }),
+  idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
+});
+
+export const shopConfTable = pgTable("shop_conf", {
+  id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+  name: varchar({ length: 255 }).notNull(),
+  description: text().notNull(),
+  products: uuid().array().notNull().default([]),
+  Livrison: boolean().default(false).notNull(),
+  cardtype: CardTypeEnum().default("A").notNull(),
+  textcolor: varchar({ length: 10 }).default("#000000").notNull(),
+  bgColor: varchar({ length: 10 }).default("#ffffff").notNull(),
+  fb_url: varchar({ length: 255 }).default(""),
+  ig_url: varchar({ length: 255 }).default(""),
+  phoneNumber: varchar({ length: 20 }).notNull(),
+  email: varchar({ length: 255 }).notNull(),
+  address: varchar({ length: 255 }),
+  isMap: boolean().default(false).notNull(),
+  xcor: real().default(0).notNull(),
+  ycor: real().default(0).notNull(),
+});
