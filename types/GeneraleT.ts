@@ -82,4 +82,4 @@ type datasetType = {
     ycor? : number
 }
 
-export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t} ;
+export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t , category} ;
