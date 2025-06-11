@@ -37,7 +37,7 @@ export const shopsTable = pgTable("shops", {
   subcreptionType : SubTypeEnum().default("Free").notNull(),
   idOwner: uuid().notNull().references(() => ownersTable.id, { onDelete: "cascade" }),
   // shop configuration
-  idConf: uuid().notNull().references(() => shopConfTable.id, { onDelete: "cascade" }),
+  idConf: uuid().references(() => shopConfTable.id, { onDelete: "cascade" }),
 });
 
 
