@@ -5,7 +5,13 @@ import { ownersTable, productsTable, shopsTable } from "../schema";
 
 export async function getAllOwners() {
   try {
-    const owners = await db.select().from(ownersTable);
+    // const owners = await db.select().from(ownersTable);
+
+    const owners = await db.query.ownersTable.findMany({
+     with : {
+      shop : true,
+     }
+    })
     return owners;
   } catch (error) {
     console.error("Error fetching owners:", error);

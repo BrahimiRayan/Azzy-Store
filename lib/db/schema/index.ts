@@ -1,7 +1,7 @@
 // write schemas then run `npx drizzle-kit generate` to generate migrations
 // and then run `npx drizzle-kit migrate` to apply migrations
 // to the database
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { pgTable, uuid, varchar, timestamp, pgEnum, boolean, date, json, real, integer, text } from "drizzle-orm/pg-core";
 
 
