@@ -1,7 +1,7 @@
 // write schemas then run `npx drizzle-kit generate` to generate migrations
 // and then run `npx drizzle-kit migrate` to apply migrations
 // to the database
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { pgTable, uuid, varchar, timestamp, pgEnum, boolean, date, json, real, integer, text } from "drizzle-orm/pg-core";
 
 
@@ -20,6 +20,7 @@ export const ProductsTypeEnum = pgEnum("Category", [
 ]);
 export const TransactionTypeEnum = pgEnum("TransactionType", ["A", "V"]);
 export const CardTypeEnum = pgEnum("CardType", ["A", "B", "C", "D"]);
+
 // Define the schema for the database tables
 
 export const ownersTable = pgTable("owners", {

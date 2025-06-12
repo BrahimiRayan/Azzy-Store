@@ -2,7 +2,6 @@ import { eq } from "drizzle-orm";
 import { db } from "..";
 import { ownersTable, productsTable, shopsTable } from "../schema";
 
-
 export async function getAllOwners() {
   try {
     // const owners = await db.select().from(ownersTable);
@@ -18,7 +17,6 @@ export async function getAllOwners() {
     throw error;
   }
 }
-
 
 export async function getOwnerById(id: string) {
   try {
