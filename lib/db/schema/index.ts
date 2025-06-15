@@ -89,7 +89,6 @@ export const orderProductsTable = pgTable("order_products", {
   pk: sql`PRIMARY KEY (${table.idOrder}, ${table.idProduct})` 
 }));
 
-
 export const transactionsTable = pgTable("transactions", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   date: date().defaultNow().notNull(),

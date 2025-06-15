@@ -1,3 +1,7 @@
+import type { transactionsTable } from "~/lib/db/schema";
+
+//TODO: DELETE SOME OF THIS AFTER INFERING ALL THE TYPES FROM THE SCHEMA
+export const SHOPID : string = "57c04eba-fcb2-493e-9879-6255b2337d28";
 type category = 'Alimentaire' | 'Electronique' | 'Vêtement' | 'Meuble' | 'Accessoire' | 'Beauté' |'Sport' | 'Livre' | 'Autre';
 
 
@@ -11,15 +15,16 @@ type Produit = {
     quantity : number ,
 }
 
-type Transaction = {
-    id : number | string ,
-    idProduct : number | string ,
-    date : Date ,
-    quantity : number ,
-    type : string ,
-    pua : number ,
-    puv : number ,
-}
+// type Transaction = {
+//     id : number | string ,
+//     idProduct : number | string ,
+//     date : Date ,
+//     quantity : number ,
+//     type : string ,
+//     pua : number ,
+//     puv : number ,
+// }
+type Transaction = typeof transactionsTable.$inferSelect;
 
 type chartData = {
     labels: string[],
