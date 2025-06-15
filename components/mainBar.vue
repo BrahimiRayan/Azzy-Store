@@ -23,11 +23,12 @@
           <!-- manipulate the show fieled to when he didn't mark a note as done to be shown -->
           <USlideover
            title="🔔 Mes notes "
-           
+             description="Ajouter, supprimer et voir les notes définies par les employés du magasin"
            icon="i-lucide-bell"
            :ui="{
                 overlay: 'bg-black/50',
-                content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+                content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]',
+                description : 'hidden' 
             }"
            >    
             <UButton :class="['h-8 w-8 flex hover:shadow-sm hover:-translate-y-1 shadow-green-500 justify-center bg-transparent text-[var(--green-grace)] transition-all duration-300 ease-in-out']" icon="i-lucide-mail" color="neutral" variant="subtle" />

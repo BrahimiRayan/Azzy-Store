@@ -1,9 +1,15 @@
 <template>
+    <UBreadcrumb :items="item" class="my-8" />
     <div>
-        <USlideover :ui="{
+        <USlideover 
+        title="controle panel"
+        description="controle panel of your online shop"
+        :ui="{
             body: 'bg-[var(--deep-dark-blue)]',
             content: 'bg-[var(--deep-dark-blue)] overflow-y-auto',
             overlay: 'bg-black/50',
+            description: 'hidden',
+            title: 'hidden'
         }" :overlay="true">
             <div class="flex items-center ml-auto my-6 w-max">
 
@@ -220,7 +226,19 @@ import desing1 from '~/assets/pics/design1.png';
 import desing2 from '~/assets/pics/design2.png';
 import desing3 from '~/assets/pics/design3.png';
 import desing4 from '~/assets/pics/design4.png';
-
+import type { BreadcrumbItem } from '@nuxt/ui';
+const item: BreadcrumbItem[] =
+[
+        {
+                label: 'Dashboard',
+                icon: 'i-material-symbols-dashboard-outline',
+                to: '/'
+        },
+        {
+                label: 'Boutique en ligne',
+                icon: 'i-solar-shop-linear',
+        },
+]
 
 const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
   { value: 'A', label: 'Option A' , src : desing1},
@@ -234,18 +252,12 @@ const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
 const ProductsList = ref<string[]>([])
 
 //TODO: fetch the products from the server
-  
-  
-  
-  
-  
-  
 
 const ProductsL =ref<Produit[]>([
     {
             id: 1,
             name: 'Product 1',
-            img: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',  // Backpack,
+            img: 'https://picsum.photos/200/300',
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -254,7 +266,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 2,
             name: 'Product 2',
-            img:'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',  // Shirt,
+            img:'https://picsum.photos/200/300',  // Shirt,
             category: 'Accessoire',
             pua: 10,
             puv: 10,
@@ -263,8 +275,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 3,
             name: 'Product 3',
-            img:'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg',  // Jeans,
-            category: 'Accessoire',
+            img:'https://picsum.photos/200/300',        category: 'Accessoire',
             pua: 10,
             puv: 10,
             quantity: 10,
@@ -272,8 +283,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 4,
             name: 'Product 4',
-            img:'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',  // Tech,
-            category: 'Accessoire',
+            img:'https://picsum.photos/200/300',       category: 'Accessoire',
             pua: 10,
             puv: 10,
             quantity: 10,
@@ -281,8 +291,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 5,
             name: 'Product 5',
-            img:'https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_.jpg',  // Jewelry,
-            category: 'Accessoire',
+            img:'https://picsum.photos/200/300',          category: 'Accessoire',
             pua: 10,
             puv: 10,
             quantity: 10,
@@ -290,7 +299,7 @@ const ProductsL =ref<Produit[]>([
         {
             id: 6,
             name: 'Product 6',
-            img:'https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg' ,// Electronics
+            img:'https://picsum.photos/200/300',
             category: 'Accessoire',
             pua: 10,
             puv: 10,

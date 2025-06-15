@@ -1,15 +1,18 @@
 <template>
         <MainBar :is-open="open" @update-open="handleDrawerToggle"/>
         <UDrawer 
+            title="aside" 
+            description="links to other routes"
             v-model:open="open"
-            description="openning menu"
              direction="left"
               :dismissible="true" 
               :overlay="false" 
               :handle="false" 
-
+            
               :ui="{
                 content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+                description:'hidden',
+                title:'hidden'
             }"
         >
             
