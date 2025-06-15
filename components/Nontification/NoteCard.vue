@@ -2,7 +2,7 @@
         <div class="h-full ">
             <!-- Add a note modal -->
             <UModal
-             v-model:open="open"
+             v-model="open"
               title="Rediger une note"
               description="Remplissez les champs ci-dessous pour ajouter une note"
               :overlay='true'
