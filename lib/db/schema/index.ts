@@ -20,6 +20,7 @@ export const ProductsTypeEnum = pgEnum("Category", [
 ]);
 export const TransactionTypeEnum = pgEnum("TransactionType", ["A", "V"]);
 export const CardTypeEnum = pgEnum("CardType", ["A", "B", "C", "D"]);
+
 // Define the schema for the database tables
 
 export const ownersTable = pgTable("owners", {
@@ -87,7 +88,6 @@ export const orderProductsTable = pgTable("order_products", {
 }, (table) => ({
   pk: sql`PRIMARY KEY (${table.idOrder}, ${table.idProduct})` 
 }));
-
 
 export const transactionsTable = pgTable("transactions", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),

@@ -34,7 +34,8 @@
                 class="h-48 border-2 border-[rgba(239,68,68,0.5)] rounded-xl bg-[var(--deep-dark-blue)]  transition-all duration-300 hover:shadow-[0_0_40px_rgba(239,68,68,0.5)] hover:scale-105 flex flex-col items-center justify-center">
                 <UIcon name="i-vaadin-stock" class=" size-8" />
                 <h2 class="text-red-500 font-bold my-2 text-xl">Totale produits en Stock</h2>
-                <p class="text-red-400 text-5xl mb-3 font-extrabold">3664 <span class="text-gray-400 text-xs">produits</span></p>
+                <!-- <img src="/public/spiner.gif" alt="" class="w-10 h-10 mb-2" v-if="pending" /> -->
+                <p class="text-red-400 text-5xl mb-3 font-extrabold">{{ prod?.products.length }} <span class="text-gray-400 text-xs">produits</span></p>
                 
             </div>
 
@@ -68,3 +69,9 @@
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+
+const {data : prod , pending} = useFetch("/api/products", {lazy: true});
+
+</script>

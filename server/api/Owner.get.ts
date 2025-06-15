@@ -1,4 +1,4 @@
-import { getAllOwners } from "~/lib/db/quieries/test"
+import { getAllOwners } from "~/lib/db/queries"
 
 export default defineEventHandler(async (event) => {
     const owners = await getAllOwners() ;
