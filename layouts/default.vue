@@ -67,7 +67,7 @@ const isAdmin = ref(true);
 const Routes :route [] = [
         {
             name : 'Dashboard',
-            path : '/',
+            path : '/Dashboard',
             icon : 'i-material-symbols-dashboard-outline'
         },
         {

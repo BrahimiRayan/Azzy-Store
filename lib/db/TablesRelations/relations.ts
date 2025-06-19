@@ -1,9 +1,9 @@
 // Relations 
 
 import { relations } from "drizzle-orm";
-import { employeesTable, notesTable, orderProductsTable, ordersTable, ownersTable, productsTable, shopConfTable, shopsTable, transactionsTable } from "../schema";
-
-export const ownersRelations = relations(ownersTable , ({one , many})=>{
+import { employeesTable, notesTable, orderProductsTable, ordersTable, productsTable, shopConfTable, shopsTable, transactionsTable } from "../schema";
+import { user } from "../schema/auth-schema"; 
+export const ownersRelations = relations(user , ({one , many})=>{
   return {
     shop : one(shopsTable) , 
     notes : many(notesTable),
@@ -13,7 +13,7 @@ export const ownersRelations = relations(ownersTable , ({one , many})=>{
 
 export const shopsRelations = relations(shopsTable, ({ one, many }) => {
   return {
-    owner: one(ownersTable, { fields: [shopsTable.idOwner], references: [ownersTable.id] }),
+    owner: one(user, { fields: [shopsTable.idOwner], references: [user.id] }),
     employees: many(employeesTable),
     notes: many(notesTable),
     products: many(productsTable),
@@ -25,7 +25,7 @@ export const shopsRelations = relations(shopsTable, ({ one, many }) => {
 
 export const employeesRelations = relations(employeesTable, ({ one , many}) => {
   return {
-    owner: one(ownersTable, { fields: [employeesTable.idOwner], references: [ownersTable.id] }),
+    owner: one(user, { fields: [employeesTable.idOwner], references: [user.id] }),
     shop: one(shopsTable, { fields: [employeesTable.idShop], references: [shopsTable.id] }),
     notes: many(notesTable),
   };
@@ -35,7 +35,7 @@ export const notesRelations = relations(notesTable, ({ one }) => {
   return {
     shop: one(shopsTable, { fields: [notesTable.idShop], references: [shopsTable.id] }),
     employee: one(employeesTable, { fields: [notesTable.idEmployee], references: [employeesTable.id] }),
-    owner: one(ownersTable, { fields: [notesTable.idOwner], references: [ownersTable.id] }),
+    owner: one(user, { fields: [notesTable.idOwner], references: [user.id] }),
   };
 });
 
