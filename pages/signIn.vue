@@ -35,7 +35,7 @@
               id="remember-me"
               name="remember-me"
               type="checkbox"
-              v-model="rememberMe"
+              v-model="form.rememberMe"
               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             >
             <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
@@ -55,8 +55,8 @@
           <span v-else>Signing in...</span>
         </button>
 
-        <div v-if="error" class="text-red-500 text-sm mt-2 text-center">
-          {{ error }}
+        <div v-if="errorSignin" class="text-red-500 text-sm mt-2 text-center">
+          {{ errorSignin }}
         </div>
       </form>
 
@@ -85,38 +85,55 @@
 <script setup lang="ts">
 import { hash } from 'bcryptjs';
 import { authClient } from '~/lib/auth/auth-client';
+import IsValidateSignIn from '~/Utils/validations/signInValidator';
 
 const form = reactive({
   email: '',
-  password: ''
+  password: '',
+  rememberMe : false
 });
 
 const loading = ref(false);
-const error = ref('');
-const rememberMe = ref(false);
+const errorSignin = ref('');
+// const rememberMe = ref<boolean>(false);
 
 async function handleLogin() {
   loading.value = true;
-  error.value = '';
-   console.log('Form data:', form);
-//    const hashedPassword = await hash(form.password , 10);
+  errorSignin.value = '';
+  
   try {
-   const {data , error} = await authClient.signIn.email({
-        email : form.email,
-        password: form.password,
-        callbackURL: "/dashboard",
-        rememberMe: false
-})
-    if (error) {
-        console.error('Sign-in error:', error);
-    }else {
-        console.log('Sign-in successful:', data);
+    
+    if (!IsValidateSignIn(form)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Bad request: All fields must be filled and valid'
+      });
     }
-    // Redirect to dashboard on success
-    await navigateTo('/dashboard');
-  } catch (err : any) {
-    error.value = err.message || 'Invalid email or password';
-    console.error('Login error:', err);
+
+    
+    const { data, error } = await authClient.signIn.email({
+      email: form.email,
+      password: form.password,
+      callbackURL: "/dashboard",
+      rememberMe: form.rememberMe        
+    });
+
+    if (error || !data?.user) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Invalid email or password'
+      });
+    }
+
+    
+    const shop = await $fetch(`/api/shop/${data.user.id}`);
+    console.log(shop)
+    // 4. Redirect to dashboard (using navigateTo)
+    return await navigateTo('/dashboard'); // 'return' prevents code continuing
+
+  } catch (err: any) {
+    errorSignin.value = err.statusMessage || err.message || 'Login failed';
+    console.error('Login error:', err); // Log for debugging
   } finally {
     loading.value = false;
   }

@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import { authClient } from '~/lib/auth/auth-client';
 import { hash } from 'bcryptjs';
-import IsValidateSignIn from '../Utils/validations/signinValidator'
+import IsValidateSignUp from '../Utils/validations/signUpValidator'
 const form = reactive({
   name: '',
   email: '',
@@ -76,37 +76,45 @@ const form = reactive({
 
 const loading = ref(false);
 const error = ref('');
-
 async function handleSignUp() {
   loading.value = true;
   error.value = '';
-  if(!IsValidateSignIn(form)){
-    throw createError({
-      statusCode : 400,
-      statusMessage : "Bad request , tout les champs doivent etre remplissent ou valide"
-    })
-  };
 
-  // const hashedPassword = await hash(form.password , 10);
+  if (!IsValidateSignUp(form)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad request, tous les champs doivent être remplis et valides"
+    });
+  }
 
   try {
-  await authClient.signUp.email({
+    // first i Sign up the user
+    const { data } = await authClient.signUp.email({
       email: form.email,
       password: form.password,
       name: form.name,
       callbackURL: "/dashboard",
-      fetchOptions: {
-        onError(context) {
-          error.value = context.error.message;
-        },
-        onSuccess() {
-          loading.value = false;
-          useRouter().push("/dashboard");
-        },
-		  },
     });
-  }catch(err){
-    console.log(err)
+
+    if (!data?.user?.id) {
+      throw new Error("User creation failed");
+    }
+
+    // then i'll Create the store after checking 
+    const shop = await $fetch('/api/shop/create', { 
+      method: 'POST',
+      body: {
+        userId: data.user.id,
+      },
+    });
+    console.log(shop)
+    // 3. Redirect only AFTER store is created
+    useRouter().push("/dashboard");
+  } catch (err : any) {
+    error.value = err.message || "Signup failed";
+    console.error("Signup error:", err);
+  } finally {
+    loading.value = false;
   }
 }
 </script>
