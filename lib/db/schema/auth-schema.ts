@@ -13,7 +13,7 @@ export const user = pgTable("user", {
 });
 
 export const session = pgTable("session", {
-	id: text('id').primaryKey(),
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	expiresAt: timestamp('expires_at').notNull(),
 	token: text('token').notNull().unique(),
 	createdAt: timestamp('created_at').notNull(),
@@ -24,7 +24,7 @@ export const session = pgTable("session", {
 });
 
 export const account = pgTable("account", {
-	id: text().primaryKey(),
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	accountId: text().notNull(),
 	providerId: text().notNull(),
 	userId: uuid().notNull().references(()=> user.id, { onDelete: 'cascade' }),
@@ -40,7 +40,7 @@ export const account = pgTable("account", {
 });
 
 export const verification = pgTable("verification", {
-	id: text().primaryKey(),
+	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	identifier: text().notNull(),
 	value: text().notNull(),
 	expiresAt: timestamp().notNull(),

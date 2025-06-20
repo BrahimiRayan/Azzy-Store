@@ -6,37 +6,40 @@
            </div>
 
                 <ul class="flex items-center gap-3">
-                        <Nuxtlink>
+                        <NuxtLink >
                         <li>
                                 <p>somthing</p>
                         </li>
-                        </Nuxtlink>
+                        </NuxtLink >
 
-                        <Nuxtlink>
+                        <NuxtLink >
                         <li>
                                 <p>somthing</p>
                         </li>
-                        </Nuxtlink>
+                        </NuxtLink >
 
-                        <Nuxtlink>
+                        <NuxtLink >
                         <li>
                         <p>somthing</p>
                         </li>
-                        </Nuxtlink>
+                        </NuxtLink >
                 </ul>
    </div>
 
       <div class="flex items-center gap-3">
         <p>github link</p>
-        <NuxtLink to="/Dashboard" class="bg-green-500 p-2 text-xs text-black">sign in/up</NuxtLink>
+        <NuxtLink v-if="session.data" to="/dashboard" class="bg-green-500 p-2 rounded-xl text-xs text-black">Mon dashboard ({{ session.data?.user.name }})</NuxtLink >
+        
+        <NuxtLink v-else to="/signIn" class="bg-green-500 p-2 rounded-xl text-xs text-black">sign in/up</NuxtLink >
       </div>
+
 </header>
 
         <slot />
 </template>
 
 <script setup lang='ts'>
+import { authClient } from '~/lib/auth/auth-client';
 
+const session = authClient.useSession()
 </script>
-
-<style></style>

@@ -2,6 +2,7 @@
 definePageMeta({
   layout: 'comercial',
 })
+
 </script>
 
 <template>
@@ -9,5 +10,7 @@ definePageMeta({
       <p class="text-[100px] ">
           BLAH BLAH BLAH...
       </p>
+
+      
   </div>
 </template>
