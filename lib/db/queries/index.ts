@@ -2,6 +2,7 @@ import { and, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "..";
 import { ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
+import { error } from "console";
 // owners
 export async function getAllOwners() {
   try {
@@ -34,6 +35,20 @@ export async function getOwnerById(id: string) {
 }
 
 // shops
+
+export async function createUserShopOnSignUp(userId : string){
+  if(!userId){
+    throw createError({
+      status : 400,
+      statusMessage : 'Bad request, userID not found'
+    })
+  }
+  const shop = await db.insert(shopsTable).values({
+            idOwner : userId
+        }).returning()
+
+  return shop
+}
 
 export async function getAllShops(){
     try{

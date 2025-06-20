@@ -42,13 +42,14 @@
                         </NuxtLink>
                     </div>
 
-                    <UButton
+                    <NuxtLink
+                        to="/logOut"
                         class="bg-red-500 hover:bg-red-600 rounded-xl p-2 w-full"
-                        @click="handelLogout"
+                        @click=""
                     >
                         <UIcon class="mr-2 size-5" name="i-material-symbols-logout" />
                         Log out
-                    </UButton>
+                    </NuxtLink>
                 </nav>
             </div>
             
@@ -111,9 +112,6 @@ const Currentroute = useRoute();
     
 const session = authClient.useSession();
 
-async function handelLogout(){
-    await authClient.signOut();
-}
     
     
 </script>
