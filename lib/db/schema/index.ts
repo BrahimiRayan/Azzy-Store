@@ -2,7 +2,11 @@
 // and then run `npx drizzle-kit migrate` to apply migrations
 // to the database
 import { sql } from "drizzle-orm";
-import { pgTable, uuid, varchar, timestamp, pgEnum, boolean, date, json, real, integer, text } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, pgEnum, boolean, date, json, real, integer, text } from "drizzle-orm/pg-core";
+import { user } from "./auth-schema";
+export * from "./auth-schema"
+
+
 
 
 export const SubTypeEnum = pgEnum("SubType", ["Free", "Premium"]);
@@ -23,20 +27,20 @@ export const CardTypeEnum = pgEnum("CardType", ["A", "B", "C", "D"]);
 
 // Define the schema for the database tables
 
-export const ownersTable = pgTable("owners", {
-  id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-  name: varchar({ length: 255 }).notNull(),
-  createdAt: timestamp().defaultNow().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
-  password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
-  phoneNumber: varchar({ length: 20 }).notNull(),
-});
+// export const ownersTable = pgTable("owners", {
+//   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
+//   name: varchar({ length: 255 }).notNull(),
+//   createdAt: timestamp().defaultNow().notNull(),
+//   email: varchar({ length: 255 }).notNull().unique(),
+//   password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
+//   phoneNumber: varchar({ length: 20 }).notNull(),
+// });
 
 export const shopsTable = pgTable("shops", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   isOnline : boolean().default(false).notNull(),
   subcreptionType : SubTypeEnum().default("Free").notNull(),
-  idOwner: uuid().notNull().references(() => ownersTable.id, { onDelete: "cascade" }),
+  idOwner: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
   // shop configuration
   idConf: uuid().references(() => shopConfTable.id, { onDelete: "cascade" }),
 });
@@ -48,7 +52,7 @@ export const employeesTable = pgTable("employees", {
   email: varchar({ length: 255 }).notNull().unique(),
   password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
   idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
-  idOwner: uuid().notNull().references(() => ownersTable.id, { onDelete: "cascade" }),
+  idOwner: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
 });
 
 export const notesTable = pgTable("notes", {
@@ -59,7 +63,7 @@ export const notesTable = pgTable("notes", {
   type: NoteTypeEnum().default("Important").notNull(),
   idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
   idEmployee: uuid().references(() => employeesTable.id, { onDelete: "cascade" }),
-  idOwner: uuid().references(() => ownersTable.id, { onDelete: "cascade" }),
+  idOwner: uuid().references(() => user.id, { onDelete: "cascade" }),
 });
 
 export const productsTable = pgTable("products", {

@@ -1,12 +1,13 @@
 import { and, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "..";
-import { ordersTable, ownersTable, productsTable, shopsTable, transactionsTable } from "../schema";
+import { ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
+import { user } from "../schema/auth-schema";
 // owners
 export async function getAllOwners() {
   try {
-    // const owners = await db.select().from(ownersTable);
+    // const owners = await db.select().from(user);
 
-    const owners = await db.query.ownersTable.findMany({
+    const owners = await db.query.user.findMany({
      with : {
       shop : true,
      }
@@ -20,7 +21,7 @@ export async function getAllOwners() {
 
 export async function getOwnerById(id: string) {
   try {
-    const [owner] = await db.select().from(ownersTable).where(eq(ownersTable.id, id)).limit(1);
+    const [owner] = await db.select().from(user).where(eq(user.id, id)).limit(1);
     if (!owner) {
         throw new Error(`Owner with ID ${id} not found`);
     }
