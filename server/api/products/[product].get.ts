@@ -7,6 +7,13 @@ export default defineEventHandler(async (event)=>{
     }
     const product = await getProductByid(id);
 
+    if(product === undefined || product === null){
+        throw createError({
+            statusCode : 404,
+            statusMessage : "Products not found ..."
+        })
+    }
+
     return {
         product : product
     }

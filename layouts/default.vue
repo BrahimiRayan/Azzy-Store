@@ -109,7 +109,6 @@ const handleDrawerToggle = (newValue:boolean) => {
 };
 
 const Currentroute = useRoute();
-    
 const session = authClient.useSession();
 
     

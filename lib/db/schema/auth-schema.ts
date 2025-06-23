@@ -8,6 +8,7 @@ export const user = pgTable("user", {
 	email: text().notNull().unique(),
 	emailVerified: boolean().$defaultFn(() => false).notNull(),
 	image: text(),
+	shopId: uuid("shop_id"),
 	createdAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
 	updatedAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date()).notNull()
 });

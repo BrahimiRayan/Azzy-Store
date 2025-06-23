@@ -1,6 +1,8 @@
 <template>
   <div class="mt-8">
-    <UBreadcrumb :items="item" class="mb-8 " />
+
+    <h1>{{ session.data?.user.shopId}}</h1>
+    <UBreadcrumb :items="item" class="mb-8 "/>
 
     <USeparator class="text-[var(--green-grace)] w-xl mt-10 mx-auto " label="Statistiques des ventes et achats"
       :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
@@ -33,7 +35,13 @@
 
 // the breadcrumb item  
 import type { BreadcrumbItem } from '@nuxt/ui';
+import type { Session } from 'better-auth';
+import { authClient } from '~/lib/auth/auth-client';
 import type { chartData } from '~/types/GeneraleT';
+
+//TODO: FIX THE TYPE LATER
+const session : any = authClient.useSession() ;
+
 const item: BreadcrumbItem[] =
   [
     {
