@@ -83,7 +83,6 @@
 </template>
 
 <script setup lang="ts">
-import { hash } from 'bcryptjs';
 import { authClient } from '~/lib/auth/auth-client';
 import IsValidateSignIn from '~/Utils/validations/signInValidator';
 

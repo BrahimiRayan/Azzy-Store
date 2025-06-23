@@ -1,10 +1,17 @@
-// import { getAllProducts } from "~/lib/db/queries";
-// import { SHOPID } from "~/types/GeneraleT";
+import { auth } from "~/lib/auth";
+import { getAllProducts } from "~/lib/db/queries";
 
-// export default defineEventHandler(async (event)=>{
+export default defineEventHandler(async (event)=>{
+    const session = await auth.api.getSession({
+      headers: event.headers
+    });
 
-//     const products = await getAllProducts(SHOPID);
-//     return {
-//         products: products
-//     }
-// });
+    if(!session){
+        return
+    }
+
+    const products = await getAllProducts(session.user.shopId);
+    return {
+        products: products
+    }
+});

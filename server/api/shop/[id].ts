@@ -14,9 +14,8 @@ export default defineEventHandler(async (event )=>{
     try {
         const userShop = await db.query.shopsTable.findFirst({
             where : eq(shopsTable.idOwner , idOwner),
-        })
-
-        console.log(userShop)
+        })    
+    
         return {
             shop : userShop
         }

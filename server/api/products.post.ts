@@ -18,12 +18,12 @@ export default defineEventHandler(async (event) => {
       .insert(productsTable)
       .values({
         name,
-        image: image || "/no-image.png", // Use default if not provided
+        image: image || "/no-image.png",
         type,
         pua,
         puv,
         qte,
-        idShop // Make sure to include this required field
+        idShop 
       })
       .returning();
     return newProduct;
@@ -35,3 +35,4 @@ export default defineEventHandler(async (event) => {
     });
   }
 });
+

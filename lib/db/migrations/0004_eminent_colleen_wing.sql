@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "shop_id" uuid;

@@ -66,7 +66,6 @@
 
 <script setup lang="ts">
 import { authClient } from '~/lib/auth/auth-client';
-import { hash } from 'bcryptjs';
 import IsValidateSignUp from '../Utils/validations/signUpValidator'
 const form = reactive({
   name: '',

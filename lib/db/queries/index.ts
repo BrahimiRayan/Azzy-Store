@@ -45,7 +45,11 @@ export async function createUserShopOnSignUp(userId : string){
   }
   const shop = await db.insert(shopsTable).values({
             idOwner : userId
-        }).returning()
+  }).returning()
+
+  if(shop[0].id){
+    await db.update(user).set({shopId : shop[0].id}).where(eq(user.id , userId))
+  }
 
   return shop
 }
@@ -68,8 +72,11 @@ export async function getAllShops(){
 export async function getAllProducts(idShop: string) {
     try {
         const products = await db.select().from(productsTable).where(eq(productsTable.idShop,idShop)) ;
-        if (!products || products.length === 0) {
+        if (products === null || products === undefined) {
             throw new Error("No products found");
+        }
+        if(products.length === 0){
+          return []
         }
         return products; 
     } catch (error) {
