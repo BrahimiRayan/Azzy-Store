@@ -25,17 +25,6 @@ export const ProductsTypeEnum = pgEnum("Category", [
 export const TransactionTypeEnum = pgEnum("TransactionType", ["A", "V"]);
 export const CardTypeEnum = pgEnum("CardType", ["A", "B", "C", "D"]);
 
-// Define the schema for the database tables
-
-// export const ownersTable = pgTable("owners", {
-//   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-//   name: varchar({ length: 255 }).notNull(),
-//   createdAt: timestamp().defaultNow().notNull(),
-//   email: varchar({ length: 255 }).notNull().unique(),
-//   password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
-//   phoneNumber: varchar({ length: 20 }).notNull(),
-// });
-
 export const shopsTable = pgTable("shops", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   isOnline : boolean().default(false).notNull(),

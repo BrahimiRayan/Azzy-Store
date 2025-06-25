@@ -1,8 +1,10 @@
 <template>
-     <header class="border-b border-white/20 flex justify-between items-center px-2">
+     <header class="flex justify-between items-center px-2 rounded-b-md border-b border-black/20">
         <div class="flex items-center gap-8">
            <div class="w-[62px] h-[62px]">
+               <NuxtLink to="/" class="w-full h-full">
               <img src="../assets/pics/Logo-dark.webp" class="w-full h-full" alt="">
+               </NuxtLink>
            </div>
 
                 <ul class="flex items-center gap-3">
@@ -27,10 +29,24 @@
    </div>
 
       <div class="flex items-center gap-3">
-        <p>github link</p>
-        <NuxtLink v-if="session.data" to="/dashboard" class="bg-green-500 p-2 rounded-xl text-xs text-black">Mon dashboard ({{ session.data?.user.name }})</NuxtLink >
+        <div v-if="session.data">
+         <NuxtLink  to="/dashboard" class="bg-green-600 p-2 rounded-xl text-xs text-white font-extrabold flex items-center justify-center gap-2">
+                <UAvatar :alt="session.data.user.name" size="sm" class="bg-green-800"/>
+                <span> Dashboard</span>
+        </NuxtLink >
+         
+        </div>
         
-        <NuxtLink v-else to="/signIn" class="bg-green-500 p-2 rounded-xl text-xs text-black">sign in/up</NuxtLink >
+        <div v-else>
+               
+          <NuxtLink  to="/signUp" class="bg-green-500 p-2 rounded-xl text-sm text-black">
+                Inscrire
+          </NuxtLink >
+          
+          <NuxtLink  to="/signIn" class="text-green-500 rounded-xl border p-2 text-sm font-extrabold ml-3">
+                Se connecter
+          </NuxtLink >
+        </div>
       </div>
 
 </header>
