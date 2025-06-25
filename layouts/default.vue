@@ -44,11 +44,11 @@
 
                     <NuxtLink
                         to="/logOut"
-                        class="bg-red-500 hover:bg-red-600 rounded-xl p-2 w-full"
+                        class="bg-red-500 hover:bg-red-600 rounded-xl p-2 w-full flex items-center justify-center text-white font-semibold transition-all duration-300 ease-in-out"
                         @click=""
                     >
                         <UIcon class="mr-2 size-5" name="i-material-symbols-logout" />
-                        Log out
+                        <span>Déconnecter</span>
                     </NuxtLink>
                 </nav>
             </div>
