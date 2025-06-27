@@ -99,6 +99,27 @@ export async function getProductByid (id : string){
   return product
 }
 
+export async function deleteProductById(id: string): Promise<boolean> {
+  if (!id) {
+    throw new Error("Cannot delete product: Missing ID");
+  }
+
+  try {
+    
+    const deletedProducts = await db
+      .delete(productsTable)
+      .where(eq(productsTable.id, id))
+      .returning();
+    if (deletedProducts.length === 0) {
+      throw new Error(`Product with ID ${id} not found`);
+    }
+    return true;
+  } catch (error) {
+    console.error(`Failed to delete product ${id}:`, error);
+    throw new Error("Failed to delete product. Please try again.");
+  }
+}
+
 // orders
 
 export async function getAllOrders(idShop: string) {
