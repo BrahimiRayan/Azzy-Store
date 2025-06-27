@@ -6,6 +6,7 @@
       body: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       header: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       overlay: 'bg-black/70',
+      content :'rounded-none'
     }">
 
     <!-- the open button  -->
@@ -29,9 +30,10 @@
         <UFormField label="Catégorie du Produit" class=" w-full" required>
           <USelectMenu id="cat" v-model="NewProduct.category" :items="items" :ui="{
             base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-            label: 'text-sm text-gray-400',
-            input: 'text-sm text-gray-400',
+            label: 'text-sm text-gray-400 ',
+            input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
             item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+            group: 'bg-[var(--deep-dark-blue)] ',
           }" class="w-48" />
         </UFormField>
         <UFormField label="Prix d'achat par unité" class=" w-full" required>
@@ -61,10 +63,20 @@
 <script setup lang="ts">
 
 import type { Produit } from '~/types/GeneraleT';
+import {PRODUCTS_TYPES} from '~/lib/consts';
+import { authClient } from '~/lib/auth/auth-client';
+
+const emit = defineEmits<{
+  (e: 'refresh-data'): void;
+}>();
+
+// we change this with a store later
+const session : any = authClient.useSession() ;
+
+
 const open = ref(false);
-const items = ref(['Autre', 'Alimentaire', 'Electronique', 'Vêtement', 'Meuble', 'Accessoire', 'Beauté', 'Sport', 'Livre']);
+const items = ref(PRODUCTS_TYPES);
 const NewProduct = ref<Produit>({
-  id: 0,
   name: '',
   img: '',
   category: 'Autre',
@@ -73,21 +85,11 @@ const NewProduct = ref<Produit>({
   quantity: 0,
 })
 const toast = useToast();
-const addProduit = () => {
-  if (NewProduct.value.name && NewProduct.value.category && NewProduct.value.pua > 0 && NewProduct.value.puv > 0 && NewProduct.value.quantity > 0) {
-    console.log('Produit ajouté:', { ...NewProduct.value });
-    console.log('name du produit:', NewProduct.value.name);
-    resetProduct();
-    toast.add({
-    title: 'Succès',
-    description: 'Produit ajouté avec succès',
-    color: 'success',
-    icon: 'lucide-check-circle',
-    ui: {
-      root: 'bg-green-500/90 rounded-lg p-4',
-    },
-  });
-  } else {
+
+
+async function addProduit() {
+
+  if (!NewProduct.value.name || !NewProduct.value.category || !(NewProduct.value.pua > 0) || !(NewProduct.value.puv > 0) || !(NewProduct.value.quantity > 0)) {
     console.error('Produit non valide');
     toast.add({
         title: 'Erreur',
@@ -98,12 +100,61 @@ const addProduit = () => {
           root: 'bg-red-500/90 rounded-lg p-4',
         },
       });
+      return ;
+  } 
+
+  try {
+
+    const data = await $fetch('/api/products',{
+      method : 'POST',
+      body:
+       {
+        name : NewProduct.value.name,
+        img : NewProduct.value.img,
+        type : NewProduct.value.category,
+        pua : NewProduct.value.pua,
+        puv : NewProduct.value.puv,
+        qte : NewProduct.value.quantity,
+        idShop : session.value.data?.user.shopId,
+      },
+    });
+
+    if (!data){
+      throw new Error('Erreur lors de l\'ajout du produit');
+    }
+    
+    console.log('Produit ajouté:', { ...NewProduct.value });
+    resetProduct();
+    toast.add({
+    title: 'Succès',
+    description: 'Produit ajouté avec succès',
+    color: 'success',
+    icon: 'lucide-check-circle',
+    ui: {
+      root: 'bg-green-500/90 rounded-lg p-4',
+    },
+    });
+    emit('refresh-data');
+    // window.location.reload();
+    return
+  } catch (error) {
+    toast.add({
+      title: 'Erreur',
+      description: 'Une erreur est survenue lors de l\'ajout du produit',
+      color: 'error',
+      icon: 'lucide-alert-triangle',
+      ui: {
+        root: 'bg-red-500/90 rounded-lg p-4',
+      },
+    });
+    throw new Error(`Erreur lors de l'ajout du produit: ${error}`);
   }
+    
 }
+
 
 const resetProduct = () => {
   NewProduct.value = {
-    id: 0,
     name: '',
     img: '',
     category: 'Autre',

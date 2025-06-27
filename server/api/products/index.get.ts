@@ -9,7 +9,6 @@ export default defineEventHandler(async (event)=>{
     if(!session){
         return
     }
-
     const products = await getAllProducts(session.user.shopId);
     return {
         products: products
