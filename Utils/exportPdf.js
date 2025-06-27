@@ -1,5 +1,5 @@
 // Correct import syntax
-import { jsPDF } from "jspdf/dist/jspdf.node.min";
+import { jsPDF } from "jspdf";
 import autoTable from 'jspdf-autotable' // Note: import as named import
 import { NormalDateformat } from './dateFormat'
 export function exportToPdf(filename, headers, data) {

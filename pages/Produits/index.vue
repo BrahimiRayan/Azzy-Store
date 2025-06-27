@@ -1,8 +1,10 @@
 <template>
-  <div v-if="pending" class="flex items-center justify-center h-screen text-7xl">
-    LOADING...
+  <div v-if="pending" class="flex items-center flex-col justify-center h-screen ">
+    <div class="bg-[url('/public/static/infinityloader.webp')] w-40 h-40 bg-contain" ></div>
+    <span class="text-4xl"> Chargement des produits ...</span>
   </div>
 
+  <div v-else>
   <UBreadcrumb :items="item" class="mt-8 " />
   <div class="flex justify-between ">
     <div class="ml-4">
@@ -43,7 +45,7 @@
       </div>
     </div>
 
-    <UTable class="border-x border-b border-[var(--pale-moon)] rounded-b-lg backdrop-blur-md lg:h-[400px] overflow-auto"
+    <UTable class="border-x border-b border-[var(--pale-moon)] rounded-b-lg backdrop-blur-md lg:max-h-[400px] overflow-auto"
       ref="table" v-model:global-filter="globalFilter" :data="produits" :columns="ProduitColumns" :ui="{
         tr: 'hover:bg-white/10 transition-all duration-300 ease-in-out',
         th: 'border-b border-green-500 bg-[var(--deep-dark-blue)]',
@@ -80,13 +82,13 @@
   <!-- the cards -->
   <div ref="expandContainer"
     class="grid grid-cols-3 gap-2 mt-10 bg-[var(--deep-dark-blue)] transition-all duration-300 ease-in-out"
-    :class="isExpanded ? 'h-auto' : 'h-[646px] overflow-hidden'">
+    :class="isExpanded ? 'max-h-none' : 'max-h-[646px] overflow-hidden'">
     <!-- the card  -->
       <div v-if="cardProducts.length === 0"> Vous n'avez pas de produits dans le stock.</div>
         <CardsProducts v-else :cardProducts="cardProducts"/>
-      </div>
+    </div>
 
-      <div v-if="cardProducts.length > 9" class="flex items-center justify-center">
+    <div v-if="cardProducts.length > 9" class="flex items-center justify-center">
 
     <UButton id="expandBtn" :icon="cardProducts.length > 9 ? 'i-lucide-more-horizontal' : ''"
       class="text-white/50 hover:text-white bg-transparent hover:bg-transparent transition-colors duration-300 ease-in-out size-10"
@@ -95,8 +97,7 @@
       {{ isExpanded ? 'Réduire' : 'Afficher plus' }}
     </label>
   </div>
-
-
+</div>
 </template>
 
 <script setup lang="ts">
@@ -108,44 +109,48 @@ import type { BreadcrumbItem } from '@nuxt/ui';
 import type { Produit } from '~/types/GeneraleT';
 import { Catecolor } from '~/Composables/useTheme';
 import { NormalDateformat } from '~/Utils/dateFormat';
+import { TitleLimit } from '~/Utils/generalUIhelpers';
 
+const toast = useToast(); 
 
 const item: BreadcrumbItem[] =
   [
   {
     label: 'Dashboard',
     icon: 'i-material-symbols-dashboard-outline',
-    to: '/'
+    to: '/dashboard',
   },
   {
     label: 'Produits',
     icon: 'i-lucide-box',
-  },
-  ]
+  },]
 
 // expanding the card container
 const isExpanded = ref(false)
 const expandContainer = ref<HTMLDivElement | null>(null)
-
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
 }
 
 // this will be the data
+interface ProductsResponse {
+  products: Produit[]
+}
 const produits  = ref<Produit[]>([]);
 const cardProducts = ref<Produit[]>([]);
-const { data, pending, error, refresh } = useFetch('/api/products', {
+
+const { data, pending, refresh } = useFetch<ProductsResponse>('/api/products', {
   lazy: true,
-  server: false, // Ensure this only runs on client side
-  immediate: true // Make sure it runs without needing explicit trigger
+  server: false,
+  immediate: true 
 });
 
 watchEffect(() => {
   if (data.value?.products) {
     produits.value = data.value.products.map((p: any , index) => ({
-      index: index + 1, // Add index for display purposes
+      index: index + 1,
       id: p.id,
-      name: p.name,
+      name: TitleLimit(p.name , 32),
       img: p.image || '/no-img.png',
       category: p.type,
       pua: p.pua,
@@ -156,13 +161,13 @@ watchEffect(() => {
   cardProducts.value = produits.value; // Initialize cardProducts with all products
 });
 
+// refresh the data on the childrens
 function handleRefresh() {
   refresh();
 }
 
-const toast = useToast(); 
 
-
+// the download functions
 const DownloadCsv = ()=>{
   if(produits.value.length === 0) {
     toast.add({
@@ -194,7 +199,6 @@ const DownloadCsv = ()=>{
   const date =  NormalDateformat(fulldate);
   exportToCsv(`Informatios produits ${date}.csv`, datas);
 }
-
 const DownloadPdf =()=>{
 
   if(produits.value.length === 0) {
@@ -233,8 +237,6 @@ const DownloadPdf =()=>{
 
 
 // the data for the cards
-
-
 const nameFilter = ref('');
 const filterProducts = () => {
 
@@ -246,8 +248,6 @@ const filterProducts = () => {
     });
   }
 }
-
-
 const resetProducts = () => {
   if(nameFilter.value.trim().length >0) {
     cardProducts.value = produits.value;
@@ -258,9 +258,9 @@ const resetProducts = () => {
 }
 
 // this is the table component
-const UIcon = resolveComponent('UIcon')
+const UIcon = resolveComponent('UIcon');
 const UBadge = resolveComponent('UBadge');
-// you will change inside the cell's value
+const globalFilter = ref('');
 const ProduitColumns: TableColumn<Produit>[] = [
   {
     accessorKey: 'index',
@@ -350,20 +350,57 @@ const ProduitColumns: TableColumn<Produit>[] = [
     header: 'Supprimer',
     accessorKey: 'id',
     cell: ({ row }) => {
-      const id: number = row.getValue('id')
-      return h(UIcon, { name: 'i-solar-trash-bin-trash-broken', class: 'font-bold p-2 bg-red-700 rounded size-8 hover:bg-red-500 cursor-pointer transition-bg duration-300 ease-in-out', id: id, onClick: () => handelDelete(id) }, '')
+      const id: string = row.getValue('id')
+      return h(UIcon, { name: 'i-solar-trash-bin-trash-broken', class: 'font-bold p-2 bg-red-700 rounded size-8 hover:bg-red-500 cursor-pointer transition-bg duration-300 ease-in-out', id: id, onClick: () => handelDelete(id) },) 
     }
   }
 ]
 
-// TODO:Server side functionalities
+//Server side functionalities
+const isDelete = ref(false);
+const handelDelete = async (id: string)=> {
+  
+  isDelete.value = true;
+  try {
+    const data : {success : boolean} = await $fetch(`/api/products`, {
+      method: "DELETE",
+      body:{
+        id
+      }
+    })
+    const { success } = data;
+    if(!success){
+      toast.add({
+        title: 'Erreur',
+        description: 'Erreur lors de la suppression du produit',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
+      return;
+    } else {
+      toast.add({
+        title: 'Succès',
+        description: 'Produit supprimé avec succès',
+        color: 'success',
+        icon: 'lucide-check-circle',
+        ui: {
+          root: 'bg-green-500/90 rounded-lg p-4',
+        },
+      });
+    }
+    refresh();
+  } catch (error) {
+    console.error(error);
+    throw new Error('Erreur lors de la suppression du produit');
+  }finally {
+    isDelete.value = false;
+  }
 
-// here is the delete function , do modify this after working on the back...
-
-const handelDelete = (id: number) => {
-  console.log('delete', id);
 }
 
-const globalFilter = ref('')
+
 
 </script>
