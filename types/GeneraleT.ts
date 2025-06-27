@@ -6,7 +6,7 @@ type category = 'Alimentaire' | 'Electronique' | 'Vêtement' | 'Meuble' | 'Acces
 
 
 type Produit = {
-    id : number | string , 
+    id? : number | string , 
     name : string , 
     img? : string , 
     category : category ,

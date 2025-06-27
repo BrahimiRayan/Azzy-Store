@@ -1,0 +1,1 @@
+export const PRODUCTS_TYPES = ['Autre', 'Alimentaire', 'Electronique', 'Vêtement', 'Meuble', 'Accessoire', 'Beauté', 'Sport', 'Livre']

@@ -1,8 +1,12 @@
 <template>
+  <div v-if="pending" class="flex items-center justify-center h-screen text-7xl">
+    LOADING...
+  </div>
+
   <UBreadcrumb :items="item" class="mt-8 " />
   <div class="flex justify-between ">
     <div class="ml-4">
-      <AddProduct />
+      <AddProduct @refresh-data="handleRefresh"/>
       <SelledProduct :produits="produits"/>
       <BoughtProduct :produits="produits"/>
     </div>
@@ -128,100 +132,37 @@ const toggleExpand = () => {
 }
 
 // this will be the data
-const produits  = ref<Produit[] | []>( [
-  {
-    id: 1,
-    name: 'Produit 1',
-    img: '/no-img.png',
-    category: 'Alimentaire',
-    pua: 299,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 2,
-    name: 'Produit 2',
-    img: '/no-img.png',
-    category: 'Beauté',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 3,
-    name: 'Produit 3',
-    img: '/no-img.png',
-    category: 'Sport',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 4,
-    name: 'Produit 4',
-    img: '/no-img.png',
-    category: 'Vêtement',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 5,
-    name: 'Produit 5',
-    img: '/no-img.png',
-    category: 'Autre',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 6,
-    name: 'Produit 6',
-    img: '/no-img.png',
-    category: 'Electronique',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 7,
-    name: 'Produit 7',
-    img: '/no-img.png',
-    category: 'Meuble',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 8,
-    name: 'Produit 8',
-    img: '/no-img.png',
-    category: 'Accessoire',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
+const produits  = ref<Produit[]>([]);
+const cardProducts = ref<Produit[]>([]);
+const { data, pending, error, refresh } = useFetch('/api/products', {
+  lazy: true,
+  server: false, // Ensure this only runs on client side
+  immediate: true // Make sure it runs without needing explicit trigger
+});
+
+watchEffect(() => {
+  if (data.value?.products) {
+    produits.value = data.value.products.map((p: any , index) => ({
+      index: index + 1, // Add index for display purposes
+      id: p.id,
+      name: p.name,
+      img: p.image || '/no-img.png',
+      category: p.type,
+      pua: p.pua,
+      puv: p.puv,
+      quantity: p.qte
+    }));
   }
-  ,
-  {
-    id: 9,
-    name: 'Produit 9',
-    img: '/no-img.png',
-    category: 'Livre',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-  {
-    id: 10,
-    name: 'Produit 10',
-    img: '/no-img.png',
-    category: 'Autre',
-    pua: 400,
-    puv: 500,
-    quantity: 100,
-  },
-])
+  cardProducts.value = produits.value; // Initialize cardProducts with all products
+});
+
+function handleRefresh() {
+  refresh();
+}
+
 const toast = useToast(); 
+
+
 const DownloadCsv = ()=>{
   if(produits.value.length === 0) {
     toast.add({
@@ -289,8 +230,10 @@ const DownloadPdf =()=>{
   exportToPdf(`Informatios produits ${date}.pdf`, headers, datas);
   
 }
+
+
 // the data for the cards
-const cardProducts = ref<Produit[]>(produits.value);
+
 
 const nameFilter = ref('');
 const filterProducts = () => {
@@ -320,11 +263,11 @@ const UBadge = resolveComponent('UBadge');
 // you will change inside the cell's value
 const ProduitColumns: TableColumn<Produit>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: 'index',
     header: () => {
       return h('div', { class: 'text-white/50 font-extrabold' }, '#')
     },
-    cell: ({ row }) => h('div', { class: 'text-white/50 font-extrabold' }, `#${row.getValue('id')}`)
+    cell: ({ row }) => h('div', { class: 'text-white/50 font-extrabold' }, `#${row.getValue('index')}`)
   },
   {
     accessorKey: 'name',
