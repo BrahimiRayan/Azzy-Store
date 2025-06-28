@@ -1,7 +1,5 @@
 <template>
   <div class="mt-8">
-
-    <h1>{{ session.data?.user.shopId}}</h1>
     <UBreadcrumb :items="item" class="mb-8 "/>
 
     <USeparator class="text-[var(--green-grace)] w-xl mt-10 mx-auto " label="Statistiques des ventes et achats"
@@ -35,7 +33,6 @@
 
 // the breadcrumb item  
 import type { BreadcrumbItem } from '@nuxt/ui';
-import type { Session } from 'better-auth';
 import { authClient } from '~/lib/auth/auth-client';
 import type { chartData } from '~/types/GeneraleT';
 

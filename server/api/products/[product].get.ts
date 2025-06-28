@@ -15,6 +15,6 @@ export default defineEventHandler(async (event)=>{
     }
 
     return {
-        product : product
+        ...product
     }
 })

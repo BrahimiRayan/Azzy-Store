@@ -35,7 +35,7 @@
                 <UIcon name="i-vaadin-stock" class=" size-8" />
                 <h2 class="text-red-500 font-bold my-2 text-xl">Totale produits en Stock</h2>
                 <!-- <img src="/public/spiner.gif" alt="" class="w-10 h-10 mb-2" v-if="pending" /> -->
-                <p class="text-red-400 text-5xl mb-3 font-extrabold">{{ prod?.products.length }} <span class="text-gray-400 text-xs">produits</span></p>
+                <p class="text-red-400 text-5xl mb-3 font-extrabold">{{ pending? "..." : prod?.products?.length}} <span class="text-gray-400 text-xs">produits</span></p>
                 
             </div>
 
@@ -71,7 +71,12 @@
 </template>
 
 <script setup lang="ts">
+import type { Produit } from '~/types/GeneraleT';
 
-const {data : prod , pending} = useFetch("/api/products", {lazy: true});
+interface ProductsResponse {
+  products: Produit[];
+}
+
+const { data: prod, pending } = useFetch<ProductsResponse>("/api/products", { lazy: true });
 
 </script>
