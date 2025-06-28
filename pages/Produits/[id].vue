@@ -1,4 +1,13 @@
 <template>
+    <div v-if="pending">
+        <Charging text="Chargement ..." />
+    </div>
+    <!-- //TODO: MAKE A COMPONENT FOR THIS LATER -->
+    <div v-else-if="error || !product" class="flex items-center justify-center h-screen">
+        <h1 class="text-2xl text-red-500 font-extrabold">Produit non trouvé</h1>
+    </div>
+    <div v-else >
+
     <UBreadcrumb :items="item" class="my-8 " />
 
 
@@ -42,7 +51,8 @@
         label="Informations de produit"
         :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
 
-    <ModifyProduct :product="product" />
+    <ModifyProduct :produit="product" @refresh-product="refresh"/>
+</div>
 </template>
 
 <script setup lang='ts'>
@@ -50,38 +60,31 @@ import type { chartData, Produit } from '~/types/GeneraleT';
 import type { BreadcrumbItem } from '@nuxt/ui';
 
 const isUp = ref<boolean>(true) ;
-const productname: string = 'produit name'; // will be gotten from bdd
+const id = useRoute().params.id;
+
+const { data : product , pending, error , refresh } = useFetch<Produit>(`/api/products/${id}`, {
+  lazy: true,
+  server: false,
+}
+);
 
 // breadcrumb
-const item: BreadcrumbItem[] =
-    [
-        {
-            label: 'Dashboard',
-            icon: 'i-material-symbols-dashboard-outline',
-            to: '/'
-        },
-        {
-            label: 'Produits',
-            icon: 'i-lucide-box',
-            to: '/produits'
-        },
-        {
-            label: productname,
-            icon: 'i-lucide-link',
-        }
-    ]
-
-// product
-const id = useRoute().params.id;
-const product = ref<Produit>({
-    id: id.toString(),
-    name: 'produit name',
-    img: 'https://img.sonofatailor.com/images/customizer/product/extra-heavy-cotton/ss/Black.jpg',
-    category: 'Electronique',
-    pua: 1000,
-    puv: 2000,
-    quantity: 100,
-});
+const item = computed<BreadcrumbItem[]>(() => [
+  {
+    label: 'Dashboard',
+    icon: 'i-material-symbols-dashboard-outline',
+    to: '/'
+  },
+  {
+    label: 'Produits',
+    icon: 'i-lucide-box',
+    to: '/produits'
+  },
+  {
+    label: product.value?.name || '', // Gestion du loading
+    icon: 'i-lucide-link',
+  }
+])
 
 // chart    
 const data: chartData = {
@@ -113,4 +116,3 @@ const data: chartData = {
 }  
 </script>
 
-<style></style>

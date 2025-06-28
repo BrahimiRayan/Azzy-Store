@@ -1,7 +1,6 @@
 <template>
-  <div v-if="pending" class="flex items-center flex-col justify-center h-screen ">
-    <div class="bg-[url('/public/static/infinityloader.webp')] w-40 h-40 bg-contain" ></div>
-    <span class="text-4xl"> Chargement des produits ...</span>
+  <div v-if="pending">
+    <Charging text="Chargement des produits..." />
   </div>
 
   <div v-else>

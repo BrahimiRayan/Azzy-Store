@@ -1,57 +1,113 @@
 <template>
-        <div class=" flex items-center gap-3">
+        <div v-if="error" class="bg-red-500 text-sm mb-5 rounded-lg p-2 w-[80%] flex items-center font-extrabold">
+            <UIcon name="i-lucide-alert-triangle" class="text-white size-5 mr-2" />
+                {{ error }}
+            <UButton icon="i-lucide-x" class="size-5 ml-auto w-8 h-8 text-center bg-red-800 hover:bg-red-600" @click="error = null" />
+        </div>
+        
+        <div class=" flex items-center gap-3 rounded-xl p-2 shadow bg-white/5">
             <div class="w-[400px] max-h-[400px] overflow-hidden">
-                <NuxtImg :src="product.img" format="webp" alt="" class="w-[90%]  rounded-xl" />
+                <NuxtImg :src="produit.img" format="webp" alt="" class="w-[90%] rounded-xl" placeholder="/no-img.png"/>
             </div>
-
             <div class="w-[45%]">
+
             <form @submit.prevent="ModifyProduct">
 
-                <UFormField label="Nom du produit" class=" w-full mb-10" required>
-                    <UInput v-model="productname" type="text" placeholder="Nom du produit" :ui="{
+                <UFormField label="Nom du produit" class=" w-full mb-5" required>
+                    <UInput v-model="product.name" type="text" placeholder="Nom du produit" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-                    }" class="w-[80%]" />
+                    }" class="w-full" />
 
                 </UFormField>
 
-                <UFormField label="Prix du produit" class=" w-full mb-10" required>
-                    <UInput v-model="puv" type="number" placeholder="Prix unite de vente" :ui="{
+                <UFormField label="Prix vente Unitaire du produit" class=" w-full mb-5" required>
+                    <UInput v-model="product.puv" type="number" placeholder="Prix unite de vente" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-                    }" class="w-[80%]" />
+                    }" class="w-full" />
+                </UFormField>
+
+                <UFormField label="Prix unité d'achat" class=" w-full mb-5" required>
+                    <UInput v-model="product.pua" type="number" placeholder="Prix unité d'achat" :ui="{
+                        base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+                    }" class="w-full" />
                 </UFormField>
 
                 <UFormField label="Quantité de produit" class=" w-full mb-5" required>
-                    <UInput v-model="pua" type="number" placeholder=" Prix unité d'achat" :ui="{
+                    <UInput v-model="product.quantity" type="number" placeholder="Quantité de produit" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-                    }" class="w-[80%]" />
+                    }" class="w-full" />
                 </UFormField>
+
+                <UButton :label="pending ? 'chargement...' :'Modifier' " :disabled="pending" class=" mx-auto bg-green-600 text-[var(--pale-moon)] hover:bg-green-700 text-sm w-[50%] flex items-center justify-center"
+                    icon="i-lucide-check" type="submit" :ui="{
+                        base: 'rounded-lg',
+                        label : 'font-extrabold text-center',
+                    }" />
             </form>
-            <UButton label="Modifier" class="bg-green-600 text-[var(--pale-moon)] hover:bg-green-700 text-sm " size="sm"
-                icon="i-lucide-check" type="submit" :ui="{
-                    base: 'rounded-lg',            
-                }" />
             </div>
         </div>
 </template>
     
 <script setup lang='ts'>
+const props = defineProps(['produit'])
+const emit = defineEmits(['refresh-product']);
+const error = ref<string | null>(null);
+const pending = ref<boolean>(false);
+const product = ref({
+    name : props.produit.name,
+    pua : props.produit.pua,
+    puv : props.produit.puv,
+    quantity : props.produit.qte,
+});
 
-import type { Produit } from '~/types/GeneraleT';
+// const name = ref<string>(props.produit.name);
 
-const props = defineProps<{
-        product: Produit,
-}>()
+const ModifyProduct =async () => {
+    if (!product.value.name.trim() || !product.value.pua || !product.value.puv || !product.value.quantity) {
+        error.value = 'Veuillez remplir tous les champs'
+        return
+    }
+    if (product.value.pua >= product.value.puv) {
+        error.value ='Le prix d\'achat doit être inférieur au prix de vente';
+        return 
+    }
+    if (product.value.quantity <= 0) {
+        error.value = 'La quantité doit être supérieure à 0';
+        return
+    }
+    if(props.produit.name === product.value.name.trim() &&
+        props.produit.pua === product.value.pua &&
+        props.produit.puv === product.value.puv &&
+        props.produit.qte === product.value.quantity) {
+        error.value ='Aucune modification apportée';
+        return 
+    }
+    if(error.value) {
+        error.value = null;
+    }
+    pending.value = true;
+    try {
+        await $fetch("/api/products", {
+            method: 'PUT',
+            body: {
+                id: props.produit.id,
+                name: product.value.name.trim(),
+                pua: product.value.pua,
+                puv: product.value.puv,
+                qte: product.value.quantity,
+            }
+        });
+        emit('refresh-product');
+    } catch (err) {
+        if (err instanceof Error) {
+            error.value = err.message;
+        } else {
+            error.value = 'Une erreur est survenue lors de la modification du produit';
+        }
+    }finally {
+        pending.value = false;
+    }
 
-const pua = ref<number>(props.product.pua);
-const puv = ref<number>(props.product.puv);
-const productname = ref<string>(props.product.name);
-
-const ModifyProduct = ()=>{
-console.log('product name : ', productname.value);
 }
 
 </script>
-    
-<style>
-    
-</style>
