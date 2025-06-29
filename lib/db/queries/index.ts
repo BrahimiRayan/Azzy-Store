@@ -1,6 +1,6 @@
 import { and, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "..";
-import { ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
+import { notesTable, ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
 import { error } from "console";
 // owners
@@ -235,4 +235,28 @@ export async function getAlltransactionWithProducts(){
     }
   })
   return transactionProducts 
+}
+
+// notes 
+export async function addUserNotes(author : string , shopid : string , title : string , content : string , Notetype : 'Important' | 'Reminder'){
+  if(!author || !shopid || !title || !content || !Notetype ){
+    throw new Error("Imposible to POST , messing data");
+  }
+  if(title.trim().length === 0 || content.trim().length === 0){
+    throw new Error("Imposible to POST , Invalide data");
+  }
+  try {
+    await db.insert(notesTable).values({
+      idOwner : author,
+      content,
+      title,
+      idShop : shopid,
+      type : Notetype
+    })
+    return {
+      success : "200ok"
+    }
+  } catch (error) {
+    throw new Error("Not able to post data , try again.")
+  }
 }

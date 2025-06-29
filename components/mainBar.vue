@@ -51,12 +51,11 @@
   
   const emit = defineEmits(['update-open']);
 
-  // composables
   const toggleDrawer = () => {
     emit('update-open', !props.isOpen);
   };
 
-  //refs
+  
   </script>
 
   <style scoped>
