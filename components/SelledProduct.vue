@@ -1,7 +1,7 @@
 <template>
     <UModal v-model:open="openSell"
-     title="J'ai vendu Un Produit" 
-     description="remplisser tous les champs essentielle pour marquer la vente d'un produit."
+     title="Marquez la vente d'un produit"
+     description="remplisser tous les champs pour marquer la vente d'un produit."
      :overlay="true"
      :ui="{
         description : 'text-sm text-gray-400',
@@ -9,6 +9,7 @@
         body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
         header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
         overlay :'bg-black/70',
+        content : 'rounded-none ring-0 shadow-sm shadow-green-600'
       }">
             
             <!-- the open button  -->
@@ -53,7 +54,7 @@
   
 
     </UModal>
-  </template>
+</template>
 
 
 
@@ -65,19 +66,25 @@ const props = defineProps<{
 }>(); 
 
 //variables
+type SelledItem = {
+  id: string;
+  label: string;
+};
 const openSell = ref(false);
-const product = ref<string>('');
+const product = ref<SelledItem | undefined>();
 const selledQ = ref<number>(0);
 
-const Selleditem = ref<string[]>([]);
-  props.produits?.forEach((product:any) => {
-    Selleditem.value.push(product.name);
-  });
+const Selleditem = computed(() => {
+  return props.produits?.map(product => ({
+    id: product.id,
+    label: product.name
+  })) || [];
+});
 // functions
 const toast = useToast();
-  const submitSelles = ()=>{
-    if (product.value === '' || selledQ.value === 0) {
 
+const submitSelles = async ()=>{
+    if (!product.value || product.value?.id === '' || selledQ.value === 0 ) {
       toast.add({
         title: 'Erreur',
         description:'Veuillez remplir tous les champs',
@@ -89,10 +96,74 @@ const toast = useToast();
       });
       return;
     }
-    // supabase logic to add the product to the database
-    console.log('produit vendu : ', product.value);
-    console.log('quantité vendu : ', selledQ.value);
+    const foundProduct = props.produits.find((p:Produit) => p.id === product.value?.id);
+    if(!foundProduct){
+      toast.add({
+        title: 'Erreur',
+        description: 'Produit non trouvé',
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
+      return;
+    }
+    if(foundProduct.quantity < selledQ.value) {
+      toast.add({
+        title: 'Erreur',
+        description: `La quantité vendue (${selledQ.value}) est supérieure à la quantité disponible (${foundProduct.quantity})`,
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
+      return;
+    }
+
+  try {
+   
+   await $fetch('api/products/prodQuantity', {
+    method : 'PUT',
+    body : {
+      id: product.value.id,
+      qte: foundProduct.quantity - selledQ.value,
+    }
+  }) 
+  } catch (error) {
+    console.error('Error while updating product quantity:', error);
     toast.add({
+      title: 'Erreur',
+      description: 'Une erreur est survenue lors de la mise à jour du produit',
+      color: 'warning',
+      icon: 'lucide-alert-triangle',
+      ui: {
+        root: 'bg-red-500/90 rounded-lg p-4',
+      },
+    });
+    return;
+  }
+
+  try {
+    
+  await $fetch('api/Transactions', {
+    method: 'POST',
+    body: {
+      productId: product.value.id,
+      quantity: selledQ.value,
+      pua: foundProduct.pua,
+      puv: foundProduct.puv,
+      type: 'V',
+    },
+  });
+  } catch (error) {
+    console.error('Error while creating transaction:', error);
+  }
+  
+  
+
+  toast.add({
     title: 'Succès',
     description: 'Operation est bien effectue',
     color: 'success',
@@ -102,10 +173,10 @@ const toast = useToast();
     },
   });
     // reset the form
-    product.value = '';
+    
     selledQ.value = 0;
 
-  }
+}
 
 
 

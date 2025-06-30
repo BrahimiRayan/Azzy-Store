@@ -9,6 +9,7 @@
       body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       overlay :'bg-black/70',
+      content : 'rounded-none ring-0 shadow-sm shadow-green-600'
     }">
           
           <!-- the open button  -->

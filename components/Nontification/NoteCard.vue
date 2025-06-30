@@ -7,11 +7,11 @@
               description="Remplissez les champs ci-dessous pour ajouter une note"
               :overlay='true'
               :dismissible="false"
-              class="rounded-tr-2xl rounded-tl-2xl"
               :ui="{
                 overlay: 'bg-black/60',
-                header: 'bg-[var(--deep-dark-blue)] rounded-tr-2xl rounded-tl-2xl text-[var(--creamy-white)]', 
-                body: 'rounded-br-2xl rounded-bl-2xl bg-[var(--deep-dark-blue)] text-[var(--creamy-white)] ',
+                header: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+                body: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)] ',
+                content: 'rounded-none ring-0 shadow-sm shadow-green-600',
              }">
                 
                 <div class="w-fit">
@@ -38,16 +38,9 @@
                 </template> 
             </UModal>
 
-            <!-- Notes , so what i should do is to display them by newest =>oldest then !important > repelle also make a distinct UI betwen the two -->
-            <!-- notifcation card -->
-            <!-- //TODO: TAKE THIS TO IT OWN SEPERATE COMPONENT ... -->
-            <div class="flex items-center gap-4" v-if="pending">
-                <USkeleton class="h-12 w-12 rounded-full bg-gray-500" />
-
-                <div class="grid gap-2">
-                <USkeleton class="h-4 w-[250px] bg-gray-500"/>
-                <USkeleton class="h-4 w-[200px] bg-gray-500" />
-                </div>
+            
+            <div v-if="pending">
+                <SkeletoneNotes v-for="_ in 2" />
             </div>
 
             <div v-else-if="notedata">

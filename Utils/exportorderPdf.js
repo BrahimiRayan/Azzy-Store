@@ -1,12 +1,14 @@
-import { jsPDF } from "jspdf";
-import autoTable from 'jspdf-autotable';
+// import { jsPDF } from "jspdf";
+// import autoTable from 'jspdf-autotable';
 
-/**
- * Génère un PDF pour une commande
- * @param {Object} commande - La commande à exporter
- * @param {string} fileName - Nom du fichier PDF (par défaut: "commande_[id].pdf")
- */
-export function genererPDFCommande(commande, fileName = `commande_${commande.id}.pdf`) {
+export async function genererPDFCommande(commande, fileName = `commande_${commande.id}.pdf`) {
+    if (process.server) return;
+
+  try {
+    // Dynamically import libraries
+    const { jsPDF } = await import('jspdf');
+    const autoTable = (await import('jspdf-autotable')).default;
+
   // Initialiser jsPDF
   const doc = new jsPDF();
   
@@ -70,4 +72,7 @@ export function genererPDFCommande(commande, fileName = `commande_${commande.id}
   
   // Sauvegarde du PDF
   doc.save(fileName);
+  }catch(error){
+    throw error
+  }
 }

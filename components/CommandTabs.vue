@@ -268,9 +268,8 @@ watch(orderChoise, (newValue) => {
 
 //TODO: make a function that export the command to pdf
 // export command to pdf
-const exportCommand = (index : number) => {
-  console.log('Exporting command...');
-  genererPDFCommande(cmds[index]);
+const exportCommand = async (index : number) => {
+  await genererPDFCommande(cmds[index]);
 };
 
 const items = [

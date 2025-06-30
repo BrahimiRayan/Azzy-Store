@@ -1,6 +1,6 @@
 <template>
     <div v-if="pending">
-        <Charging text="Chargement ..." />
+        <SkeletoneProduct />
     </div>
     <!-- //TODO: MAKE A COMPONENT FOR THIS LATER -->
     <div v-else-if="error || !product" class="flex items-center justify-center h-screen">

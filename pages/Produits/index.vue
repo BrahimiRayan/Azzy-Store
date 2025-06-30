@@ -1,6 +1,6 @@
 <template>
   <div v-if="pending">
-    <Charging text="Chargement des produits..." />
+    <SkeletoneProducts />
   </div>
 
   <div v-else>
@@ -198,7 +198,7 @@ const DownloadCsv = ()=>{
   const date =  NormalDateformat(fulldate);
   exportToCsv(`Informatios produits ${date}.csv`, datas);
 }
-const DownloadPdf =()=>{
+const DownloadPdf =async ()=>{
 
   if(produits.value.length === 0) {
 
@@ -230,7 +230,7 @@ const DownloadPdf =()=>{
   const fulldate = new Date();
   const date =  NormalDateformat(fulldate);
   const headers = ['#', 'Intitulé', 'Catégorie', 'Prix U.Achat', 'Prix U.Vente ','Benifice','Quantité'];
-  exportToPdf(`Informatios produits ${date}.pdf`, headers, datas);
+   await exportToPdf(`Informations produits ${date}.pdf`, headers, datas);
   
 }
 

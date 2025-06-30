@@ -1,9 +1,8 @@
-import { eq } from "drizzle-orm";
-import { db } from "~/lib/db";
-import { shopsTable } from "~/lib/db/schema";
+import { getUserShopOnAuth } from "~/lib/db/queries";
 
 export default defineEventHandler(async (event )=>{
     const idOwner = getRouterParam(event , 'id');
+
     if(!idOwner){
         throw createError({
             statusCode: 400,
@@ -12,14 +11,11 @@ export default defineEventHandler(async (event )=>{
     }
 
     try {
-        const userShop = await db.query.shopsTable.findFirst({
-            where : eq(shopsTable.idOwner , idOwner),
-        })    
-    
+        const userShop = await getUserShopOnAuth(idOwner);    
         return {
             shop : userShop
         }
     } catch (error) {
-        
+        throw error
     }
 })
