@@ -8,8 +8,8 @@
   <div class="flex justify-between ">
     <div class="ml-4">
       <AddProduct @refresh-data="handleRefresh"/>
-      <SelledProduct :produits="produits"/>
-      <BoughtProduct :produits="produits"/>
+      <SelledProduct :produits="produits" @refresh-data="handleRefresh"/>
+      <BoughtProduct :produits="produits" @refresh-data="handleRefresh"/>
     </div>
     <div class=" w-[20%] bg-[url('/state.png')] bg-no-repeat bg-contain bg-right">
     </div>

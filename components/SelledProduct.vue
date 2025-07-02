@@ -59,12 +59,16 @@
 
 
 <script setup lang="ts">
+import { SelledProduct } from '#components';
 import type { Produit } from '~/types/GeneraleT';
 
 const props = defineProps<{
   produits : Produit[]
 }>(); 
 
+const emit = defineEmits<{
+  (e: 'refresh-data'): void;
+}>();
 //variables
 type SelledItem = {
   id: string;
@@ -160,8 +164,6 @@ const submitSelles = async ()=>{
   } catch (error) {
     console.error('Error while creating transaction:', error);
   }
-  
-  
 
   toast.add({
     title: 'Succès',
@@ -172,9 +174,11 @@ const submitSelles = async ()=>{
       root: 'bg-green-500/90 rounded-lg p-4',
     },
   });
-    // reset the form
-    
-    selledQ.value = 0;
+
+  emit('refresh-data');
+  
+  SelledProduct.value = undefined;
+  selledQ.value = 0;
 
 }
 

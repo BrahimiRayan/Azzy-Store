@@ -67,11 +67,12 @@
                         icon="i-lucide-trash" 
                         class="ml-auto bg-red-500 hover:bg-red-700 transition-colors duration-300 ease-in-out"
                         size="sm"
+                        @click="DeleteNote(note.id)"
                     />
                 </div>
                 <USeparator class="my-3 text-[var(--green-grace)] opacity-25" />
                 <div>
-                    <h2 class="font-extrabold text-sm">Type : <span class="font-bold text-sm " :class="note.type === 'Important'? 'text-red-500' : 'text-blue-500' ">{{note.type === "Important"? "Important!" : "Rappele" }}</span></h2>
+                    <h2 class="font-extrabold text-sm">Type : <UBadge class="font-bold" :class="note.type === 'Important'? 'text-red-500' : 'text-blue-500' ">{{note.type === "Important"? "Important!" : "Rappele" }}</UBadge></h2>
                     <h2 class="font-extrabold text-sm">Titre: <span class="text-sm font-medium">{{ note.title }}</span></h2>
                     <p class="p-2 text-sm">{{ note.content }} </p>
                 </div>
@@ -121,11 +122,12 @@ const addNote = ref<{
 
 const {data : notedata , pending , refresh} = useFetch<NoteFetchResponse>('/api/notes', {
     lazy: true,
+    server : false
 });
 
 
-    const submitNote = () => {
-        $fetch("/api/notes", {
+const submitNote = async () => {
+       await $fetch("/api/notes", {
             method: "POST",
             body: {
                 title: addNote.value.title,
@@ -135,5 +137,16 @@ const {data : notedata , pending , refresh} = useFetch<NoteFetchResponse>('/api/
         })
         open.value = false;
         refresh();
-    }
+}
+
+const DeleteNote = async (id : string)=>{
+    console.log(id);
+    await $fetch("/api/notes" , {
+        method : 'DELETE',
+        body : {
+            id
+        }
+    })
+    refresh();
+}
 </script>

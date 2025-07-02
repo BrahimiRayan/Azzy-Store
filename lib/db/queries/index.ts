@@ -1,9 +1,8 @@
-import { and, eq, gte, lte, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { notesTable, ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
-import { error } from "console";
-import type { category } from "~/types/GeneraleT";
+
 // owners
 export async function getAllOwners() {
   try {
@@ -367,6 +366,20 @@ export async function getAllNotesByShop(shopid : string){
     });
     
     return notes
+  } catch (error) {
+    throw error
+  }
+  
+}
+
+export async function DeleteNoteById(idNote : string){
+  if(!idNote){
+    throw new Error("Error in passing data!");
+  }
+
+  try {
+    await db.delete(notesTable).where(eq(notesTable.id , idNote));
+    return
   } catch (error) {
     throw error
   }
