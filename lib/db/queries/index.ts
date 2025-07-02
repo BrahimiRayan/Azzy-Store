@@ -1,8 +1,8 @@
-import { and, eq, gte, lte, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { notesTable, ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
-import { error } from "console";
+
 // owners
 export async function getAllOwners() {
   try {
@@ -67,6 +67,28 @@ export async function getAllShops(){
     }
 }
 
+export async function getUserShopOnAuth(iduser : string){
+  if(!iduser){
+    throw createError({
+      statusMessage : "Server probleme , try again...",
+      statusCode : 500
+    })
+  }
+
+  try {
+    const userShop = await db.query.shopsTable.findFirst({
+            where : eq(shopsTable.idOwner , iduser),
+    });
+
+    return userShop ;
+  } catch (error) {
+    
+    throw createError({
+      statusMessage : "Not able to connect to shop",
+      statusCode : 404
+    });
+  }
+}
 // products
 
 export async function getAllProducts(idShop: string) {
@@ -117,6 +139,69 @@ export async function deleteProductById(id: string): Promise<boolean> {
   } catch (error) {
     console.error(`Failed to delete product ${id}:`, error);
     throw new Error("Failed to delete product. Please try again.");
+  }
+}
+
+type productT = typeof productsTable.$inferInsert.type
+
+export async function addNewProduct(shopid : string , name : string , image : string , prodType : productT , pua : number , puv : number , qte : number ){
+  
+  if(!shopid){
+    throw new Error("Not authaurized to POST!");
+  }
+  
+  if (!name || !prodType || pua === undefined || puv === undefined || 
+      qte === undefined ) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Missing required fields',
+    });
+  }
+
+  try {
+    await db
+      .insert(productsTable)
+      .values({
+        idShop:shopid ,
+        name,
+        image: image || "/no-image.png",
+        type : prodType,
+        pua,
+        puv,
+        qte,
+         
+      })
+
+      return {
+        success : '200ok'
+      }
+  } catch (error) {
+    throw new Error("A probleme has auccured, try again...")
+  }
+}
+
+export async function updateProduct(id : string , name : string , pua : number , puv : number , qte : number){
+  if(!id || !name || !pua || !puv || !qte ){
+    throw new Error("Can't UPDATE the product , messing args!");
+  }
+
+  try {
+     await db.update(productsTable).set({name, pua , puv , qte}).where(eq(productsTable.id , id));
+     return
+  } catch (error) {
+    throw new Error("Internal server problem !");
+  }
+}
+
+export async function updateProductQuantity(id : string , qte : number){
+  if(!id || qte < 0 ){
+    throw new Error("Can't UPDATE the product , messing args!");
+  }
+
+  try {
+     await db.update(productsTable).set({qte}).where(eq(productsTable.id , id));
+  } catch (error) {
+    throw new Error("Internal server problem !");
   }
 }
 
@@ -258,5 +343,61 @@ export async function addUserNotes(author : string , shopid : string , title : s
     }
   } catch (error) {
     throw new Error("Not able to post data , try again.")
+  }
+}
+
+export async function getAllNotesByShop(shopid : string){
+
+  if(!shopid){
+    throw new Error("Can't get data , you are not authaurized !");
+  }
+  try {
+    const notes = await db.query.notesTable.findMany({
+              orderBy : (notesTable , {desc, asc})=> [desc(notesTable.date), asc(notesTable.type)] ,
+              with : {
+                  owner : {
+                      columns : {
+                          image : true ,
+                          name : true ,
+                      }
+                  }
+              } ,
+              where : eq(notesTable.idShop , shopid)
+    });
+    
+    return notes
+  } catch (error) {
+    throw error
+  }
+  
+}
+
+export async function DeleteNoteById(idNote : string){
+  if(!idNote){
+    throw new Error("Error in passing data!");
+  }
+
+  try {
+    await db.delete(notesTable).where(eq(notesTable.id , idNote));
+    return
+  } catch (error) {
+    throw error
+  }
+  
+}
+
+export async function DeleteAllNotesByShopId(idShop : string) {
+  if(!idShop){
+    throw createError({
+      statusMessage : 'Bad request , messing data',
+      statusCode : 400
+    })
+  }
+
+  try {
+    await db.delete(notesTable).where(eq(notesTable.idShop , idShop));
+    return
+  } catch (error) {
+    throw error;   
   }
 }

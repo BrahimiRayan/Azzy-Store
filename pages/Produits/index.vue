@@ -1,6 +1,6 @@
 <template>
   <div v-if="pending">
-    <Charging text="Chargement des produits..." />
+    <SkeletoneProducts />
   </div>
 
   <div v-else>
@@ -8,8 +8,8 @@
   <div class="flex justify-between ">
     <div class="ml-4">
       <AddProduct @refresh-data="handleRefresh"/>
-      <SelledProduct :produits="produits"/>
-      <BoughtProduct :produits="produits"/>
+      <SelledProduct :produits="produits" @refresh-data="handleRefresh"/>
+      <BoughtProduct :produits="produits" @refresh-data="handleRefresh"/>
     </div>
     <div class=" w-[20%] bg-[url('/state.png')] bg-no-repeat bg-contain bg-right">
     </div>
@@ -25,7 +25,7 @@
     <div class="flex items-center justify-between px-4 py-3.5 border border-[var(--pale-moon)] rounded-t-lg">
       <p class="text-white/70 font-bold">Totale produits : <span class="text-red-500/70">{{ produits.length }}</span></p>
       <div class="flex items-center gap-3">
-        <UInput v-model="globalFilter" class="max-w-sm" placeholder="Chercher un produit ... " icon="i-ci-filter" />
+        <UInput v-model="globalFilter" class="max-w-sm" placeholder="Chercher un produit ... " icon="i-ci-filter" :ui="{base:'bg-[var(--deep-dark-blue)] placeholder:text-white/60'}"/>
         <UButton 
         label="Exporter en PDF"
           class="bg-red-600 text-white font-bold hover:bg-red-700 text-sm "
@@ -58,8 +58,9 @@
 
   <form @submit.prevent="filterProducts" class="mt-8 flex">
     <UInput v-model="nameFilter" class="max-w-sm h-8 indent-0.5 shadow-green-600" placeholder="Chercher un produit ... "
-      icon="i-lucide-search-check" :ui="{
-        base: 'rounded-l rounded-r-none',
+      icon="i-lucide-search-check" 
+      :ui="{
+        base: 'rounded-l rounded-r-none bg-[var(--deep-dark-blue)] placeholder:text-white/60',
       }" />
     <UButton label="Chercher" class="bg-green-600 text-[var(--pale-moon)] h-8 border hover:bg-green-700 text-sm "
       size="sm" 
@@ -198,7 +199,7 @@ const DownloadCsv = ()=>{
   const date =  NormalDateformat(fulldate);
   exportToCsv(`Informatios produits ${date}.csv`, datas);
 }
-const DownloadPdf =()=>{
+const DownloadPdf =async ()=>{
 
   if(produits.value.length === 0) {
 
@@ -230,7 +231,7 @@ const DownloadPdf =()=>{
   const fulldate = new Date();
   const date =  NormalDateformat(fulldate);
   const headers = ['#', 'Intitulé', 'Catégorie', 'Prix U.Achat', 'Prix U.Vente ','Benifice','Quantité'];
-  exportToPdf(`Informatios produits ${date}.pdf`, headers, datas);
+   await exportToPdf(`Informations produits ${date}.pdf`, headers, datas);
   
 }
 

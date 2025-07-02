@@ -1,31 +1,11 @@
-import { db } from "~/lib/db";
-import { productsTable } from "~/lib/db/schema";
+import { addNewProduct } from "~/lib/db/queries";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { name, image, type, pua, puv, qte, idShop } = body;
 
-  if (!name || !type || pua === undefined || puv === undefined || 
-      qte === undefined || !idShop) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Missing required fields',
-    });
-  }
-
   try {
-    const newProduct = await db
-      .insert(productsTable)
-      .values({
-        name,
-        image: image || "/no-image.png",
-        type,
-        pua,
-        puv,
-        qte,
-        idShop 
-      })
-      .returning();
+    const newProduct = await addNewProduct(idShop , name , image , type , pua , puv , qte);
     return newProduct;
   } catch (error) {
     console.error('Error creating product:', error);

@@ -7,52 +7,59 @@
               description="Remplissez les champs ci-dessous pour ajouter une note"
               :overlay='true'
               :dismissible="false"
-              class="rounded-tr-2xl rounded-tl-2xl"
               :ui="{
                 overlay: 'bg-black/60',
-                header: 'bg-[var(--deep-dark-blue)] rounded-tr-2xl rounded-tl-2xl text-[var(--creamy-white)]', 
-                body: 'rounded-br-2xl rounded-bl-2xl bg-[var(--deep-dark-blue)] text-[var(--creamy-white)] ',
+                header: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]', 
+                body: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)] ',
+                content :'rounded-xl ring-white/40 ',
+                close : 'bg-red-600 hover:bg-red-700'
              }">
                 
                 <div class="w-fit">
                 <UButton
                     label="Ajouter une note"
                     icon="i-lucide-plus" 
-                    class="bg-[var(--green-grace)] text-[var(--deep-dark-blue)] border-2 border-[var(--green-grace)] hover:bg-white text-sm mb-4 m"
+                    class="bg-[var(--green-grace)] text-[var(--deep-dark-blue)] border-2 border-[var(--green-grace)] hover:bg-green-500 text-sm mb-4 m"
                     size="sm"
                 />
+
             </div>
                 <template #body>
                     <form @submit.prevent="submitNote" defau>
                     <UFormField label="Titre" class="mb-5" required>
-                        <UInput placeholder="Entrer un titre" v-model="addNote.title" class="w-[90%]" required/>
+                        <UInput placeholder="Entrer un titre" v-model="addNote.title" class="w-[90%]" required :ui="{base : 'bg-[var(--deep-dark-blue)] placeholder:text-white/60 ring-white/80'}"/>
                     </UFormField>
                     <UFormField label="Description" class="mb-6" required>
-                        <UTextarea placeholder="Entrer une description" v-model="addNote.content" class="w-[90%]" required/>
+                        <UTextarea placeholder="Entrer une description" v-model="addNote.content" class="w-[90%]" required :ui="{base : 'bg-[var(--deep-dark-blue)] placeholder:text-white/60 ring-white/80'}"/>
                     </UFormField>
                     <URadioGroup v-model="addNote.type" :items="NoteTypes" color="secondary"/>
                     <USeparator class="my-3 text-[var(--green-grace)] opacity-60" />
-                    <UButton label="Submit" type="submit" class="mr-6 text-[var(--deep-dark-blue)] borde border-white bg-amber-200"/>
-                    <UButton label="Fermer" class="bg-transparent border border-red-600 hover:bg-red-800" @click="open = false" />
+                    <UButton :label="isSubmitting ?'attendez ...' :'Soumettre'" type="submit" class="mr-6 text-black border-green-500 border bg-green-600" :disabled="isSubmitting"/>
+                    
                 </form>
                 </template> 
             </UModal>
 
-            <!-- Notes , so what i should do is to display them by newest =>oldest then !important > repelle also make a distinct UI betwen the two -->
-            <!-- notifcation card -->
-            <!-- //TODO: TAKE THIS TO IT OWN SEPERATE COMPONENT ... -->
-            <div class="flex items-center gap-4" v-if="pending">
-                <USkeleton class="h-12 w-12 rounded-full bg-gray-500" />
+            <div>
+                <UButton
+                    :label="isDeleting ?'attendez ...': 'Supprimer tout'"
+                    icon="i-lucide-trash" 
+                    class="bg-red-600 text-white text-sm mb-4 hover:bg-red-700 disabled:bg-red-600/80"
+                    size="sm"
+                    @click="DeleteAllNotes"
+                    :disabled="notedata?.notes.length === 0"
+                />
+            </div>
 
-                <div class="grid gap-2">
-                <USkeleton class="h-4 w-[250px] bg-gray-500"/>
-                <USkeleton class="h-4 w-[200px] bg-gray-500" />
-                </div>
+            <div v-if="pending">
+                <SkeletoneNotes v-for="_ in 2" />
             </div>
 
             <div v-else-if="notedata">
-            <div v-if="notedata.notes.length === 0" class="text-center text-gray-500 mt-10">
-                <p>Aucune note disponible pour le moment.</p>
+            <div v-if="notedata.notes.length === 0" class="text-center text-gray-500 mt-10 ">
+                <div class="bg-[url('/assets/pics/emptyMail.png')] w-48 h-38 bg-cover bg-no-repeat bg-center mx-auto"></div>
+                
+                <p>Aucune note disponible pour le moment ...</p>
             </div >
 
             <div v-else >
@@ -74,11 +81,12 @@
                         icon="i-lucide-trash" 
                         class="ml-auto bg-red-500 hover:bg-red-700 transition-colors duration-300 ease-in-out"
                         size="sm"
+                        @click="DeleteNote(note.id)"
                     />
                 </div>
                 <USeparator class="my-3 text-[var(--green-grace)] opacity-25" />
                 <div>
-                    <h2 class="font-extrabold text-sm">Type : <span class="font-bold text-sm " :class="note.type === 'Important'? 'text-red-500' : 'text-blue-500' ">{{note.type === "Important"? "Important!" : "Rappele" }}</span></h2>
+                    <h2 class="font-extrabold text-sm">Type : <UBadge class="font-bold" :class="note.type === 'Important'? 'text-red-500' : 'text-blue-500' ">{{note.type === "Important"? "Important!" : "Rappele" }}</UBadge></h2>
                     <h2 class="font-extrabold text-sm">Titre: <span class="text-sm font-medium">{{ note.title }}</span></h2>
                     <p class="p-2 text-sm">{{ note.content }} </p>
                 </div>
@@ -95,6 +103,9 @@
 import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
 import type { notesTable } from '~/lib/db/schema';
 const open = ref<boolean>(false) ;
+const isSubmitting = ref<boolean>(false);
+const isDeleting = ref<boolean>(false);
+
 
 type NoteFetchResponse = {
     notes: (typeof notesTable.$inferSelect & {owner : {image : string | null ,name : string}})[]
@@ -128,11 +139,14 @@ const addNote = ref<{
 
 const {data : notedata , pending , refresh} = useFetch<NoteFetchResponse>('/api/notes', {
     lazy: true,
+    server : false
 });
 
 
-    const submitNote = () => {
-        $fetch("/api/notes", {
+const submitNote = async () => {
+    isSubmitting.value = true;
+    try {
+        await $fetch("/api/notes", {
             method: "POST",
             body: {
                 title: addNote.value.title,
@@ -140,7 +154,48 @@ const {data : notedata , pending , refresh} = useFetch<NoteFetchResponse>('/api/
                 type: addNote.value.type
             }
         })
-        open.value = false;
+        addNote.value.title = ''
+        addNote.value.content = ''
+
         refresh();
+    } catch (error) {
+        throw error
+    }finally{
+        isSubmitting.value = false;
     }
+
+}
+
+const DeleteNote = async (id : string)=>{
+    isDeleting.value = true;
+    try {
+        await $fetch("/api/notes" , {
+        method : 'DELETE',
+        body : {
+            id
+        }
+    })
+    refresh();
+    } catch (error) {
+        throw error
+    }finally{
+        isDeleting.value = false;
+    }
+
+}
+
+const DeleteAllNotes = async ()=>{
+    isDeleting.value = true;
+    try{
+        await $fetch("/api/notes/deleteAll",{
+            method : 'DELETE'
+        });
+        refresh()
+    }catch(error){
+        throw error
+    }finally{
+        isDeleting.value = false;
+    }
+    
+}
 </script>

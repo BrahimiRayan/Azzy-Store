@@ -9,6 +9,8 @@
       body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       overlay :'bg-black/70',
+      content :'rounded-xl ring-white/40 ',
+      close : 'bg-red-600 hover:bg-red-700'
     }">
           
           <!-- the open button  -->
@@ -27,7 +29,7 @@
       <form @submit.prevent="submitBought">
         <!-- choix de produit  -->
         <UFormField label="Selectionez un produits dans la liste" class=" w-full mb-5" required>
-        <USelectMenu v-model="Bproduct" :items="Boughtitems" placeholder="Selectionez un produit ..." :ui="{
+        <USelectMenu id="cat" v-model="Bproduct" :items="Boughtitems" placeholder="Selectioner un produit ..." :ui="{
           base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
           label: 'text-sm text-gray-400',
           input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
@@ -57,6 +59,12 @@
         }" class="w-[80%]" />
       </UFormField>
 
+      <div class="mt-8">
+        <p class="text-sm text-red-400 font-extrabold">* Attention, la modification des prix unitaires d'achat et de vente pour un produit sera appliquée à toutes les unités restantes en stock.</p>
+      <p class="text-sm text-red-400 font-extrabold"> Par contre, les transactions précédentes resteront inchangées.</p>
+      </div>
+      
+
       <USeparator class="text-[var(--green-grace)] w-full my-5"/>
       <UButton label="Valider" class="bg-green-600 text-[var(--pale-moon)] hover:bg-green-700 text-sm " size="sm"
         icon="i-lucide-check" type="submit" :ui="{
@@ -70,62 +78,169 @@
   </UModal>
 </template>
 
-
-
 <script setup lang="ts">
 import type { Produit } from '~/types/GeneraleT';
 
-// props
+
 const props = defineProps<{
   produits: Produit[],
 }>();
+
+const emit = defineEmits<{
+  (e: 'refresh-data'): void;
+}>();
 //variables
 const openBought = ref(false);
-const Bproduct = ref<string>('');
+
+type BoughtitemsT = {
+  id: string;
+  label: string;
+};
+
+const Bproduct = ref<BoughtitemsT | undefined>();
 const BoughtQ = ref<number>(0);
 const pua = ref<number>(0);
 const puv = ref<number>(0);
-const toast = useToast();
-const Boughtitems = ref<string[]>([]);
-props.produits?.forEach((product : Produit) => {
-  Boughtitems.value.push(product.name);
+
+watch(Bproduct , (newValue)=>{
+  if(!newValue || !newValue.id) {
+    pua.value = 0;
+    puv.value = 0;
+  }
+  else {
+    // Assuming the product has a price property
+    const selectedProduct = props.produits.find(product => product.id === newValue.id);
+    if (selectedProduct) {
+      pua.value = selectedProduct.pua || 0; 
+      puv.value = selectedProduct.puv || 0;
+    }
+  }
+})
+
+const Boughtitems = computed(() => {
+  return props.produits?.map(product => ({
+    id: product.id,
+    label: product.name
+  })) || [];
 });
+
+const toast = useToast();
+
 // functions
-const submitBought = ()=>{
-  if (Bproduct.value === '' || BoughtQ.value === 0 || pua.value === 0 || puv.value === 0) {
+const submitBought =async ()=>{
+  if (!Bproduct.value || !Bproduct.value.id || BoughtQ.value === 0 || pua.value === 0 || puv.value === 0) {
     toast.add({
         title: 'Erreur',
         description: 'Veuillez remplir tous les champs',
         color: 'warning',
         icon: 'lucide-alert-triangle',
         ui: {
-          root: 'bg-red-500/90 rounded-lg p-4',
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-red-600'
         },
       });
     return;
   }
 
-  // supabase logic to add the bought product to the database
-  const productId = props.produits?.find((product: Produit) => product.name === Bproduct.value)?.id;
-  console.log('productId : ', productId);
-  console.log('produit vendu : ', Bproduct.value);
-  console.log('quantité vendu : ', BoughtQ.value);
-  console.log('prix unitaire d\'achat : ', pua.value);
-  console.log('prix unitaire de vente : ', puv.value);
-  toast.add({
+  if(pua.value > puv.value){
+    toast.add({
+        title: 'Attention',
+        description: "Le prix d'achat est superieur au prix de vente !",
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-red-600'
+        },
+    })
+    return
+  }
+
+  const foundProduct = props.produits.find((p:Produit) => p.id === Bproduct.value?.id);
+  if(!foundProduct){
+      toast.add({
+        title: 'Erreur',
+        description: "Produit non trouvé, si cette erreur persiste, veuillez vérifier la liste des produits ou refrecher la page",
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-red-600'
+        },
+      });
+      return;
+  }
+
+
+try {
+  
+   await $fetch('api/products', {
+    method : 'PUT',
+    body : {
+      id: Bproduct.value.id,
+      name: Bproduct.value.label,
+      pua: pua.value,
+      puv: puv.value,
+      qte: foundProduct.quantity + BoughtQ.value,
+    },
+  }); 
+  } catch (error) {
+   
+    toast.add({
+      title: 'Erreur',
+      description: 'Une erreur est survenue lors de la mise à jour du produit',
+      color: 'warning',
+      icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-red-600'
+        },
+    });
+    return;
+  }
+
+try {
+    
+  await $fetch('api/Transactions', {
+    method: 'POST',
+    body: {
+      productId: Bproduct.value.id,
+      quantity: BoughtQ.value,
+      pua: pua.value,
+      puv: puv.value,
+      type: 'A',
+    },
+  });
+  } catch (error) {
+    toast.add({
+      title: 'Erreur',
+      description: 'Une erreur est survenue lors de la mise à jour du produit',
+      color: 'warning',
+      icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-red-600'
+        },
+    });
+    return;
+  }finally{
+    Bproduct.value = undefined;
+    BoughtQ.value = 0;
+    pua.value = 0;
+    puv.value = 0;
+    openBought.value = !openBought.value
+  }
+    emit('refresh-data');
+    toast.add({
     title: 'Succès',
     description: 'Operation est bien effectue',
     color: 'success',
     icon: 'lucide-check-circle',
     ui: {
-      root: 'bg-green-500/90 rounded-lg p-4',
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-green-600'
     },
   });
-  // reset the form
-  Bproduct.value = '';
-  BoughtQ.value = 0;
-  pua.value = 0;
-  puv.value = 0;
 
 }
 

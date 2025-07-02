@@ -1,23 +1,19 @@
-import { eq } from "drizzle-orm";
-import { db } from "~/lib/db";
-import { productsTable } from "~/lib/db/schema";
-
+import { updateProduct } from "~/lib/db/queries";
 
 export default defineEventHandler(async (event)=>{
    const data = await readBody(event);
     if(!data){
-        throw new Error("No data recieved !")
+        throw new Error("No data recieved !");
     }
     const {id , name , pua , puv , qte} = data;
 
     try{
-       await db.update(productsTable).set({name, pua , puv , qte}).where(eq(productsTable.id , id))
-
+       await updateProduct(id , name , pua , puv , qte);
        return {
             success : true
        }
     }catch(error){
-
+        throw new Error("Internal error")
     }
 
 })

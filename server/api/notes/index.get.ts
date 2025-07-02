@@ -1,7 +1,6 @@
-import { eq } from "drizzle-orm";
 import { auth } from "~/lib/auth"
-import { db } from "~/lib/db";
-import { notesTable } from "~/lib/db/schema";
+import { getAllNotesByShop } from "~/lib/db/queries";
+
 
 export default defineEventHandler(async (event)=>{
     const session = await auth.api.getSession({
@@ -14,21 +13,8 @@ export default defineEventHandler(async (event)=>{
             statusMessage : 'Shop not found.'
         });
     }
-
     try{
-        const notes = await db.query.notesTable.findMany({
-            orderBy : (notesTable , {desc, asc})=> [desc(notesTable.date), asc(notesTable.type)] ,
-            with : {
-                owner : {
-                    columns : {
-                         image : true ,
-                         name : true ,
-                    }
-                }
-            } ,
-            where : eq(notesTable.idShop , session.user.shopId)
-        })
-
+        const notes = await getAllNotesByShop(session.user.shopId);
         return {
            notes
         }
