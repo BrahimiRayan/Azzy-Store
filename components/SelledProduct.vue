@@ -9,7 +9,8 @@
         body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
         header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
         overlay :'bg-black/70',
-        content : 'rounded-none ring-0 shadow-sm shadow-green-600'
+        content :'rounded-xl ring-white/40 ',
+        close : 'bg-red-600 hover:bg-red-700'
       }">
             
             <!-- the open button  -->
@@ -29,17 +30,18 @@
           <!-- choix de produit  -->
           <UFormField label="Catégorie du Produit" class=" w-full mb-5" required>
           <USelectMenu id="cat" v-model="product" :items="Selleditem" placeholder="Selectioner un produit ..." :ui="{
-          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] ring-white/70',
           label: 'text-sm text-gray-400',
-          input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
+          input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)] ',
           item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] hover:bg-blue-900',
+          placeholder : 'text-white/60',
           group: 'p-0',
         }" class="w-[80%]" />
         </UFormField>
         <!-- la Quantité de produuit vendu -->
         <UFormField label="Quantité vendu" class=" w-full mb-3" required>
-          <UInput v-model="selledQ" type="number" placeholder="Quantité vendue" min="0" :ui="{
-            base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+          <UInputNumber v-model="selledQ" placeholder="Quantité vendue" :min="0" :ui="{
+            base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/60 ring-white/70',
           }" class="w-[80%]" />
         </UFormField>
 
@@ -56,10 +58,7 @@
     </UModal>
 </template>
 
-
-
 <script setup lang="ts">
-import { SelledProduct } from '#components';
 import type { Produit } from '~/types/GeneraleT';
 
 const props = defineProps<{
@@ -88,7 +87,7 @@ const Selleditem = computed(() => {
 const toast = useToast();
 
 const submitSelles = async ()=>{
-    if (!product.value || product.value?.id === '' || selledQ.value === 0 ) {
+    if (!product.value || product.value?.id === '' || selledQ.value === 0 || !selledQ.value) {
       toast.add({
         title: 'Erreur',
         description:'Veuillez remplir tous les champs',
@@ -177,7 +176,7 @@ const submitSelles = async ()=>{
 
   emit('refresh-data');
   
-  SelledProduct.value = undefined;
+  product.value = undefined
   selledQ.value = 0;
 
 }

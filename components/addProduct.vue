@@ -1,12 +1,13 @@
 <template>
   <UModal v-model:open="open" title="Ajouter Un Produit"
-    description="remplisser tous les champs essentielle pour ajouter un produit." :overlay="true" :ui="{
+    description="remplisser tous les champs essentielle (*) pour ajouter un produit." :overlay="true" :ui="{
       description: 'text-sm text-gray-400',
       title: 'text-lg font-semibold',
       body: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       header: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       overlay: 'bg-black/70',
-      content :'rounded-none'
+      content :'rounded-xl ring-white/40 ',
+      close : 'bg-red-600 hover:bg-red-700'
     }">
 
     <!-- the open button  -->
@@ -19,35 +20,90 @@
     <template #body>
       <!-- add product -->
       <form @submit.prevent="addProduit" class="flex flex-col items-start justify-between gap-2">
+
         <UFormField label="Intitulé du Produit" class=" w-full" required>
-          <UInput required label="In " placeholder="Ex : T-shirt Roda ..." class="w-full" type="text"
-            v-model="NewProduct.name" />
+          <UInput required 
+            placeholder="Ex : T-shirt Roda ..."
+            class="w-full"
+            type="text"
+            v-model="NewProduct.name" 
+            :ui="{
+              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+            }"
+            />
         </UFormField>
 
-        <UInput label="Image du Produit" class=" w-full" type="file" accept="image/*" v-model="NewProduct.img"
-          icon="i-lucide-image" />
+        <UFormField label="Image (optionel)" class="w-full">
+
+          <UInput 
+            label="Image du Produit" 
+            class=" w-full" 
+            type="file" 
+            accept="image/*" 
+            v-model="NewProduct.img"
+            icon="i-lucide-image" 
+            :ui="{
+                base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+              }"
+            />
+        </UFormField>
 
         <UFormField label="Catégorie du Produit" class=" w-full" required>
-          <USelectMenu id="cat" v-model="NewProduct.category" :items="items" :ui="{
-            base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-            label: 'text-sm text-gray-400 ',
-            input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
-            item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-            group: 'bg-[var(--deep-dark-blue)] ',
-          }" class="w-48" />
+          <div class="flex items-center justify-between">
+            <USelectMenu id="cat" v-model="NewProduct.category" :items="items" :ui="{
+              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+              label: 'text-sm text-gray-400 ',
+              input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
+              item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+              group: 'bg-[var(--deep-dark-blue)] ',
+            }" class="w-48" />
+  
+            <span class="px-2 py-1.5 bg-black/20 text-green-600 rounded-xl text-xs font-extrabold">{{ NewProduct.category === 'Autre' ? 'Défaut : ' : "" }} {{ NewProduct.category }}</span>
+          </div>
         </UFormField>
+
         <UFormField label="Prix d'achat par unité" class=" w-full" required>
-          <UInput required placeholder="Prix d'achat par unité" class=" w-full" type="number" min="0"
-            v-model="NewProduct.pua" icon="i-icons8-buy" />
+          <UInput 
+            required 
+            placeholder="Prix d'achat par unité" 
+            class=" w-full" 
+            type="number" 
+            min="0"
+            v-model="NewProduct.pua" 
+            icon="i-icons8-buy" 
+            :ui="{
+              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+            }"/>
         </UFormField>
+
         <UFormField label="Prix de vente par unité" class=" w-full" required>
-          <UInput required placeholder="Prix de vente par unité" class=" w-full" type="number" min="0"
-            v-model="NewProduct.puv" icon="i-material-symbols-sell-outline" />
+          <UInput 
+            required 
+            placeholder="Prix de vente par unité" 
+            class=" w-full" 
+            type="number" 
+            min="0"
+            v-model="NewProduct.puv" 
+            icon="i-material-symbols-sell-outline"
+            :ui="{
+              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+            }"
+            />
         </UFormField>
 
         <UFormField label="Quantité du Produit" class=" w-full" required>
-          <UInput required placeholder="Quantité du Produit" class=" w-full" type="number" min="0"
-            v-model="NewProduct.quantity" icon="i-material-symbols-sell-outline" />
+          <UInput 
+            required 
+            placeholder="Quantité du Produit" 
+            class=" w-full" 
+            type="number" 
+            min="0"
+            v-model="NewProduct.quantity" 
+            icon="i-material-symbols-sell-outline" 
+            :ui="{
+              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+            }"
+            />
         </UFormField>
 
         <USeparator class="my-4" />

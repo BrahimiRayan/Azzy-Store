@@ -18,17 +18,17 @@
 
       </div>
       
-      <ul class="flex items-center gap-8">
+      <ul class="flex items-center gap-8 relative">
         <li>
-          <!-- manipulate the show fieled to when he didn't mark a note as done to be shown -->
           <USlideover
            title="🔔 Mes notes "
-             description="Ajouter, supprimer et voir les notes définies par les employés du magasin"
+           description="Ajouter, supprimer et voir les notes définies par les employés du magasin"
            icon="i-lucide-bell"
            :ui="{
                 overlay: 'bg-black/50',
                 content: 'bg-[var(--deep-dark-blue)] text-[var(--creamy-white)]',
-                description : 'hidden' 
+                description : 'hidden', 
+                close : 'bg-red-600 hover:bg-red-700'
             }"
            >    
             <UButton :class="['h-8 w-8 flex hover:shadow-sm hover:-translate-y-1 shadow-green-500 justify-center bg-transparent text-[var(--green-grace)] transition-all duration-300 ease-in-out']" icon="i-lucide-mail" color="neutral" variant="subtle" />
@@ -36,18 +36,35 @@
               <NontificationNoteCard />
             </template>
           </USlideover>
-          
-        
+        </li>
+
+        <li>
+          <button @click="showBox = !showBox" class="cursor-pointer">
+            <UAvatar :alt="session.data?.user.name" 
+              class="bg-[var(--green-grace)] text-[var(--deep-dark-blue)] hover:shadow-md hover:scale-130 shadow-green-500 transition-all duration-300 ease-in-out" 
+              :ui="{
+              fallback : 'font-extrabold'
+              }"
+            />
+          </button>
+          <div v-if="showBox" class="w-30 h-30 bg-amber-400 absolute top-10 -right-10">
+            lolo
+          </div>
         </li>
       </ul>
     </nav>
   </template>
   
   <script setup lang="ts">
+import { authClient } from '~/lib/auth/auth-client';
+
+const showBox =ref(false);
   // props and emits
   const props = defineProps({
     isOpen: Boolean
   });
+
+  const session = authClient.useSession();
   
   const emit = defineEmits(['update-open']);
 
@@ -58,32 +75,3 @@
   
   </script>
 
-  <style scoped>
-    .fade-enter-active, .fade-leave-active {
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-    .fade-enter, .fade-leave-to {
-      transition: opacity 0.5s ease-in;
-
-      opacity: 0;
-    }
-    
-    .costumDark , .costumLight{
-    /* position: relative; */
-    border-radius: 11px;
-    display: block;
-    width: 45px;
-    text-align: center;
-    height: 25px;
-    flex-shrink: 0;
-    border: 1px solid var(--creamy-white);
-    background-color: var(--green-grace);
-    transition: border-color .25s !important;
-
-}
-.costumLight{
-    background-color: rgb(255, 255, 255);
-    border: 1px solid var(--deep-dark-blue);
-}
-  </style>

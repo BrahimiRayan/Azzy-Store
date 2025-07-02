@@ -9,7 +9,8 @@
       body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
       overlay :'bg-black/70',
-      content : 'rounded-none ring-0 shadow-sm shadow-green-600'
+      content :'rounded-xl ring-white/40 ',
+      close : 'bg-red-600 hover:bg-red-700'
     }">
           
           <!-- the open button  -->
@@ -76,8 +77,6 @@
 
   </UModal>
 </template>
-
-
 
 <script setup lang="ts">
 import type { Produit } from '~/types/GeneraleT';

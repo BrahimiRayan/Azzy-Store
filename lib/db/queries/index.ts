@@ -385,3 +385,19 @@ export async function DeleteNoteById(idNote : string){
   }
   
 }
+
+export async function DeleteAllNotesByShopId(idShop : string) {
+  if(!idShop){
+    throw createError({
+      statusMessage : 'Bad request , messing data',
+      statusCode : 400
+    })
+  }
+
+  try {
+    await db.delete(notesTable).where(eq(notesTable.idShop , idShop));
+    return
+  } catch (error) {
+    throw error;   
+  }
+}
