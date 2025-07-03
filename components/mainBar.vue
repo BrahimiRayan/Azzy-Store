@@ -40,16 +40,33 @@
 
         <li>
           <button @click="showBox = !showBox" class="cursor-pointer">
-            <UAvatar :alt="session.data?.user.name" 
-              class="bg-[var(--green-grace)] text-[var(--deep-dark-blue)] hover:shadow-md hover:scale-130 shadow-green-500 transition-all duration-300 ease-in-out" 
+            <UAvatar :alt="showBox ? 'X' : session.data?.user.name "
+              class=" hover:shadow-md hover:scale-130  transition-all duration-300 ease-in-out" 
+              :class="showBox ? 'bg-red-600 text-white shadow-red-500' : 'text-[var(--deep-dark-blue)] bg-[var(--green-grace)] shadow-green-500'"
               :ui="{
               fallback : 'font-extrabold'
               }"
             />
           </button>
-          <div v-if="showBox" class="w-30 h-30 bg-amber-400 absolute top-10 -right-10">
-            lolo
+
+          <div v-if="showBox" 
+               class="absolute top-10 right-0 bg-[var(--deep-dark-blue)] border border-white/10 rounded-lg shadow-lg p-4 z-50 min-w-48"
+               @click.stop>
+            <div class="flex flex-col gap-2">
+              <p class="text-sm text-gray-400">{{ session.data?.user.name }}</p>
+              <p class="text-xs text-gray-500">{{ session.data?.user.email }}</p>
+              <hr class="border-white/10">
+              <button class="text-left text-sm hover:text-green-400 transition-colors">
+                Profil
+              </button>
+              <NuxtLink to="/logOut" >
+              <button class="text-left w-full text-sm hover:text-red-400 transition-colors">
+                 Déconnexion
+                </button>
+              </NuxtLink>
+            </div>
           </div>
+
         </li>
       </ul>
     </nav>
@@ -58,7 +75,7 @@
   <script setup lang="ts">
 import { authClient } from '~/lib/auth/auth-client';
 
-const showBox =ref(false);
+const showBox =ref<boolean>(false);
   // props and emits
   const props = defineProps({
     isOpen: Boolean
