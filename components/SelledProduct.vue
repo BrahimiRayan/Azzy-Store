@@ -127,7 +127,7 @@ const submitSelles = async ()=>{
 
   try {
    
-   await $fetch('api/products/prodQuantity', {
+   await $fetch('/api/products/prodQuantity', {
     method : 'PUT',
     body : {
       id: product.value.id,
@@ -150,7 +150,7 @@ const submitSelles = async ()=>{
 
   try {
     
-  await $fetch('api/Transactions', {
+  await $fetch('/api/Transactions', {
     method: 'POST',
     body: {
       productId: product.value.id,
