@@ -1,4 +1,7 @@
 <template>
+
+
+
   <UTabs :items="items" class="gap-4 w-full" :ui="{
     trigger: 'flex-1',
     list: 'border-1 border-gray-200/20',
@@ -34,10 +37,10 @@
                 side: 'left',
                 sideOffset: 8
               }" :ui="{
-    input: 'bg-[var(--deep-dark-blue)]',
-    group: 'text-white/90 bg-[var(--deep-dark-blue)]',
-    item: 'text-white/90 bg-[var(--deep-dark-blue)] border-b-1 border-white/10',
-  }" required class="w-60" />
+                input: 'bg-[var(--deep-dark-blue)]',
+                group: 'text-white/90 bg-[var(--deep-dark-blue)]',
+                item: 'text-white/90 bg-[var(--deep-dark-blue)] border-b-1 border-white/10',
+              }" required class="w-60" />
             </UFormField>
 
             <UFormField label="Quantité" required :ui="{
@@ -59,11 +62,11 @@
         </form>
         <div class="w-[38%]">
           <div class="flex flex-col gap-3">
-            <div v-for="(item, index) in formData" :key="index"
+            <div v-for="(item, index) in formData" :key="item.product?.id"
               class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
               
               <p class="text-sm">Produit: 
-                  <span v-if="item.product !== ''" class="font-bold text-green-500 ml-1">{{ item.product }}</span>
+                  <span v-if="item.product" class="font-bold text-green-500 ml-1">{{ item.product.label }}</span>
                   <span v-else class="font-bold text-red-500 ml-1"> vous devez choisir un produit</span>
               </p>
 
@@ -132,57 +135,145 @@
 
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
-import type { Cammande } from '~/types/GeneraleT';
-const toast = useToast()
-//TODO: this from the db
-const Products = ref<string[]>(['Backlog', 'Todo', 'In Progress', 'Done'])
-const fournisseur = ref<string>('') ;
+import type { Cammande, Produit } from '~/types/GeneraleT';
+import type { orderProductsTable } from '~/lib/db/schema';
 
+type prod_ORDER = {id : string}
+type prodCommand = typeof orderProductsTable.$inferInsert
+type ProdItem = {
+  id: string;
+  label: string;
+};
 interface FormItem {
-  product: string;
+  product: ProdItem | undefined;
   quantity: number | 0;
 }
 
+const props = defineProps<{myProducts : Produit[]}>();
+const toast = useToast()
+
+const Products = computed(() => {
+  return props.myProducts?.map(prod => ({
+    id: prod.id,
+    label: prod.name
+  })) || [];
+});
+
+const fournisseur = ref<string>('') ;
 const formData = ref<FormItem[]>([]);
 
 const AddForm = () => {
   formData.value.push({
-    product: '',
+    product: undefined,
     quantity: 0
   });
 };
 
+function OptimizeFormDatas() {
+  formData.value = formData.value.reduce((acc, current) => {
+    if (!current.product) {
+      return acc;
+    }
 
-//TODO: check this function ... 
-function addCommand() {
-  let isValid = true;
-  let products : FormItem[] = [] ;
-  formData.value.forEach((item , index) => {
-    if (item.product === '' || item.quantity <= 0) {
-      console.log('Produit ou quantité invalide');
+    const existingItem = acc.find(item => 
+      item.product?.id === current.product?.id
+    );
+
+    if (existingItem && existingItem.product) {
+      existingItem.quantity += current.quantity;
+    } else {
+      acc.push({ ...current });
+    }
+    return acc;
+  }, [] as FormItem[]);
+}
+
+async function addCommand() {
+try {
+  OptimizeFormDatas();
+
+  if(!formData.value || formData.value.length === 0){
       toast.add({
-        title: 'Erreur',
-        description: `Ooops,Le Produit numero ${index + 1} invalide ou sa quantité égale à 0`,
-        color: 'warning',
-        icon: 'lucide-alert-triangle',
-        ui: {
-          root: 'bg-red-500/90 rounded-lg p-4',
-        },
+          title: 'Erreur',
+          description: `Veuillez remplir tous les champs obligatoires.`,
+          color: 'warning',
+          icon: 'lucide-alert-triangle',
+            ui: {
+              root: 'bg-gray-900/90 rounded-lg p-4',
+              progress : 'bg-red-600'
+            },
       });
+    return 
+  }
 
-      isValid = false;
+  let products : FormItem[] = [] ;
+  let isvalide : boolean = true;
+
+  formData.value.forEach((item , index) => {
+    if (!item.product || !item.product.id || item.quantity <= 0) {
+      toast.add({
+          title: 'Erreur',
+          description: `Ooops,Le Produit numero ${index + 1} invalide ou sa quantité égale à 0`,
+          color: 'warning',
+          icon: 'lucide-alert-triangle',
+            ui: {
+              root: 'bg-gray-900/90 rounded-lg p-4',
+              progress : 'bg-red-600'
+            },
+      });
+      isvalide = false;
+      return
     }
     products.push(item);
   });
-  if (!isValid) {
-    products = [];
-    return;
+
+  if(!isvalide){
+    return
   }
-  products.forEach((item) => {
-    console.log('Produit:', item.product, 'Quantité:', item.quantity);
+
+// create the commande ... 
+
+  const idcommand : prod_ORDER = await $fetch('/api/commands' , {
+    method : 'POST',
+    body : {
+      fornisseur : fournisseur.value,
+    },
+  })
+
+  if(!idcommand.id){
+          toast.add({
+          title: 'Erreur',
+          description: 'ORDER ID DOES NOT EXITS',
+          color: 'warning',
+          icon: 'lucide-alert-triangle',
+            ui: {
+              root: 'bg-gray-900/90 rounded-lg p-4',
+              progress : 'bg-red-600'
+            },
   });
+      return
+  }
+
+  let orderProduct : prodCommand[] = []; // i will store the {idorder , qte , idproduct}
   
-  formData.value = [];
+  products.forEach((item) => {
+      if(item.product){
+      orderProduct.push({
+          idOrder : idcommand.id,
+          qte : item.quantity,
+          idProduct : item.product.id
+      });
+  }});
+
+  await $fetch('/api/order/products',{
+    method : 'POST',
+    body : {
+      prodord : orderProduct
+    },
+  })
+  console.log(...orderProduct)
+    // clean up
+  // formData.value = [];
   toast.add({
     title: 'Succès',
     description: 'Commande ajoutée avec succès',
@@ -192,9 +283,18 @@ function addCommand() {
       root: 'bg-green-500/90 rounded-lg p-4',
     },
   });
-
-
-  // console.log('Form data:', formData.value);
+}catch (error) {
+  toast.add({
+    title: 'Erreur',
+    description: 'Problem !',
+    color: 'warning',
+    icon: 'lucide-alert-triangle',
+    ui: {
+      root: 'bg-gray-900/90 rounded-lg p-4',
+      progress : 'bg-red-600'
+      },
+  });
+}
 }
 
 
@@ -219,6 +319,7 @@ const cmds : Cammande[] = [
   },
   ]
 },
+
 {
   id: 2,
   date: '2023-10-02',

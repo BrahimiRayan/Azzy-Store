@@ -1,6 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
-import { notesTable, ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
+import { notesTable, orderProductsTable, ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
 
 // owners
@@ -243,6 +243,30 @@ export async function getNumberofOrdersByMonth(idshop : string , year : string){
   return orders
 }
 
+export async function InsertCommandByShopID(shopid : string , fournisseur : string){
+  if(!shopid ){
+    throw createError({
+      statusMessage : 'No ID is provided .',
+      statusCode : 400
+    });
+  }
+
+  if(!fournisseur || fournisseur.trim() === ''){
+    fournisseur = 'Unknown';
+  }
+
+  try {
+    const command = await db.insert(ordersTable).values({
+      idShop : shopid,
+      forniseur : fournisseur
+    }).returning();
+
+    return command
+  } catch (error) {
+    throw error
+  }
+}
+
 // transactions
 export async function getAllTransactions(idShop: string) {
     try {
@@ -399,5 +423,22 @@ export async function DeleteAllNotesByShopId(idShop : string) {
     return
   } catch (error) {
     throw error;   
+  }
+}
+
+// order_products
+type orderProducts =  {
+    idOrder: string;
+    qte: number;
+    idProduct: string;
+}[]
+export async function InsertOrderProducts(orderProd : orderProducts){
+  if(orderProd.length === 0 || !orderProd){
+    throw new Error("No data receved")
+  }
+  try {
+    await db.insert(orderProductsTable).values(orderProd);
+  } catch (error) {
+    throw new Error("couldn't insert data")
   }
 }

@@ -4,7 +4,9 @@
                 <LineChart :chartData :chartTitle="title"/>
         </div>
         <div class="w-full mt-16">
-                <CommandTabs />
+                <div v-if="pending">pending ...</div>
+
+                <CommandTabs v-if="produits" :myProducts="produits"/>
         </div>
 
 
@@ -12,7 +14,37 @@
         
 <script setup lang='ts'>
 import type { BreadcrumbItem } from '@nuxt/ui';
-import type { LinechartData } from '~/types/GeneraleT';
+import type { LinechartData, Produit } from '~/types/GeneraleT';
+import { TitleLimit } from '~/Utils/generalUIhelpers';
+
+interface ProductsResponse {
+  products: Produit[]
+}
+
+const produits  = ref<Produit[]>([]);
+const {data , pending} = useFetch<ProductsResponse>('/api/products' , {
+  lazy : true,
+  server : false,
+  immediate : true
+});
+
+watchEffect(() => {
+  if (data.value?.products) {
+    produits.value = data.value.products.map((p: any , index) => ({
+      index: index + 1,
+      id: p.id,
+      name: TitleLimit(p.name , 32),
+      img: p.image || '/no-img.png',
+      category: p.type,
+      pua: p.pua,
+      puv: p.puv,
+      quantity: p.qte
+    }));
+  }
+  
+});
+
+
 const item: BreadcrumbItem[] =
 [
         {

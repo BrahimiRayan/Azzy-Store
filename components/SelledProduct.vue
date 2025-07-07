@@ -181,10 +181,6 @@ const submitSelles = async ()=>{
 
 }
 
-
-
-
-
 </script>
 
 
