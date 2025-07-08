@@ -1,7 +1,4 @@
 <template>
-
-
-
   <UTabs :items="items" class="gap-4 w-full" :ui="{
     trigger: 'flex-1',
     list: 'border-1 border-gray-200/20',
@@ -88,16 +85,16 @@
     
     <template #commandHistory="{ item }">
       
-      <div v-if="cmds.length > 0" class="flex flex-col gap-5">
+      <div v-if="transformedData.length > 0" class="flex flex-col gap-5">
         <div class="flex justify-between items-center mb-6">
           <p class="text-sm">Total des commandes: 
-            <span class="font-bold text-green-500 ml-1">{{ cmds.length }}</span>
+            <span class="font-bold text-green-500 ml-1">{{ transformedData.length }}</span>
           </p>
   
           <URadioGroup orientation="horizontal" v-model="orderChoise" :items="order" />
         </div>
 
-        <div v-for="(item, index) in cmds" :key="index"
+        <div v-for="(item, index) in transformedData" :key="index"
           class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
           <div class="flex justify-between items-center mb-3">
             <div>
@@ -130,12 +127,13 @@
 
 
     </template>
+
   </UTabs>
 </template>
 
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
-import type { Cammande, Produit } from '~/types/GeneraleT';
+import type { Cammande, OrderProducts, Produit } from '~/types/GeneraleT';
 import type { orderProductsTable } from '~/lib/db/schema';
 
 type prod_ORDER = {id : string}
@@ -301,44 +299,26 @@ try {
 // commands
 //TODO: get commandes from the db 
 // dumy data ... 
-const cmds : Cammande[] = [
-{
-  id: 1,
-  date: '2023-10-01',
-  fournisseur: 'Fournisseur A',
-  produits: [
-    {id : 1 , 
-    name : "Produit A", 
-    category : "Alimentaire" ,
-    quantity : 77 ,
-  },
-  {id : 2 , 
-    name : "Produit B", 
-    category : "Alimentaire" ,
-    quantity : 203 ,
-  },
-  ]
-},
 
-{
-  id: 2,
-  date: '2023-10-02',
-  fournisseur: 'Fournisseur B',
-  produits : [
-    {id : 1 , 
-    name : "Produit C", 
-    category : "Alimentaire" ,
-    quantity : 32 ,
-  },
-  {id : 2 , 
-    name : "Produit D", 
-    category : "Alimentaire" ,
-    quantity : 19 ,
-  },
-  ]
-}
+const {data : orderhistory , pending} = useFetch<OrderProducts>('/api/order/products',{
+    server : false , 
+    lazy : true
+});
 
-] 
+const transformedData = computed(() => {
+  if (!orderhistory.value) return [];
+  return orderhistory.value.orderprods.map(order => ({
+    id: order.id.slice(0,7),
+    date: order.date,
+    fournisseur: order.forniseur || '',
+    produits: order.products.map(item => ({
+      id: item.product.id.slice(0,7),
+      name: item.product.name,
+      category: item.product.type,
+      quantity: item.qte
+    }))
+  }));
+});
 
 // order by date 
 import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
@@ -361,7 +341,7 @@ const orderChoise = ref<RadioGroupValue>('asc');
 // order by date
 watch(orderChoise, (newValue) => {
   if (newValue) {
-    cmds.reverse();
+    transformedData.value.reverse();
   } 
 });
 
@@ -370,7 +350,7 @@ watch(orderChoise, (newValue) => {
 //TODO: make a function that export the command to pdf
 // export command to pdf
 const exportCommand = async (index : number) => {
-  await genererPDFCommande(cmds[index]);
+  await genererPDFCommande(transformedData.value[index]);
 };
 
 const items = [

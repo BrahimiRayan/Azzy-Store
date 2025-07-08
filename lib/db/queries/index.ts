@@ -442,3 +442,38 @@ export async function InsertOrderProducts(orderProd : orderProducts){
     throw new Error("couldn't insert data")
   }
 }
+
+export async function getOrderProductsByShopid(shopid : string){
+  if(!shopid){
+    throw new Error("Not authaurized.");
+  }
+
+  try {
+    const OrderProducts = await db.query.ordersTable.findMany({
+      where : eq(ordersTable.idShop , shopid),
+      columns : {
+        idShop : false
+      },
+      with : {
+        products : {
+          columns : {
+            qte : true
+          },
+          with:{
+            product : {
+              columns : {
+                id : true ,
+                name : true,
+                type : true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    return OrderProducts;
+  } catch (error) {
+    throw new Error("Can't fetch, internal problem.");
+  }
+}

@@ -15,15 +15,21 @@ type Produit = {
     quantity : number ,
 }
 
-// type Transaction = {
-//     id : number | string ,
-//     idProduct : number | string ,
-//     date : Date ,
-//     quantity : number ,
-//     type : string ,
-//     pua : number ,
-//     puv : number ,
-// }
+type OrderProducts = {
+  orderprods : {
+    date: string,
+    id: string,
+    forniseur: string | null,
+    remarque: string | null,
+    products: {
+        qte: number,
+        product: {
+            name: string,
+            id: string,
+            type: category,
+        },
+    }[],
+}[]}
 type Transaction = typeof transactionsTable.$inferSelect;
 
 type chartData = {
@@ -63,7 +69,7 @@ type datasetType = {
   type Cammande = {
     id : number | string ,
     date : Date  | string,
-    fournisseur? : string ,
+    fournisseur: string | null,
     produits : ProductOfCommand[] ,
   }
 
@@ -87,4 +93,4 @@ type datasetType = {
     ycor? : number
 }
 
-export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t , category} ;
+export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t , category , OrderProducts} ;
