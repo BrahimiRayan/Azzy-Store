@@ -52,7 +52,7 @@
   </div>
 
 
-  <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Mes produits"
+  <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Catalogue"
     :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
   <!-- search the product by name -->
 

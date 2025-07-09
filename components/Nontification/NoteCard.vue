@@ -100,7 +100,7 @@
 </template>
     
 <script setup lang='ts'>
-import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
+import type { RadioGroupItem } from '@nuxt/ui'
 import type { notesTable } from '~/lib/db/schema';
 const open = ref<boolean>(false) ;
 const isSubmitting = ref<boolean>(false);

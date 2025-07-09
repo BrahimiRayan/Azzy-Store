@@ -1,12 +1,16 @@
 <template>
-        <UBreadcrumb :items="item" class="my-8 " />
-        <div class="lg:w-[90%]">
-                <LineChart :chartData :chartTitle="title"/>
+        <div v-if="mpanding || pending">
+          <SkeletoneOrders/>
         </div>
-        <div class="w-full mt-16">
-                <div v-if="pending">pending ...</div>
 
-                <CommandTabs v-if="produits" :myProducts="produits"/>
+        <div v-else>
+          <UBreadcrumb :items="item" class="my-8 " /> 
+          <div class="lg:w-[90%]">
+                  <LineChart :chartData :chartTitle="title"/>
+          </div>
+          <div class="w-full mt-16">
+              <CommandTabs v-if="produits" :myProducts="produits" @refresh-orders="RefreshMonthlyOrders"/>
+          </div>
         </div>
 
 
@@ -16,6 +20,18 @@
 import type { BreadcrumbItem } from '@nuxt/ui';
 import type { LinechartData, Produit } from '~/types/GeneraleT';
 import { TitleLimit } from '~/Utils/generalUIhelpers';
+const item: BreadcrumbItem[] =
+[
+        {
+                label: 'Dashboard',
+                icon: 'i-material-symbols-dashboard-outline',
+                to: '/'
+        },
+        {
+                label: 'Commandes',
+                icon: 'i-lets-icons-paper',
+        },
+]
 
 interface ProductsResponse {
   products: Produit[]
@@ -44,23 +60,26 @@ watchEffect(() => {
   
 });
 
+// line chart
 
-const item: BreadcrumbItem[] =
-[
-        {
-                label: 'Dashboard',
-                icon: 'i-material-symbols-dashboard-outline',
-                to: '/'
-        },
-        {
-                label: 'Commandes',
-                icon: 'i-lets-icons-paper',
-        },
-]
+type MonthlyordersFetchResponse = {
+  monthlyorders : {
+    month : number ,
+    orderCount : number
+  }[]
+}
 
+const {data : M_orders , pending : mpanding , refresh} = useFetch<MonthlyordersFetchResponse>('/api/order/ordersbymonth' , {
+  server : false,
+  lazy : true,
+});
+
+function RefreshMonthlyOrders(){
+  refresh();
+}
+
+let datas : number[] = []
 const title = '" Commande effectuées pour chaque mois "';
-const datas : number[] =[65, 59, 80, 81, 56, 55, 40 , 0 , 7 , 99 , 12 , 1] ; 
-
 
 const chartData : LinechartData = {
     labels: ['Jan', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
@@ -72,11 +91,21 @@ const chartData : LinechartData = {
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 3,
         tension: 0.3,
-        fill: true
+        // fill: true
 
       }
     ]
+}
+
+watchEffect(() => {
+  if (M_orders.value?.monthlyorders) {
+    datas = M_orders.value?.monthlyorders.map((order)=>(
+      order.orderCount
+    )) || []
   }
+
+  chartData.datasets[0].data = datas
+});
   
 </script>
         

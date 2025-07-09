@@ -267,6 +267,39 @@ export async function InsertCommandByShopID(shopid : string , fournisseur : stri
   }
 }
 
+export async function getMonthlyOrdersByShopid(shopid : string){
+  if(!shopid){
+    throw new Error("Internal probleme");
+  }
+
+try {
+  const currentYear = new Date().getFullYear();
+
+  const monthlyOrders = await db
+  .select({
+    month: sql<number>`month.month`,
+    orderCount: sql<number>`COUNT(${ordersTable.id})::int`
+  })
+  .from(
+    sql`generate_series(1, 12) AS month(month)`
+  )
+  .leftJoin(
+    ordersTable,
+    sql`
+      EXTRACT(YEAR FROM ${ordersTable.date}) = ${currentYear} AND
+      EXTRACT(MONTH FROM ${ordersTable.date}) = month.month AND 
+      ${ordersTable.idShop} = ${shopid}
+    `
+  )
+  .groupBy(sql`month.month`)
+  .orderBy(sql`month.month`);
+
+  return monthlyOrders
+  } catch (error) {
+    throw new Error("Internal probleme");
+  }
+}
+
 // transactions
 export async function getAllTransactions(idShop: string) {
     try {
@@ -310,6 +343,41 @@ export async function getTransactionsByYear(transType : ("A" | "V") , year : str
   .orderBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})`);
 
   return monthlyTransactions;
+}
+
+//TODO:THIS IS FOR THE DASHBOARD I'LL FIX IT LATER AND OPTIMIZE IT 
+//NB: TRY TO SEE IF I CAN DEEL WITH SOME STUFF IN THE SERVER OR CLIENT ...
+export async function getMonthlySallingsByShopid(shopid : string){
+  if(!shopid){
+    throw new Error("Internal probleme");
+  }
+
+try {
+  const currentYear = new Date().getFullYear();
+
+  const monthlyOrders = await db
+  .select({
+    month: sql<number>`month.month`,
+    orderCount: sql<number>`COUNT(${transactionsTable.id})::int`
+  })
+  .from(
+    sql`generate_series(1, 12) AS month(month)`
+  )
+  .leftJoin(
+    transactionsTable,
+    sql`
+      EXTRACT(YEAR FROM ${transactionsTable.date}) = ${currentYear} AND
+      EXTRACT(MONTH FROM ${transactionsTable.date}) = month.month AND 
+      ${transactionsTable.idShop} = ${shopid}
+    `
+  )
+  .groupBy(sql`month.month`)
+  .orderBy(sql`month.month`);
+
+  return monthlyOrders
+  } catch (error) {
+    throw new Error("Internal probleme");
+  }
 }
 
 // this function get the stats data for a single product 
@@ -454,6 +522,7 @@ export async function getOrderProductsByShopid(shopid : string){
       columns : {
         idShop : false
       },
+      orderBy : (ordersTable , {desc})=> desc(ordersTable.date),
       with : {
         products : {
           columns : {

@@ -12,11 +12,8 @@
       <div class=" flex justify-between ">
         <form @submit.prevent="addCommand" class="w-[60%] border-r-2 border-white/10 px-3">
 
-          <div class="flex justify-between items-center mb-10">
-            <UButton label="Ajouter un Produit" icon="lucide-plus" type="button" @click="AddForm"
-              class="bg-green-500/80 text-white/90 font-bold" />
-            <p class="text-sm">Produits ajouter <span class="font-extrabold text-green-600">x{{ formData.length
-                }}</span></p>
+          <div class="flex justify-end items-center mb-4">
+            <p class="text-sm">Produits ajouter <span class="font-extrabold text-green-600">x{{ formData.length}}</span></p>
           </div>
 
           <UFormField v-if="formData.length > 0" label="Fournisseur" :ui="{
@@ -47,19 +44,38 @@
               <UInput type="number" placeholder="la quantité" v-model="item.quantity" required class="w-60" min="0" />
             </UFormField>
           </div>
+
+          <div class="flex items-center mb-10">
+            <UButton label="Ajouter un Produit" icon="lucide-plus" type="button" @click="AddForm"
+              class="bg-green-500/80 text-white/90 font-bold" />
+           
+          </div>
           <USeparator class="w-full mb-5" />
           <div v-if="formData.length > 0" class="flex items-center mb-10 gap-3">
             <UButton label="Confirmer" type="submit" class="bg-green-500 hover:bg-green-600 font-bold" />
             <UButton label="Annuler" class="bg-red-500 hover:bg-red-600 font-bold" type="button"
               @click="formData = []" />
           </div>
-          <div v-else class="text-center h-40 text-lg text-white/60">
-            Aucune commande ajoutée
+
+          <div v-else class="text-center h-60 text-white/60 flex flex-col items-center justify-between">
+            <span></span>
+            <p class="text-2xl">Aucune commande ajoutée..</p>
+
+            <div class="bg-gray-700 text-white self-end p-4 rounded-md flex justify-center items-center gap-3">
+              <div class="">
+                <UIcon name="lucide-alert-triangle" class="text-red-400 animate-pulse " size="40"/>
+              </div>
+              <div class="border-l-2 border-white/80">
+                <p class="font-semibold text-xl my-2">Remarque importante</p>
+                <p class="text-sm text-left px-2 text-white/90">Seuls les produits inscrits dans votre base de données peuvent être commandés. Si vous souhaitez demander à votre fournisseur un produit non répertorié, vous devez d'abord l'ajouter à votre catalogue pour qu'il apparaisse dans les options de sélection.</p>
+              </div>
+            </div>
+
           </div>
         </form>
         <div class="w-[38%]">
           <div class="flex flex-col gap-3">
-            <div v-for="(item, index) in formData" :key="item.product?.id"
+            <div v-for="item in formData" :key="item.product?.id"
               class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
               
               <p class="text-sm">Produit: 
@@ -85,44 +101,52 @@
     
     <template #commandHistory="{ item }">
       
-      <div v-if="transformedData.length > 0" class="flex flex-col gap-5">
-        <div class="flex justify-between items-center mb-6">
-          <p class="text-sm">Total des commandes: 
-            <span class="font-bold text-green-500 ml-1">{{ transformedData.length }}</span>
-          </p>
-  
-          <URadioGroup orientation="horizontal" v-model="orderChoise" :items="order" />
-        </div>
-
-        <div v-for="(item, index) in transformedData" :key="index"
-          class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
-          <div class="flex justify-between items-center mb-3">
-            <div>
-              <p class="text-sm">Fournisseur: 
-                <span class="font-bold text-green-500 ml-1">{{ item.fournisseur }}</span>
-              </p>
-              <p class="text-sm">Date: 
-                <span class="font-bold text-green-500 ml-1">{{ item.date }}</span>
-              </p>
-            </div>
-
-            <UButton label="Imprimer" icon="lucide-printer" @click="exportCommand(index)" class="bg-red-500 hover:bg-red-600 font-bold" />
-          </div>
-
-
-          <p class="text-sm my-3">Produits : </p>
-          <div class="flex items-center gap-2">
-              <span v-for="(prod, _ ) in item.produits" :key="prod.id" class="font-bold text-green-500 ml-1 bg-gray-900 px-2 py-1 rounded-lg">
-                {{ prod.name }} <span class="text-xs text-white/90"> x{{ prod.quantity }} </span> </span>
-          </div>
-        </div>
+      <div v-if="pending">
+        <h1 class="text-2xl text-center">Chargement ...</h1>
       </div>
-
-
-      <div v-else class="h-30">
-        <p class="text-center text-lg text-white/60">
-          Historique des commandes est vide .
-        </p>
+      
+      <div v-else>
+        <div v-if="transformedData.length > 0" class="flex flex-col gap-5">
+          <div class="flex justify-between items-center mb-6">
+            <p class="text-sm">Total des commandes: 
+              <span class="font-bold text-green-500 ml-1">{{ transformedData.length }}</span>
+            </p>
+    
+            <URadioGroup orientation="horizontal" v-model="orderChoise" :items="order" :ui="{
+              indicator : 'bg-green-600'
+            }"/>
+          </div>
+  
+          <div v-for="(item, index) in transformedData" :key="index"
+            class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
+            <div class="flex justify-between items-center mb-3">
+              <div>
+                <p class="text-sm">Fournisseur: 
+                  <span class="font-bold text-green-500 ml-1">{{ item.fournisseur }}</span>
+                </p>
+                <p class="text-sm">Date: 
+                  <span class="font-bold text-green-500 ml-1">{{ item.date }}</span>
+                </p>
+              </div>
+  
+              <UButton label="Imprimer" icon="lucide-printer" @click="exportCommand(index)" class="bg-red-500 hover:bg-red-600 font-bold" />
+            </div>
+  
+  
+            <p class="text-sm my-3">Produits : </p>
+            <div class="flex items-center gap-2">
+                <span v-for="(prod, _ ) in item.produits" :key="prod.id" class="font-bold text-green-500 ml-1 bg-gray-900 px-2 py-1 rounded-lg">
+                  {{ prod.name }} <span class="text-xs text-white/90"> x{{ prod.quantity }} </span> </span>
+            </div>
+          </div>
+        </div>
+  
+  
+        <div v-else class="h-30">
+          <p class="text-center text-lg text-white/60">
+            Historique des commandes est vide .
+          </p>
+        </div>
       </div>
 
 
@@ -133,7 +157,7 @@
 
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
-import type { Cammande, OrderProducts, Produit } from '~/types/GeneraleT';
+import type { OrderProducts, Produit } from '~/types/GeneraleT';
 import type { orderProductsTable } from '~/lib/db/schema';
 
 type prod_ORDER = {id : string}
@@ -147,6 +171,9 @@ interface FormItem {
   quantity: number | 0;
 }
 
+const emit = defineEmits<{
+  (e : 'refresh-orders'): void;
+}>()
 const props = defineProps<{myProducts : Produit[]}>();
 const toast = useToast()
 
@@ -268,10 +295,11 @@ try {
     body : {
       prodord : orderProduct
     },
-  })
-  console.log(...orderProduct)
-    // clean up
-  // formData.value = [];
+  });
+
+  // clean up
+  formData.value = [];
+  emit("refresh-orders");
   toast.add({
     title: 'Succès',
     description: 'Commande ajoutée avec succès',
@@ -295,10 +323,7 @@ try {
 }
 }
 
-
-// commands
-//TODO: get commandes from the db 
-// dumy data ... 
+// second tab
 
 const {data : orderhistory , pending} = useFetch<OrderProducts>('/api/order/products',{
     server : false , 
@@ -320,7 +345,6 @@ const transformedData = computed(() => {
   }));
 });
 
-// order by date 
 import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
 import { genererPDFCommande } from '~/Utils/exportorderPdf';
 
@@ -337,18 +361,13 @@ const order = ref<RadioGroupItem[]>([
 ]);
 
 const orderChoise = ref<RadioGroupValue>('asc');
-// TODO: check IF THIS WAY BETTER OR MAKING A REQUEST TO THE DB IS BETTER
-// order by date
+
 watch(orderChoise, (newValue) => {
   if (newValue) {
     transformedData.value.reverse();
   } 
 });
 
-
-
-//TODO: make a function that export the command to pdf
-// export command to pdf
 const exportCommand = async (index : number) => {
   await genererPDFCommande(transformedData.value[index]);
 };
@@ -369,3 +388,14 @@ const items = [
 ] satisfies TabsItem[]
 
 </script>
+
+
+<style>
+@keyframes rotate {
+  from {
+    transform: rotateZ('0deg');
+  }to{
+    transform: rotateZ('350deg');
+  }
+}
+</style>
