@@ -33,11 +33,9 @@
 
 // the breadcrumb item  
 import type { BreadcrumbItem } from '@nuxt/ui';
-import { authClient } from '~/lib/auth/auth-client';
 import type { chartData } from '~/types/GeneraleT';
 
-//TODO: FIX THE TYPE LATER
-const session : any = authClient.useSession() ;
+
 
 const item: BreadcrumbItem[] =
   [
