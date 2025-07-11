@@ -89,6 +89,23 @@ export async function getUserShopOnAuth(iduser : string){
     });
   }
 }
+
+export async function getIsShopOnline(idOwner : string){
+  if(!idOwner){
+    throw new Error("Not Authorized");
+  }
+
+  try {
+    const [isOnline] = await db
+                              .select({ isOnline: shopsTable.isOnline })
+                              .from(shopsTable)
+                              .where(eq(shopsTable.idOwner , idOwner))
+
+    return isOnline;                   
+  } catch (error) {
+    throw new Error("Server error.")
+  }
+}
 // products
 
 export async function getAllProducts(idShop: string) {
