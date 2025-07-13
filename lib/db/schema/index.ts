@@ -8,7 +8,6 @@ export * from "./auth-schema"
 
 
 
-
 export const SubTypeEnum = pgEnum("SubType", ["Free", "Premium"]);
 export const NoteTypeEnum = pgEnum("NoteType", ["Important", "Reminder"]);
 export const ProductsTypeEnum = pgEnum("Category", [
@@ -30,8 +29,6 @@ export const shopsTable = pgTable("shops", {
   isOnline : boolean().default(false).notNull(),
   subcreptionType : SubTypeEnum().default("Free").notNull(),
   idOwner: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
-  // shop configuration
-  idConf: uuid().references(() => shopConfTable.id, { onDelete: "cascade" }),
 });
 
 
@@ -39,7 +36,7 @@ export const employeesTable = pgTable("employees", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
-  password: varchar({ length: 255 }), //TODO: When it comes to production, use a hashed password and not nullable
+  password: varchar({ length: 255 }),
   idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
   idOwner: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
 });
@@ -58,6 +55,7 @@ export const notesTable = pgTable("notes", {
 export const productsTable = pgTable("products", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   name: varchar({ length: 255 }).notNull(),
+  description : text().default("") ,
   image: varchar({ length: 255 }).notNull().default("/no-image.png"),
   type: ProductsTypeEnum().default("Autre").notNull(),
   pua : real().notNull(),
@@ -110,4 +108,5 @@ export const shopConfTable = pgTable("shop_conf", {
   isMap: boolean().default(false).notNull(),
   xcor: real().default(0).notNull(),
   ycor: real().default(0).notNull(),
+  idShop : uuid().notNull().references(()=> shopsTable.id , {onDelete : "cascade"}),
 });

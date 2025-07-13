@@ -19,7 +19,7 @@ export const shopsRelations = relations(shopsTable, ({ one, many }) => {
     products: many(productsTable),
     orders: many(ordersTable),
     transactions: many(transactionsTable),
-    shopConf: one(shopConfTable, { fields: [shopsTable.idConf], references: [shopConfTable.id] }),
+    shopConf: one(shopConfTable, { fields: [shopsTable.id], references: [shopConfTable.idShop] }),
   };
 });
 
@@ -69,7 +69,7 @@ export const transactionsRelations = relations(transactionsTable, ({ one }) => {
 );
 export const shopConfRelations = relations(shopConfTable, ({ one }) => {
   return {
-    shop: one(shopsTable, { fields: [shopConfTable.id], references: [shopsTable.idConf] }),
+    shop: one(shopsTable, { fields: [shopConfTable.idShop], references: [shopsTable.id] }),
   };
 }
 );

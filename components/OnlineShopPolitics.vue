@@ -64,7 +64,11 @@
         </div>
         <UButton label="Créer ma e-boutique" @click="OpenMyShop" class="bg-green-600 mx-auto block h-12 mt-15 disabled:bg-gray-600" :disabled="!isAgree"/>
 
-        <div v-if="!isAgree" class="flex p-4 bg-red-500 rounded-lg w-max items-center gap-3 mt-4">
+        <div v-if="pending" class="w-full mt-8">
+          <p class="text-white/70 text-2xl font-bold text-center">Chargement...</p>
+        </div>
+        
+        <div v-if="!isAgree" class="flex p-4 bg-red-500 rounded-lg w-max items-center gap-3 mt-4 mx-auto">
             <UIcon name="lucide-triangle-alert" size="24" />
             <p>Vous devez accepter les droits d'utilisation !</p>
         </div>
@@ -78,6 +82,11 @@
 <script setup lang='ts'>
 import type { StepperItem } from '@nuxt/ui'
 
+const emit = defineEmits<{
+  (e : 'isOnline-updated') : void,
+}>()
+
+const toast = useToast()
 const items = [
   {
     slot: 'law' as const,
@@ -98,27 +107,46 @@ const items = [
 ] satisfies StepperItem[]
 
 const isAgree = ref<boolean>(false)
+const pending = ref<boolean>(false);
+type createConfTypeRes = {
+  state : string
+}
 
 async function OpenMyShop(){
     if(!isAgree.value){
+    toast.add({
+        title: 'Erreur',
+        description: "Vous devez accepter les droits d'utilisation !",
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-gray-900/90 rounded-lg p-4',
+          progress : 'bg-red-600'
+        },
+      });
         return
     }
-    // 1 . create a shop config
-    // 2 . update the shop foreigne key for the config && isOnline to true; 
-    try {
 
-        const data = await $fetch('/api/eshop/create', {
+    try {
+      pending.value = true
+        const data = await $fetch<createConfTypeRes>('/api/eshop/create', {
            method : 'POST',
          });
-         
+
+         if(data.state !== 'success'){
+          console.log("error in creating the configue")
+          return
+         }
+
          await $fetch('/api/shop' , {
             method : 'PUT',
-            body : {
+         });
 
-            }
-         })
+         emit('isOnline-updated');
     } catch (error) {
-        
+        throw error
+    }finally{
+      pending.value = false
     }
 
 }

@@ -8,12 +8,28 @@ type category = 'Alimentaire' | 'Electronique' | 'Vêtement' | 'Meuble' | 'Acces
 type Produit = {
     id? : number | string , 
     name : string , 
+    description? : string,
     img? : string , 
     category : category ,
     pua : number , 
     puv : number ,
     quantity : number ,
 }
+
+
+export type productsCards = {
+    name: string;
+    id: string;
+    description: string | null;
+    image: string;
+    type: "Alimentaire" | "Electronique" | "Vêtement" | "Meuble" | "Accessoire" | "Beauté" | "Sport" | "Livre" | "Autre";
+    pua: number;
+    puv: number;
+    qte: number;
+    idShop: string;
+}
+
+export type shopProdtype = productsCards[]
 
 type OrderProducts = {
   orderprods : {

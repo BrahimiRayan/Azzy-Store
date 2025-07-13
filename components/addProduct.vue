@@ -33,6 +33,19 @@
             />
         </UFormField>
 
+
+        <UFormField label="Description du Produit (Optionel)" class=" w-full" >
+          <UTextarea  
+            placeholder="Ex : T-shirt Roda ..."
+            class="w-full"
+            v-model="NewProduct.description" 
+            :ui="{
+              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+            }"
+            />
+        </UFormField>
+
+
         <UFormField label="Image (optionel)" class="w-full">
 
           <UInput 
@@ -135,6 +148,7 @@ const items = ref(PRODUCTS_TYPES);
 const NewProduct = ref<Produit>({
   name: '',
   img: '',
+  description : '',
   category: 'Autre',
   pua: 0,
   puv: 0,
@@ -167,6 +181,7 @@ async function addProduit() {
        {
         name : NewProduct.value.name,
         img : NewProduct.value.img,
+        description : NewProduct.value.description,
         type : NewProduct.value.category,
         pua : NewProduct.value.pua,
         puv : NewProduct.value.puv,
@@ -213,6 +228,7 @@ const resetProduct = () => {
   NewProduct.value = {
     name: '',
     img: '',
+    description : '',
     category: 'Autre',
     pua: 0,
     puv: 0,
