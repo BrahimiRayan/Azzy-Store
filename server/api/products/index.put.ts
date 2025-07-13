@@ -5,10 +5,10 @@ export default defineEventHandler(async (event)=>{
     if(!data){
         throw new Error("No data recieved !");
     }
-    const {id , name , pua , puv , qte} = data;
+    const {id , name  , description, pua , puv , qte} = data;
 
     try{
-       await updateProduct(id , name , pua , puv , qte);
+       await updateProduct(id , name , description, pua , puv , qte);
        return {
             success : true
        }

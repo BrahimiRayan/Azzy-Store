@@ -13,27 +13,45 @@
 
             <form @submit.prevent="ModifyProduct">
 
-                <UFormField label="Nom du produit" class=" w-full mb-5" required>
+                <UFormField label="Nom du produit" class=" w-full mb-5" required :ui="{
+                    label : 'text-white/70 font-bold'
+                }">
                     <UInput v-model="product.name" type="text" placeholder="Nom du produit" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
                     }" class="w-full" />
 
                 </UFormField>
 
-                <UFormField label="Prix vente Unitaire du produit" class=" w-full mb-5" required>
-                    <UInput v-model="product.puv" type="number" placeholder="Prix unite de vente" :ui="{
+                <UFormField label="Description du produit" class="w-full mb-5" :ui="{
+                    label : 'text-white/70 font-bold'
+                }">
+                    <UTextarea v-model="product.description" placeholder="Nom du produit" :ui="{
+                        base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+                    }" class="w-full" />
+
+                </UFormField>
+
+                <UFormField label="Prix vente Unitaire du produit" class=" w-full mb-5" required :ui="{
+                    label : 'text-white/70 font-bold'
+                }">
+                    <UInputNumber v-model="product.puv" :min="0" placeholder="Prix unite de vente" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
                     }" class="w-full" />
                 </UFormField>
 
-                <UFormField label="Prix unité d'achat" class=" w-full mb-5" required>
-                    <UInput v-model="product.pua" type="number" placeholder="Prix unité d'achat" :ui="{
+                <UFormField label="Prix unité d'achat" class=" w-full mb-5" required :ui="{
+                    label : 'text-white/70 font-bold'
+                }">
+                    <UInputNumber v-model="product.pua" :min="0" placeholder="Prix unité d'achat" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
                     }" class="w-full" />
                 </UFormField>
 
-                <UFormField label="Quantité de produit" class=" w-full mb-5" required>
-                    <UInput v-model="product.quantity" type="number" placeholder="Quantité de produit" :ui="{
+                <UFormField label="Quantité de produit" class=" w-full mb-5" required 
+                :ui="{
+                    label : 'text-white/70 font-bold'
+                }">
+                    <UInputNumber v-model="product.quantity" :min="0" placeholder="Quantité de produit" :ui="{
                         base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
                     }" class="w-full" />
                 </UFormField>
@@ -55,6 +73,7 @@ const error = ref<string | null>(null);
 const pending = ref<boolean>(false);
 const product = ref({
     name : props.produit.name,
+    description : props.produit.description,
     pua : props.produit.pua,
     puv : props.produit.puv,
     quantity : props.produit.qte,
@@ -78,7 +97,8 @@ const ModifyProduct =async () => {
     if(props.produit.name === product.value.name.trim() &&
         props.produit.pua === product.value.pua &&
         props.produit.puv === product.value.puv &&
-        props.produit.qte === product.value.quantity) {
+        props.produit.qte === product.value.quantity && 
+        props.produit.description === product.value.description) {
         error.value ='Aucune modification apportée';
         return 
     }
@@ -92,6 +112,7 @@ const ModifyProduct =async () => {
             body: {
                 id: props.produit.id,
                 name: product.value.name.trim(),
+                description : product.value.description.trim(),
                 pua: product.value.pua,
                 puv: product.value.puv,
                 qte: product.value.quantity,

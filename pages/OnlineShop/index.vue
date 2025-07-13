@@ -1,17 +1,24 @@
 <template>
-    <UBreadcrumb :items="item" class="my-8" />
-    <div v-if="!isOnline?.res.isOnline">
-        <OnlineShopPolitics/>
+    <div v-if="pending">
+        <SkeletoneOnlineShop/>
     </div>
-
     <div v-else>
-        <ShopConf/>
+
+        <UBreadcrumb :items="item" class="my-8" />
+        <div v-if="!isOnline?.res.isOnline">
+            <OnlineShopPolitics @isOnline-updated="reloadPage"/>
+        </div>
+    
+        <div v-else>
+            <ShopConf/>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { SkeletoneOnlineShop } from '#components';
 import type { BreadcrumbItem } from '@nuxt/ui';
-import { authClient } from '~/lib/auth/auth-client';
+
 
 const item: BreadcrumbItem[] =
 [
@@ -26,17 +33,20 @@ const item: BreadcrumbItem[] =
         },
 ]
 
-
-
 type isOnlineFetchres = {
     res : {
         isOnline : boolean
     }
 }
-const session = authClient.useSession();
 
-const {data :isOnline , pending} = useFetch<isOnlineFetchres>(`/api/shop/isOnline/${session.value.data?.user.id}`, {
+
+const {data :isOnline , pending , refresh} = useFetch<isOnlineFetchres>(`/api/shop/isOnline`, {
     server : false,
     lazy : true
 })
+
+function reloadPage (){
+    refresh()
+    return
+}
 </script>

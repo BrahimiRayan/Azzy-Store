@@ -1,6 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
-import { notesTable, orderProductsTable, ordersTable, productsTable, shopsTable, transactionsTable } from "../schema";
+import { notesTable, orderProductsTable, ordersTable, productsTable, shopConfTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
 
 // owners
@@ -106,6 +106,19 @@ export async function getIsShopOnline(idOwner : string){
     throw new Error("Server error.")
   }
 }
+
+export async function SetShopToOnline(shopid : string ){
+  if(!shopid){
+    throw new Error("Probleme while recieving data, shop id not found");
+  }
+
+  try {
+    await db.update(shopsTable).set({isOnline : true}).where(eq(shopsTable.id , shopid));
+    return
+  } catch (error) {
+    throw new Error("Server error");
+  }
+}
 // products
 
 export async function getAllProducts(idShop: string) {
@@ -161,7 +174,7 @@ export async function deleteProductById(id: string): Promise<boolean> {
 
 type productT = typeof productsTable.$inferInsert.type
 
-export async function addNewProduct(shopid : string , name : string , image : string , prodType : productT , pua : number , puv : number , qte : number ){
+export async function addNewProduct(shopid : string , name : string ,description : string ,image : string , prodType : productT , pua : number , puv : number , qte : number ){
   
   if(!shopid){
     throw new Error("Not authaurized to POST!");
@@ -181,6 +194,7 @@ export async function addNewProduct(shopid : string , name : string , image : st
       .values({
         idShop:shopid ,
         name,
+        description,
         image: image || "/no-image.png",
         type : prodType,
         pua,
@@ -197,13 +211,13 @@ export async function addNewProduct(shopid : string , name : string , image : st
   }
 }
 
-export async function updateProduct(id : string , name : string , pua : number , puv : number , qte : number){
+export async function updateProduct(id : string , name : string , description : string , pua : number , puv : number , qte : number){
   if(!id || !name || !pua || !puv || !qte ){
     throw new Error("Can't UPDATE the product , messing args!");
   }
 
   try {
-     await db.update(productsTable).set({name, pua , puv , qte}).where(eq(productsTable.id , id));
+     await db.update(productsTable).set({name, description, pua , puv , qte}).where(eq(productsTable.id , id));
      return
   } catch (error) {
     throw new Error("Internal server problem !");
@@ -561,5 +575,42 @@ export async function getOrderProductsByShopid(shopid : string){
     return OrderProducts;
   } catch (error) {
     throw new Error("Can't fetch, internal problem.");
+  }
+}
+
+
+// shop configue
+
+export async function createShopConfigbyShopid(shopid : string){
+  if(!shopid){
+    throw new Error("Messing informations , cannot POST");
+  }
+
+  try {
+    await db.insert(shopConfTable)
+                       .values({
+                        description : "",
+                        name : "",
+                        email : "",
+                        phoneNumber : "",
+                        idShop : shopid
+     });
+    
+     return "200ok"
+  } catch (error) {
+    
+  }
+}
+
+export async function getConfigByShopid(shopid : string){
+  if(!shopid){
+    throw new Error("Messing data , no shop id detected");
+  }
+
+  try {
+    const config = await db.select().from(shopConfTable).where(eq(shopConfTable.idShop , shopid));
+    return config
+  } catch (error) {
+    throw new Error("Internal server Error");
   }
 }

@@ -1,29 +1,26 @@
 <template>
-    <div v-if="conf" :style="`--bg-color: ${conf.bg}59 ;--bg-card :${conf.bg}50 ; --text-color: ${conf.textColor}; --bg-pub : ${conf.bg}B3 ; --bg : ${conf.bg}`" class="wrapper rounded-xl p-5 border">
+    <div v-if="conf" :style="`--bg-color: ${conf.bgColor}59 ;--bg-card :${conf.bgColor}50 ; --text-color: ${conf.textcolor}; --bg-pub : ${conf.bgColor}B3 ; --bg : ${conf.bgColor}`" class="wrapper rounded-xl p-5 border">
         
-        <div v-if="conf.logo" class="flex justify-center">
-            <img :src="conf.logo" alt="logo" class="w-1/2 h-auto"/>
-        </div>
 
-     <header class=" rounded-2xl flex items-center justify-between h-18" :style="`background-color : ${conf.bg};`">
-        <h1 :style="`color : ${conf.textColor};`" class="logo ml-3 font-extrabold text-3xl">{{ conf.name }}</h1>
+     <header class=" rounded-2xl flex items-center justify-between h-18" :style="`background-color : ${conf.bgColor};`">
+        <h1 :style="`color : ${conf.textcolor};`" class="logo ml-3 font-extrabold text-3xl">{{ conf.name }}</h1>
 
         <nav class="flex items-center justify-around gap-10">
-            <UInput type="text" icon="i-line-md-search" placeholder="Rechercher ... " 
+            <UInput type="text" icon="i-line-md-search" placeholder="Rechercher ... " class="cursor-pointer"
                 variant="none"
                 :ui="{
-                    base: 'rounded-md placeholder:text-white/60',
-                    root: 'border-2 rounded-lg hover:border-white/60 focus-within:border-white/60 transition-all duration-300 ease-in-out',
+                    base: `rounded-md placeholder:text-[${conf.textcolor}] text-[${conf.textcolor}] text-sm`,
+                    root: `border-2 rounded-lg hover:border-[${conf.textcolor}] focus-within:border-[${conf.textcolor}] transition-all duration-300 ease-in-out `,
                 }"
             />
 
             <ul class="flex items-center gap-3 mr-3">
                 <li>
-                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
+                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
                 </li>
                 
                 <li>
-                    <UButton icon="i-lineicons-phone" label="phone" :to="`tel:${conf.phone}`" class="bg-white/50 hover:bg-blue-500 shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
+                    <UButton icon="i-lineicons-phone" label="phone" :to="`tel:${conf.phoneNumber}`" class="bg-white/50 hover:bg-blue-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
                 </li>
             </ul>
         </nav>
@@ -59,70 +56,75 @@
             </div>
         </section>
 
-        <section>
+        <section v-if="shopProd.length > 0">
             <h2 class="logo font-extrabold text-6xl mb-10 ml-4 underline">Nos produits</h2>
             <div id="products_holder" class="grid grid-cols-3 gap-5">
                 <div v-for="product in shopProd"  :key="product.id">
-                    <div v-if="conf.cardType ==='A'" >
+                    <div v-if="conf.cardtype ==='A'" >
                         <CardsTypeA 
                             :product="product"
                             :fb="conf.fb_url"
                             :ig="conf.ig_url"
                             :email="conf.email"
-                            :phone="conf.phone"
+                            :phone="conf.phoneNumber"
                             :address="conf.address"
-                            :shipping="conf.livraison"
+                            :shipping="conf.Livrison"
                             :style="`--font-style: 'Great Vibes', cursive;`"
                         />
                     </div>
 
-                    <div v-else-if="conf.cardType ==='B'">
+                    <div v-else-if="conf.cardtype ==='B'">
                         <!-- B TYPE COMPONENET -->
                         <CardsTypeB 
                             :product="product"
                             :fb="conf.fb_url"
                             :ig="conf.ig_url"
                             :email="conf.email"
-                            :phone="conf.phone"
+                            :phone="conf.phoneNumber"
                             :address="conf.address"
-                            :shipping="conf.livraison"
+                            :shipping="conf.Livrison"
                             :style="`--font-style: 'Great Vibes', cursive;`"
                         />    
                     </div>
 
-                    <div v-else-if="conf.cardType ==='C' ">
+                    <div v-else-if="conf.cardtype ==='C' ">
                         <!-- C TYPE COMPONENET -->
                          <CardsTypeC 
                             :product="product"
                             :fb="conf.fb_url"
                             :ig="conf.ig_url"
                             :email="conf.email"
-                            :phone="conf.phone"
+                            :phone="conf.phoneNumber"
                             :address="conf.address"
-                            :shipping="conf.livraison"
+                            :shipping="conf.Livrison"
                             :style="`--font-style: 'Great Vibes', cursive;`"
                         />    
                     </div>
 
-                    <div v-else-if="conf.cardType ==='D' ">
+                    <div v-else-if="conf.cardtype ==='D' ">
                         <!-- D TYPE COMPONENET -->
                          <CardsTypeD 
+                            
                             :product="product"
                             :fb="conf.fb_url"
                             :ig="conf.ig_url"
                             :email="conf.email"
-                            :phone="conf.phone"
+                            :phone="conf.phoneNumber"
                             :address="conf.address"
-                            :shipping="conf.livraison"
+                            :shipping="conf.Livrison"
                             :style="`--font-style: 'Great Vibes', cursive;`"
                         />
                     </div>
                 </div>
             </div>
         </section>
+
+        <div v-else>
+            No Products selected...
+        </div>
     </main>
 
-    <footer class="flex items-center overflow-hidden justify-between mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bg};`">
+    <footer class="flex items-center overflow-hidden justify-between mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bgColor};`">
         <div>
             <p class="logo text-3xl my-3 font-extrabold">{{ conf.name }}</p>
             <h2 class="py-1 px-2 rounded bg-black/30 w-max">Nos contacts</h2>
@@ -130,19 +132,19 @@
             <ul class="flex gap-3 align-center justify-center mt-6 mb-3">
 
                     <li v-if="conf.fb_url">
-                        <a :href="conf.fb_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-[#3b5998] rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                        <a :href="conf.fb_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/30 rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
                             <UIcon name="i-mdi-facebook" class="text-2xl" />                            
                         </a>
                     </li>
 
                     <li v-if="conf.ig_url">
-                        <a :href="conf.ig_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-400 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
+                        <a :href="conf.ig_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
                            <UIcon name="i-hugeicons-instagram" class="text-2xl" />                                                        
                         </a>
                     </li>
 
                      <li >
-                        <a :href="`mailto:${conf.email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-gradient-to-r from-red-500 to bg-red-700 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
+                        <a :href="`mailto:${conf.email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
                            <UIcon name="i-material-symbols-mail" class="text-2xl" />
                         </a>
                     </li>
@@ -177,12 +179,13 @@
 </template>
     
 <script setup lang='ts'>
-import type { Produit, shopConfT } from '~/types/GeneraleT';
+import type { shopProdtype } from '~/types/GeneraleT';
+import type { ShopConfigType } from './ShopConf.vue';
 
 
     const props = defineProps<{
-        conf :shopConfT,
-        shopProd : Produit[],
+        conf :ShopConfigType,
+        shopProd : shopProdtype,
     }>()
 
 const ProdPics = [
