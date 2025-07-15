@@ -1,4 +1,9 @@
 <template>
+        <div v-if="productsLisPending || fetchedConfisPending">
+                <SkeletoneOnlineShop/>
+        </div>
+
+        <div v-else>
             <div>
                 <USlideover 
                 title="controle panel"
@@ -213,7 +218,8 @@
             </div>
 
             <Shop :conf="shopConfig" :shopProd="shopProd"/>
-             
+        </div>
+
 
 </template>
 
@@ -226,6 +232,7 @@ import desing3 from '~/assets/pics/design3.png';
 import desing4 from '~/assets/pics/design4.png';
 import { productsTable, shopConfTable } from '~/lib/db/schema';
 
+
 const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
   { value: 'A', label: 'Option A' , src : desing1},
   { value: 'B', label: 'Option B' , src : desing2},
@@ -234,12 +241,12 @@ const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
 ];
 
 export type ProductsLResp = {
-    products : typeof productsTable.$inferSelect[]
-}
-type sh = typeof shopConfTable.$inferSelect 
+    products : typeof productsTable.$inferSelect[] | []
+} 
+export type sh = typeof shopConfTable.$inferSelect 
 type resultQuery = {
     conf : sh 
-}
+} | undefined
 export type ShopConfigType = Omit<sh , "idShop" | "id">
 
 const shopConfig = ref<sh>({
@@ -262,10 +269,18 @@ const shopConfig = ref<sh>({
         ycor: 0,
 });
 
-const {data : ProductsL} = await useFetch<ProductsLResp>('/api/products', {
+
+const ProductsL = ref<ProductsLResp>({products : []});
+const {data : ProductsLdata , pending : productsLisPending} = useFetch<ProductsLResp>('/api/products', {
     server : false,
+    lazy : true
 });
 
+watchEffect(()=>{
+    if(ProductsLdata.value?.products){
+        ProductsL.value = ProductsLdata.value
+    };
+})
 
 const Selectedproduct = ref<{ id: string ; label: string; }[]>([]) 
 
@@ -277,16 +292,24 @@ const ProductsList = computed(() => {
 });
 
 // fetch the config 
-const {data : fetchedConf} = await useFetch<resultQuery>('/api/shop/conf' , {
-    server : false
+
+const fetchedConf = ref<resultQuery>(undefined);
+const {data : fetchedConfdata , pending : fetchedConfisPending} = useFetch<resultQuery>('/api/shop/conf' , {
+    server : false,
+    lazy : true
 });
 
+watchEffect(()=>{
+    if(fetchedConfdata.value?.conf){
+        fetchedConf.value = fetchedConfdata.value;
+    }
 
-if(fetchedConf.value){
+    if(fetchedConf.value?.conf ){
     shopConfig.value = fetchedConf.value.conf
-}
+    }
+})
 
-// card types
+// this will watch and change accourding to my cards type
 const selectedOption = ref(fetchedConf.value?.conf.cardtype || "A");
 const selectOption = (value : card_t) => {
     selectedOption.value = value;
@@ -296,7 +319,7 @@ watch( selectedOption , (newval)=>{
     shopConfig.value.cardtype = newval ;
 });
 
-
+// this will get to me the shop products that are in the conf.
 const shopProd = computed<shopProdtype>(() => {
   if (!ProductsL.value?.products) return [];
   return ProductsL.value.products.filter(product => 
@@ -304,10 +327,87 @@ const shopProd = computed<shopProdtype>(() => {
   );
 });
 
-const SubmitConfig = ()=>{
+// submit the config...
+const toast = useToast();
+const SubmitConfig = async ()=>{
+    // i need only the id's of the products that selected
     shopConfig.value.products = Selectedproduct.value.map((p)=>{
         return p.id
     });
-    console.log(shopConfig.value);
+    
+    if(!shopConfig.value.name || !shopConfig.value.description||
+        !shopConfig.value.email || !shopConfig.value.phoneNumber ||
+        !shopConfig.value.idShop || !shopConfig.value.cardtype || 
+        !shopConfig.value.id 
+    ){
+        toast.add({
+            title: 'Erreur',
+            description: "Un champ est manquant ou des données sont incorrectes, veuillez remplir tous les champs obligatoires ou corriger les erreurs.",
+            color: 'warning',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-red-600'
+            },
+        });
+        return 
+    }
+
+    if(shopConfig.value.products.length === 0){
+        toast.add({
+            title: 'Erreur',
+            description: "Vous devez sélectionner au moins un produit à afficher dans votre boutique !",
+            color: 'warning',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-red-600'
+            },
+        });
+        return 
+    }
+
+    if(shopConfig.value.isMap){
+        if(shopConfig.value.xcor === 0 || shopConfig.value.ycor === 0  ){
+        toast.add({
+            title: 'Erreur',
+            description: "Les coordonnées de la carte ne doivent pas être égales à zéro. Veuillez saisir des coordonnées valides.",
+            color: 'warning',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-red-600'
+            },
+        });
+            return 
+        }
+    }
+
+    try {
+        await $fetch('/api/eshop' , {
+            method : 'PUT',
+            body : {
+                shopConfig : shopConfig.value
+            }
+        });
+
+        toast.add({
+            title: 'Succès',
+            description: "La configuration de votre boutique a bien été mise à jour.",
+            color: 'success',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-green-600'
+            },
+        });
+        
+        return
+    } catch (error ) {
+        throw error
+    }
+ 
+
+    
 }
 </script>

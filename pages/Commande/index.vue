@@ -18,6 +18,7 @@
         
 <script setup lang='ts'>
 import type { BreadcrumbItem } from '@nuxt/ui';
+import { fr_MONTHS } from '~/lib/consts';
 import type { LinechartData, Produit } from '~/types/GeneraleT';
 import { TitleLimit } from '~/Utils/generalUIhelpers';
 const item: BreadcrumbItem[] =
@@ -82,7 +83,7 @@ let datas : number[] = []
 const title = '" Commande effectuées pour chaque mois "';
 
 const chartData : LinechartData = {
-    labels: ['Jan', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
+    labels: fr_MONTHS,
     datasets: [
       {
         label: "Commande effectuées",

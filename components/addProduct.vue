@@ -194,7 +194,6 @@ async function addProduit() {
       throw new Error('Erreur lors de l\'ajout du produit');
     }
     
-    console.log('Produit ajouté:', { ...NewProduct.value });
     resetProduct();
     toast.add({
     title: 'Succès',

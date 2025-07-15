@@ -2,6 +2,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { notesTable, orderProductsTable, ordersTable, productsTable, shopConfTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
+import type { card_t } from "~/types/GeneraleT";
 
 // owners
 export async function getAllOwners() {
@@ -613,4 +614,43 @@ export async function getConfigByShopid(shopid : string){
   } catch (error) {
     throw new Error("Internal server Error");
   }
+}
+
+
+export async function UpdateShopConfig(idConf : string , name : string , description : string , 
+  products : string[] , Livrison : boolean , cardtype : card_t , bgColor : string , textcolor : string ,
+  fb_url : string , ig_url : string , phoneNumber : string, email : string, address : string , isMap : boolean , xcor : number , ycor : number  
+){
+
+  if(!idConf){
+    throw new Error("Error, no config found.")
+  }
+  if(!name || !description || !phoneNumber || !email || products.length === 0 ){
+    throw new Error("Error, messing data")
+  }
+  
+  try {
+    await db.update(shopConfTable)
+          .set({
+            name : name,
+            description : description,
+            products : products,
+            Livrison : Livrison,
+            cardtype : cardtype,
+            bgColor : bgColor,
+            textcolor : textcolor,
+            fb_url : fb_url,
+            ig_url : ig_url,
+            phoneNumber : phoneNumber , 
+            email : email,
+            address : address,
+            isMap : isMap,
+            xcor: xcor,
+            ycor : ycor
+          }).where(eq(shopConfTable.id , idConf))
+     return      
+  } catch (error) {
+    throw error
+  }
+
 }
