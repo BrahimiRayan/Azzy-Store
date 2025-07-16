@@ -70,17 +70,25 @@ watch(
 useHead({
   title: () => pageMeta.title,
   meta: [
+    // Critical OG Tags
+    { property: 'og:title', content: () => pageMeta.title || 'Azzy Store' },
+    { property: 'og:description', content: () => pageMeta.description || 'Discover our products' },
     { 
-      name: 'description', 
-      content: () => pageMeta.description 
+      property: 'og:image', 
+      content: 'https://azzy-store.vercel.app/Logo-light_soc.jpg?v=1' // Cache buster
     },
-    { property: 'og:title', content: () => pageMeta.title },
-    { property: 'og:description', content: () => pageMeta.description },
+    { property: 'og:url', content: `https://azzy-store.vercel.app${route.path}` },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `https://azzy-store.com${route.path}` },
-    { property: 'og:image', content:'/Logo-light_soc.jpg' },
-  ],
-  titleTemplate: (title) => `${title} | Azze-store`,
 
+    // Image Dimensions (Required by Facebook)
+    { property: 'og:image:width', content: '800' }, // Actual width of your image
+    { property: 'og:image:height', content: '800' }, // Actual height
+    { property: 'og:image:type', content: 'image/jpeg' },
+
+    // Cache Control Fix
+    { property: 'og:image:secure_url', content: 'https://azzy-store.vercel.app/Logo-light_soc.jpg' },
+    { 'http-equiv': 'Cache-Control', content: 'public, max-age=31536000, immutable' }
+  ],
+  titleTemplate: (title) => `${title} | Azze-store`
 });
 </script>
