@@ -1,1 +1,2 @@
 export const PRODUCTS_TYPES = ['Autre', 'Alimentaire', 'Electronique', 'Vêtement', 'Meuble', 'Accessoire', 'Beauté', 'Sport', 'Livre']
+export const fr_MONTHS = ['Jan', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc']

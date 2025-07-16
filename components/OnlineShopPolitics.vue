@@ -82,9 +82,7 @@
 <script setup lang='ts'>
 import type { StepperItem } from '@nuxt/ui'
 
-const emit = defineEmits<{
-  (e : 'isOnline-updated') : void,
-}>()
+const emit = defineEmits(['isOnlineUpdated'])
 
 const toast = useToast()
 const items = [
@@ -142,7 +140,7 @@ async function OpenMyShop(){
             method : 'PUT',
          });
 
-         emit('isOnline-updated');
+         emit('isOnlineUpdated');
     } catch (error) {
         throw error
     }finally{

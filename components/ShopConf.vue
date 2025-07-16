@@ -1,4 +1,9 @@
 <template>
+        <div v-if="productsLisPending || fetchedConfisPending">
+                <SkeletoneOnlineShop/>
+        </div>
+
+        <div v-else>
             <div>
                 <USlideover 
                 title="controle panel"
@@ -12,7 +17,7 @@
                 }" :overlay="true">
 
                     <div class="flex items-center ml-auto my-6 w-max">
-                        <UButton label="Configurer votre boutique" icon="i-vaadin-touch" variant="subtle" class="border"/>
+                        <UButton label="Configurer votre boutique" icon="i-vaadin-touch" class="border bg-green-600 hover:bg-green-500 cursor-pointer"/>
                     </div>
         
                     <template #content>
@@ -198,12 +203,10 @@
         
                                 </div>
                                 <USeparator class="w-full mb-5" />
-                                <div class="flex items-center mb-10 gap-3">
+                                <div class="mb-10">
                                     <UButton label="Confirmer" type="submit"
                                         class="bg-green-500 hover:bg-green-600 font-bold ml-4" />
-                                    <!-- //TODO:delete this in production  -->
-                                    <UButton label="Auto-fill" class="bg-red-500 hover:bg-red-600 font-bold" type="button"
-                                        @click="console.log(Selectedproduct)" />
+                                    
                                 </div>
                             </form>
         
@@ -211,9 +214,13 @@
                     </template>
                 </USlideover>
             </div>
+            <div class="rounded-2xl overflow-hidden">
+                <Shop :conf="shopConfig" :shopProd="shopProd"/>
+            </div>
+            <Shoplinkready v-if="HostUrl" :storeUrl="HostUrl"/>
 
-            <Shop :conf="shopConfig" :shopProd="shopProd"/>
-             
+        </div>
+
 
 </template>
 
@@ -233,13 +240,15 @@ const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
   { value: 'D', label: 'Option D' , src : desing4},
 ];
 
+let HostUrl = useRuntimeConfig().public.BaseUrl
+
 export type ProductsLResp = {
-    products : typeof productsTable.$inferSelect[]
-}
-type sh = typeof shopConfTable.$inferSelect 
+    products : typeof productsTable.$inferSelect[] | []
+} 
+export type sh = typeof shopConfTable.$inferSelect 
 type resultQuery = {
     conf : sh 
-}
+} | undefined
 export type ShopConfigType = Omit<sh , "idShop" | "id">
 
 const shopConfig = ref<sh>({
@@ -262,10 +271,18 @@ const shopConfig = ref<sh>({
         ycor: 0,
 });
 
-const {data : ProductsL} = await useFetch<ProductsLResp>('/api/products', {
+
+const ProductsL = ref<ProductsLResp>({products : []});
+const {data : ProductsLdata , pending : productsLisPending} = useFetch<ProductsLResp>('/api/products', {
     server : false,
+    lazy : true
 });
 
+watchEffect(()=>{
+    if(ProductsLdata.value?.products){
+        ProductsL.value = ProductsLdata.value
+    };
+})
 
 const Selectedproduct = ref<{ id: string ; label: string; }[]>([]) 
 
@@ -277,16 +294,38 @@ const ProductsList = computed(() => {
 });
 
 // fetch the config 
-const {data : fetchedConf} = await useFetch<resultQuery>('/api/shop/conf' , {
-    server : false
+
+const fetchedConf = ref<resultQuery>(undefined);
+const {data : fetchedConfdata , pending : fetchedConfisPending} = useFetch<resultQuery>('/api/shop/conf' , {
+    server : false,
+    lazy : true
 });
 
+watchEffect(()=>{
+    if(fetchedConfdata.value?.conf){
+        fetchedConf.value = fetchedConfdata.value;  
+        HostUrl = useRuntimeConfig().public.BaseUrl 
+        HostUrl = HostUrl +`boutique/${fetchedConfdata.value.conf.idShop}`
+    }
 
-if(fetchedConf.value){
+    if(fetchedConf.value?.conf ){
     shopConfig.value = fetchedConf.value.conf
-}
+    
+    if (ProductsL.value?.products && shopConfig.value.products) {
+    Selectedproduct.value = shopConfig.value.products
+        .map(id => {
+            const product = ProductsL.value.products.find(p => p.id === id);
+            return product ? { id: product.id, label: product.name } : null;
+        }).filter(Boolean) as { id: string; label: string }[]; 
+// this is coolest line I ever wrote , so the result of map will be like this 
+// for exmp: [ {id: '1', label: 'Product A'}, null, {id: '3', label: 'Product C'} ] 
+// then this line with filter(Boolean) it will remove the null value and I can use 
+// this technique to remove from  arrays those values (null, undefined, false, 0, "", NaN)
+        }
+    }
+})
 
-// card types
+// this will watch and change accourding to my cards type
 const selectedOption = ref(fetchedConf.value?.conf.cardtype || "A");
 const selectOption = (value : card_t) => {
     selectedOption.value = value;
@@ -296,7 +335,17 @@ watch( selectedOption , (newval)=>{
     shopConfig.value.cardtype = newval ;
 });
 
+watchEffect(()=>{
+    if(shopConfig.value.isMap === false){
+        shopConfig.value.xcor = 0 ;
+        shopConfig.value.ycor = 0; 
 
+        console.log("x : " ,shopConfig.value.xcor , " y : " , shopConfig.value.ycor)
+    }
+    console.log("triggered");
+})
+
+// this will get to me the shop products that are in the conf.
 const shopProd = computed<shopProdtype>(() => {
   if (!ProductsL.value?.products) return [];
   return ProductsL.value.products.filter(product => 
@@ -304,10 +353,88 @@ const shopProd = computed<shopProdtype>(() => {
   );
 });
 
-const SubmitConfig = ()=>{
+// submit the config...
+const toast = useToast();
+const SubmitConfig = async ()=>{
+    // i need only the id's of the products that selected
     shopConfig.value.products = Selectedproduct.value.map((p)=>{
         return p.id
     });
-    console.log(shopConfig.value);
+    
+    if(!shopConfig.value.name || !shopConfig.value.description||
+        !shopConfig.value.email || !shopConfig.value.phoneNumber ||
+        !shopConfig.value.idShop || !shopConfig.value.cardtype || 
+        !shopConfig.value.id 
+    ){
+        toast.add({
+            title: 'Erreur',
+            description: "Un champ est manquant ou des données sont incorrectes, veuillez remplir tous les champs obligatoires ou corriger les erreurs.",
+            color: 'warning',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-red-600'
+            },
+        });
+        return 
+    }
+
+    if(shopConfig.value.products.length === 0){
+        toast.add({
+            title: 'Erreur',
+            description: "Vous devez sélectionner au moins un produit à afficher dans votre boutique !",
+            color: 'warning',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-red-600'
+            },
+        });
+        return 
+    }
+
+    if(shopConfig.value.isMap){
+        if(shopConfig.value.xcor === 0 || shopConfig.value.ycor === 0  ){
+        toast.add({
+            title: 'Erreur',
+            description: "Les coordonnées de la carte ne doivent pas être égales à zéro. Veuillez saisir des coordonnées valides.",
+            color: 'warning',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-red-600'
+            },
+        });
+            return 
+        }
+    }
+
+    try {
+        await $fetch('/api/eshop' , {
+            method : 'PUT',
+            body : {
+                shopConfig : shopConfig.value
+            }
+        });
+
+        toast.add({
+            title: 'Succès',
+            description: "La configuration de votre boutique a bien été mise à jour.",
+            color: 'success',
+            icon: 'lucide-alert-triangle',
+            ui: {
+            root: 'bg-gray-900/90 rounded-lg p-4',
+            progress : 'bg-green-600'
+            },
+        });
+        
+        return
+    } catch (error ) {
+        throw error
+    }
+ 
+
+    
 }
+
 </script>

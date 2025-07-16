@@ -1,5 +1,5 @@
 <template>
-    <nav class="sticky z-50 top-0 h-[64px] bg-[var(--deep-dark-blue)] border-b border-white/10 flex items-center text-primary justify-between w-full mx-auto py-2 px-5">
+    <nav class="sticky z-9999 top-0 h-[64px] bg-[var(--deep-dark-blue)] border-b border-white/10 flex items-center text-primary justify-between w-full mx-auto py-2 px-5">
       <div class="flex gap-8">
         <UButton 
           :class="['bg-transparent text-secondary hover:shadow-sm hover:-translate-x-1 shadow-green-500 font-extrabold h-8 w-8 flex items-center justify-center my-auto transition-all duration-300 ease-in-out']" 

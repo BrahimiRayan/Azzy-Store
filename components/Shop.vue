@@ -1,7 +1,6 @@
 <template>
-    <div v-if="conf" :style="`--bg-color: ${conf.bgColor}59 ;--bg-card :${conf.bgColor}50 ; --text-color: ${conf.textcolor}; --bg-pub : ${conf.bgColor}B3 ; --bg : ${conf.bgColor}`" class="wrapper rounded-xl p-5 border">
-        
-
+    <div v-if="conf" :style="`--bg-color: ${conf.bgColor}B2 ;--bg-card :${conf.bgColor}50 ; --text-color: ${conf.textcolor}; --bg-pub : ${conf.bgColor}B3 ; --bg : ${conf.bgColor}`" class="wrapper p-5 border">
+    
      <header class=" rounded-2xl flex items-center justify-between h-18" :style="`background-color : ${conf.bgColor};`">
         <h1 :style="`color : ${conf.textcolor};`" class="logo ml-3 font-extrabold text-3xl">{{ conf.name }}</h1>
 
@@ -124,56 +123,86 @@
         </div>
     </main>
 
-    <footer class="flex items-center overflow-hidden justify-between mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bgColor};`">
+    <footer class="grid grid-cols-3 items-center gap-x-4 overflow-hidden mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bgColor};`">
         <div>
             <p class="logo text-3xl my-3 font-extrabold">{{ conf.name }}</p>
             <h2 class="py-1 px-2 rounded bg-black/30 w-max">Nos contacts</h2>
  
-            <ul class="flex gap-3 align-center justify-center mt-6 mb-3">
+            <ul class="flex gap-4 align-center justify-center mt-6 mb-3 flex-col w-max">
 
                     <li v-if="conf.fb_url">
-                        <a :href="conf.fb_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/30 rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
-                            <UIcon name="i-mdi-facebook" class="text-2xl" />                            
+                        <a :href="conf.fb_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/30 hover:bg-blue-600 rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                            <UIcon name="i-mdi-facebook" class="text-2xl" />
+                            <span v-if="conf.fb_url.length > 28">{{ conf.fb_url.slice(0 , 27) }}... </span>                           
+                            <span v-else> {{ conf.fb_url }}</span>
                         </a>
                     </li>
 
                     <li v-if="conf.ig_url">
-                        <a :href="conf.ig_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
-                           <UIcon name="i-hugeicons-instagram" class="text-2xl" />                                                        
+                        <a :href="conf.ig_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 hover:bg-pink-600  rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
+                           <UIcon name="i-hugeicons-instagram" class="text-2xl" />
+                           <span class="md:hidden">
+                               <span v-if="conf.ig_url.length > 28">{{ conf.ig_url.slice(0 , 27) }}... </span>                           
+                               <span v-else> {{ conf.ig_url }}</span>                                                        
+                           </span>
                         </a>
                     </li>
 
                      <li >
-                        <a :href="`mailto:${conf.email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
+                        <a :href="`mailto:${conf.email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 hover:bg-red-600  rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
                            <UIcon name="i-material-symbols-mail" class="text-2xl" />
+                            <span v-if="conf.email.length > 28">{{ conf.email.slice(0 , 27) }}... </span>                           
+                           <span v-else> {{ conf.email }}</span>   
                         </a>
                     </li>
                 </ul>
 
 
         </div>
+
+        <div class="bg-white/20 rounded-lg text-center p-2">
+            <p class="text-shadow-lg text-shadow-black/20">Vous souhaitez créer une boutique en ligne ? Nous vous offrons bien plus !</p>
+            <p class="mt-8 text-sm flex flex-col items-center justify-center gap-2">
+                Créé par  
+                
+                <a href="/" target="_blank" rel="noopener" class="underline text-shadow-lg text-shadow-white/20 " style="color: oklch(70.7% 0.165 254.624);">
+                    <img src="../assets/pics/Logo-dark.webp" class="w-20 h-20 bg-[var(--deep-dark-blue)] rounded-2xl cursor-pointer"/>
+                    Azzy-store
+                </a>
+                    
+            </p>
+        </div>
         
-        <div v-if="conf.xcor !== 0 && conf.ycor !==0">
-            
-            <div class=" w-[300px] rounded-2xl border overflow-hidden">
-                <Map 
-                    :xcor="conf.xcor" 
-                    :ycor="conf.ycor" 
-                    :nom="conf.name"
-                />
-                <!-- map from leflet -->
+        <div class="w-max ml-auto">
+            <div v-if="conf.xcor !== 0 && conf.ycor !==0">
+                
+                <div class=" w-[300px] rounded-2xl border overflow-hidden">
+                    <Map 
+                        :xcor="conf.xcor" 
+                        :ycor="conf.ycor" 
+                        :nom="conf.name"
+                    />
+                    <!-- map from leflet -->
+                </div>
+    
+                <div class="flex gap-2 items-center rounded-lg p-1  bg-white/20 w-max mt-3">
+                    <UIcon name="lucide-map-pin-house" size="24"/>
+                    <p v-if="conf.address" class="mt-2 text-sm ">
+                        {{ conf.address }}
+                    </p>
+                </div>
             </div>
-
-            <p v-if="conf.address" class="mt-2 text-sm">
-                {{ conf.address }}
-            </p>
+    
+            <div v-else>
+                <div class="flex gap-2 items-center rounded-lg p-1 bg-white/20 w-max mt-3">
+                    <UIcon name="lucide-map-pin-house" size="24"/>
+                    <p v-if="conf.address" class="mt-2 text-sm">
+                        {{ conf.address }}
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <div v-else>
-            <p v-if="conf.address">
-                {{ conf.address }}
-            </p>
-        </div>
     </footer>
     </div>
 </template>
@@ -183,19 +212,16 @@ import type { shopProdtype } from '~/types/GeneraleT';
 import type { ShopConfigType } from './ShopConf.vue';
 
 
-    const props = defineProps<{
+const props = defineProps<{
         conf :ShopConfigType,
         shopProd : shopProdtype,
     }>()
+const ProdPics = computed(()=>{
+    return props.shopProd.map((elemnt)=>{
+        return elemnt.image
+    })
+})
 
-const ProdPics = [
-  'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',  // Backpack
-  'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',  // Shirt
-  'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg',  // Jeans
-  'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',  // Tech
-  'https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_.jpg',  // Jewelry
-  'https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg'  // Electronics
-];
 
 
 //TODO: find a way to get the products using conf.products ... 
