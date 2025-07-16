@@ -6,7 +6,7 @@
 
         <UBreadcrumb :items="item" class="my-8" />
         <div v-if="!isOnline?.res.isOnline">
-            <OnlineShopPolitics @isOnline-updated="reloadPage"/>
+            <OnlineShopPolitics @isOnlineUpdated="reloadPage"/>
         </div>
     
         <div v-else>

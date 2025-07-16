@@ -17,7 +17,7 @@
                 }" :overlay="true">
 
                     <div class="flex items-center ml-auto my-6 w-max">
-                        <UButton label="Configurer votre boutique" icon="i-vaadin-touch" variant="subtle" class="border"/>
+                        <UButton label="Configurer votre boutique" icon="i-vaadin-touch" class="border bg-green-600 hover:bg-green-500 cursor-pointer"/>
                     </div>
         
                     <template #content>
@@ -203,12 +203,10 @@
         
                                 </div>
                                 <USeparator class="w-full mb-5" />
-                                <div class="flex items-center mb-10 gap-3">
+                                <div class="mb-10">
                                     <UButton label="Confirmer" type="submit"
                                         class="bg-green-500 hover:bg-green-600 font-bold ml-4" />
-                                    <!-- //TODO:delete this in production  -->
-                                    <UButton label="Auto-fill" class="bg-red-500 hover:bg-red-600 font-bold" type="button"
-                                        @click="console.log(Selectedproduct)" />
+                                    
                                 </div>
                             </form>
         
@@ -216,8 +214,11 @@
                     </template>
                 </USlideover>
             </div>
+            <div class="rounded-2xl overflow-hidden">
+                <Shop :conf="shopConfig" :shopProd="shopProd"/>
+            </div>
+            <Shoplinkready v-if="HostUrl" :storeUrl="HostUrl"/>
 
-            <Shop :conf="shopConfig" :shopProd="shopProd"/>
         </div>
 
 
@@ -232,13 +233,14 @@ import desing3 from '~/assets/pics/design3.png';
 import desing4 from '~/assets/pics/design4.png';
 import { productsTable, shopConfTable } from '~/lib/db/schema';
 
-
 const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
   { value: 'A', label: 'Option A' , src : desing1},
   { value: 'B', label: 'Option B' , src : desing2},
   { value: 'C', label: 'Option C'  , src : desing3},
   { value: 'D', label: 'Option D' , src : desing4},
 ];
+
+let HostUrl = useRuntimeConfig().public.BaseUrl
 
 export type ProductsLResp = {
     products : typeof productsTable.$inferSelect[] | []
@@ -301,11 +303,25 @@ const {data : fetchedConfdata , pending : fetchedConfisPending} = useFetch<resul
 
 watchEffect(()=>{
     if(fetchedConfdata.value?.conf){
-        fetchedConf.value = fetchedConfdata.value;
+        fetchedConf.value = fetchedConfdata.value;  
+        HostUrl = useRuntimeConfig().public.BaseUrl 
+        HostUrl = HostUrl +`boutique/${fetchedConfdata.value.conf.idShop}`
     }
 
     if(fetchedConf.value?.conf ){
     shopConfig.value = fetchedConf.value.conf
+    
+    if (ProductsL.value?.products && shopConfig.value.products) {
+    Selectedproduct.value = shopConfig.value.products
+        .map(id => {
+            const product = ProductsL.value.products.find(p => p.id === id);
+            return product ? { id: product.id, label: product.name } : null;
+        }).filter(Boolean) as { id: string; label: string }[]; 
+// this is coolest line I ever wrote , so the result of map will be like this 
+// for exmp: [ {id: '1', label: 'Product A'}, null, {id: '3', label: 'Product C'} ] 
+// then this line with filter(Boolean) it will remove the null value and I can use 
+// this technique to remove from  arrays those values (null, undefined, false, 0, "", NaN)
+        }
     }
 })
 
@@ -318,6 +334,16 @@ const selectOption = (value : card_t) => {
 watch( selectedOption , (newval)=>{
     shopConfig.value.cardtype = newval ;
 });
+
+watchEffect(()=>{
+    if(shopConfig.value.isMap === false){
+        shopConfig.value.xcor = 0 ;
+        shopConfig.value.ycor = 0; 
+
+        console.log("x : " ,shopConfig.value.xcor , " y : " , shopConfig.value.ycor)
+    }
+    console.log("triggered");
+})
 
 // this will get to me the shop products that are in the conf.
 const shopProd = computed<shopProdtype>(() => {
@@ -410,4 +436,5 @@ const SubmitConfig = async ()=>{
 
     
 }
+
 </script>
