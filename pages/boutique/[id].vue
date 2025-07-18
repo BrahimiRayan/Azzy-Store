@@ -70,25 +70,53 @@ watch(
 useHead({
   title: () => pageMeta.title,
   meta: [
+    { 
+      name: 'description', 
+      content: () => pageMeta.description,
+      // Add key for proper updates
+      key: 'description'
+    },
     // Critical OG Tags
-    { property: 'og:title', content: () => pageMeta.title || 'Azzy Store' },
-    { property: 'og:description', content: () => pageMeta.description || 'Discover our products' },
+    { 
+      property: 'og:title', 
+      content: () => pageMeta.title || 'Azzy Store',
+      key: 'og:title' 
+    },
+    { 
+      property: 'og:description', 
+      content: () => pageMeta.description || 'Discover our products',
+      key: 'og:description' 
+    },
     { 
       property: 'og:image', 
-      content: 'https://azzy-store.vercel.app/Logo-light_soc.jpg?v=1' // Cache buster
+      content: 'https://azzy-store.vercel.app/Logo-light_soc.jpg?v=1',
+      key: 'og:image' 
     },
-    { property: 'og:url', content: `https://azzy-store.vercel.app${route.path}` },
-    { property: 'og:type', content: 'website' },
+    { 
+      property: 'og:url', 
+      // Make reactive to route changes
+      content: () => `https://azzy-store.vercel.app${route.fullPath}`,
+      key: 'og:url' 
+    },
+    { 
+      property: 'og:type', 
+      content: 'website',
+      key: 'og:type' 
+    },
 
-    // Image Dimensions (Required by Facebook)
-    { property: 'og:image:width', content: '800' }, // Actual width of your image
-    { property: 'og:image:height', content: '800' }, // Actual height
-    { property: 'og:image:type', content: 'image/jpeg' },
+    // Image Dimensions
+    { property: 'og:image:width', content: '1200', key: 'og:image:width' },
+    { property: 'og:image:height', content: '630', key: 'og:image:height' },
+    { property: 'og:image:type', content: 'image/jpg', key: 'og:image:type' },
 
-    // Cache Control Fix
-    { property: 'og:image:secure_url', content: 'https://azzy-store.vercel.app/Logo-light_soc.jpg' },
-    { 'http-equiv': 'Cache-Control', content: 'public, max-age=31536000, immutable' }
+    // Twitter Cards (Recommended)
+    { name: 'twitter:card', content: 'summary_large_image', key: 'twitter:card' },
+    { name: 'twitter:title', content: () => pageMeta.title || 'Azzy Store', key: 'twitter:title' },
+    { name: 'twitter:description', content: () => pageMeta.description || 'Discover our products', key: 'twitter:description' },
+    { name: 'twitter:image', content: 'https://azzy-store.vercel.app/Logo-light_soc.jpg?v=1', key: 'twitter:image' },
+    
+    // Remove Cache-Control meta tag - this should be set via HTTP headers instead
   ],
-  titleTemplate: (title) => `${title} | Azze-store`
+  titleTemplate: (title) => `${title} | Azzy-store` // Fixed brand name consistency
 });
 </script>

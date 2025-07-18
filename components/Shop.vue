@@ -161,16 +161,17 @@
         </div>
 
         <div class="bg-white/20 rounded-lg text-center p-2">
-            <p class="text-shadow-lg text-shadow-black/20">Vous souhaitez créer une boutique en ligne ? Nous vous offrons bien plus !</p>
-            <p class="mt-8 text-sm flex flex-col items-center justify-center gap-2">
-                Créé par  
-                
-                <a href="/" target="_blank" rel="noopener" class="underline text-shadow-lg text-shadow-white/20 " style="color: oklch(70.7% 0.165 254.624);">
-                    <img src="../assets/pics/Logo-dark.webp" class="w-20 h-20 bg-[var(--deep-dark-blue)] rounded-2xl cursor-pointer"/>
-                    Azzy-store
-                </a>
-                    
+            <p class="text-shadow-sm text-shadow-black/20">Vous souhaitez créer une boutique en ligne ? Nous vous offrons bien plus !</p>
+            
+            <p class="mt-8 text-sm flex flex-col items-center justify-center gap-2 text-shadow-sm text-shadow-black/20">
+                <span>Commancer la votre a</span>
+                    <a href="/" target="_blank" rel="noopener">
+                        <img src="../assets/pics/Logo-dark.webp" class="w-20 h-20 bg-[var(--deep-dark-blue)] shadow-lg shadow-black/20 hover:shadow-green-600 rounded-2xl transition-all duration-500 ease-in-out cursor-pointer"/>
+                        <span class="hidden">Azzy-store</span>
+                    </a>          
+
             </p>
+
         </div>
         
         <div class="w-max ml-auto">
