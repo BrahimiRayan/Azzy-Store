@@ -52,3 +52,4 @@ export function shareOnInstagram(url: string) {
   const message = `🌟 Découvrez ma boutique exclusive ! 🛍️\n${url}`;
   window.open(`https://www.instagram.com/direct/new/?text=${encodeURIComponent(message)}`, '_blank');
 }
+

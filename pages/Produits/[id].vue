@@ -1,118 +1,195 @@
 <template>
-    <div v-if="pending">
+    <div v-if="pending || isTransactionsPending">
         <SkeletoneProduct />
     </div>
     <!-- //TODO: MAKE A COMPONENT FOR THIS LATER -->
     <div v-else-if="error || !product" class="flex items-center justify-center h-screen">
         <h1 class="text-2xl text-red-500 font-extrabold">Produit non trouvé</h1>
     </div>
-    <div v-else >
 
-    <UBreadcrumb :items="item" class="my-8 " />
+    <div v-else>
+        
+        <UBreadcrumb :items="item" class="my-8 " />
+        <USelectMenu 
+            icon="i-lucide-calendar-1"
+            v-model="Monthvalue" 
+            :items="months" 
+            class="w-48" 
+            placeholder="Choisir un moin..."
+            :ui="{
+                content : 'bg-[var(--deep-dark-blue)] ring-white/20',
+                item : 'border-b-1 border-white/20 hover:bg-white/10 p-2',
+                input : 'bg-[var(--deep-dark-blue)]',
+                base : 'ring-white/40 ring-2',
+            }"
+            />
+        <div class="flex items-center justify-between my-9 gap-5">
 
-
-    <div class="flex items-center justify-between my-9 gap-5">
-
-        <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
-            <h1 class="text-xl text-green-500 font-extrabold">Nombre vendus ce mois</h1>
-            <div class="flex items-baseline gap-1">
-                <span class="text-3xl font-extrabold">0</span>
-                <p class="text-xs text-gray-400 ">unite</p>
+            <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
+                <h1 class="text-xl text-green-500 font-extrabold">Nombre vendus ce mois</h1>
+                <div class="flex items-baseline gap-1">
+                    <span v-if="NumberOfmonthSelles" class="text-3xl font-extrabold">{{NumberOfmonthSelles}}</span>
+                    <span v-else class="text-3xl font-extrabold">--</span>
+                    <p class="text-xs text-gray-400 ">unite</p>
+                </div>
+                <UIcon name="i-ic-outline-sell" class="text-[var(--green-grace)] size-6 mr-2" />
             </div>
-            <UIcon name="i-ic-outline-sell" class="text-[var(--green-grace)] size-6 mr-2" />
+
+            <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
+                
+                    <h1 class="text-xl font-extrabold" :class="MonthBenifice < 0 ? 'text-red-500' : MonthBenifice > 0 ? 'text-green-500' : 'text-gray-400' ">Situation financière : 
+                        {{ 
+                            MonthBenifice < 0 ? 'Perte' : MonthBenifice > 0 ? 'Bénéfice' : 'Équilibre' 
+                        }}
+                    </h1>    
+                
+                <div class="flex items-baseline gap-1">
+                    <span v-if="MonthBenifice" class="text-3xl font-extrabold">{{MonthBenifice}}</span>
+                    <span v-else class="text-3xl font-extrabold">--</span>
+                    <p class="text-xs text-gray-400 ">DZD</p>
+                </div>
+                <UIcon 
+                :name="MonthBenifice < 0 ? 'i-hugeicons-trade-down' : MonthBenifice > 0 ? 'i-hugeicons-trade-up' : 'i-tdesign-money' "
+                class="size-6 mr-2" 
+                :class="MonthBenifice < 0 ? 'text-red-500' : MonthBenifice > 0 ? 'text-green-500' : 'text-gray-400' "
+                />
+            </div>
+
+            <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
+                <h1 class="text-xl text-green-500 font-extrabold">Chiffre d'affaires brut</h1>
+                <div class="flex items-baseline gap-1">
+                    <p class="text-3xl font-extrabold">{{BruteSum}}</p>
+                    <p class="text-xs text-gray-400 ">DZD</p>
+                </div>
+                <UIcon name="i-bx-stats" class="text-[var(--green-grace)] size-6 mr-2" />
+            </div>
+
         </div>
 
-        <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
-            <h1 class="text-xl text-green-500 font-extrabold">Généré ce mois-ci</h1>
-            <div class="flex items-baseline gap-1">
-                <span class="text-3xl font-extrabold">0</span>
-                <p class="text-xs text-gray-400 ">DZD</p>
-            </div>
-            <UIcon name="i-tdesign-money" class="text-[var(--green-grace)] size-6 mr-2" />
+        <div>
+            <Chart :chartData="data" />
+
         </div>
 
-        <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
-            <h1 class="text-xl text-green-500 font-extrabold">Par rapport au dernier moins</h1>
-            <div class="flex items-baseline gap-1">
-                <span class="text-3xl font-extrabold" :class="isUp ?'text-white' : 'text-red-500'">13</span>
-                <p class="text-xs text-gray-400 ">% <UIcon :name="isUp ? 'formkit-arrowup' : 'formkit-arrowdown'" class="size-6" :class=" isUp ?'text-[var(--green-grace)]' : 'text-red-500'" /></p>
-            </div>
-            <UIcon name="i-bx-stats" class="text-[var(--green-grace)] size-6 mr-2" />
-        </div>
+        <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Informations de produit"
+            :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
 
+        <ModifyProduct :produit="product" @refresh-product="refresh" />
     </div>
-
-    <div>
-        <Chart :chartData="data" />
-
-    </div>
-
-    <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " 
-        label="Informations de produit"
-        :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
-
-    <ModifyProduct :produit="product" @refresh-product="refresh"/>
-</div>
 </template>
 
 <script setup lang='ts'>
-import type { chartData, Produit } from '~/types/GeneraleT';
+import type { ProductTransactionsArrayType, ProductTransactionsType, Produit } from '~/types/GeneraleT';
 import type { BreadcrumbItem } from '@nuxt/ui';
+import { CalculateMonthlyBenifice, getSellesOrExpensesForMonths } from '~/Utils/datasHelpers';
+import { fr_MONTHS } from '~/lib/consts';
 
-const isUp = ref<boolean>(true) ;
+
 const id = useRoute().params.id;
 
-const { data : product , pending, error , refresh } = useFetch<Produit>(`/api/products/${id}`, {
-  lazy: true,
-  server: false,
+const date = new Date()
+const months = ref([
+  { label: 'Janvier', value: 1 },
+  { label: 'Février', value: 2 },
+  { label: 'Mars', value: 3 },
+  { label: 'Avril', value: 4 },
+  { label: 'Mai', value: 5 },
+  { label: 'Juin', value: 6 },
+  { label: 'Juillet', value: 7 },
+  { label: 'Août', value: 8 },
+  { label: 'Septembre', value: 9 },
+  { label: 'Octobre', value: 10 },
+  { label: 'Novembre', value: 11 },
+  { label: 'Décembre', value: 12 }
+])
+
+const current = months.value.find(m=> m.value === date.getMonth() +1)
+const Monthvalue = ref(current)
+
+const month = computed(()=>{
+    if(!Monthvalue.value) return date.getMonth()
+    return months.value.findIndex(item => item.label === Monthvalue.value?.label);
+})
+
+
+
+
+// get the product
+const { data: product, pending, error, refresh } = useFetch<Produit>(`/api/products/${id}`, {
+    lazy: true,
+    server: false,
 }
 );
 
+const { data: transactions, pending: isTransactionsPending } = useFetch<ProductTransactionsType>(`/api/Transactions/${id}`, {
+    lazy: true,
+    server: false,
+})
+
 // breadcrumb
 const item = computed<BreadcrumbItem[]>(() => [
-  {
-    label: 'Dashboard',
-    icon: 'i-material-symbols-dashboard-outline',
-    to: '/'
-  },
-  {
-    label: 'Produits',
-    icon: 'i-lucide-box',
-    to: '/produits'
-  },
-  {
-    label: product.value?.name || '', // Gestion du loading
-    icon: 'i-lucide-link',
-  }
+    {
+        label: 'Dashboard',
+        icon: 'i-material-symbols-dashboard-outline',
+        to: '/dashboard'
+    },
+    {
+        label: 'Produits',
+        icon: 'i-lucide-box',
+        to: '/produits'
+    },
+    {
+        label: product.value?.name || '', // Gestion du loading
+        icon: 'i-lucide-link',
+    }
 ])
 
-// chart    
-const data: chartData = {
-    labels: [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'
-    ],
-    datasets: [{
+
+// chart   
+let achats : ProductTransactionsArrayType = []
+let ventes : ProductTransactionsArrayType = []
+let NumberOfmonthSelles = ref<number>(0);
+let MonthBenifice = ref<number>(0);
+let BruteSum = ref<number>(0);
+
+const data = computed(() => {
+   achats = getSellesOrExpensesForMonths(transactions.value?.data || [], "A");
+   ventes = getSellesOrExpensesForMonths(transactions.value?.data || [], "V");
+   const Benefice = CalculateMonthlyBenifice(ventes , achats);
+
+   NumberOfmonthSelles.value = ventes[month.value].totalQuantity
+   MonthBenifice.value = ventes[month.value].totalSaleAmount - achats[month.value].totalPurchaseAmount
+   BruteSum.value = ventes[month.value].totalSaleAmount
+
+  return {
+    labels: fr_MONTHS,
+    datasets: [
+      {
         label: 'Achats',
-        // will be gotten from bdd
-        data: [0, 0, 0, 0, 9800, 200900, 31000, 31100, 1200, 1300, 201400, 201500],
+        data: achats.map(t => t.totalPurchaseAmount),
         borderColor: '#E74C3C',
         backgroundColor: '#E74C3C',
-
-    },
-    {
+      },
+      {
         label: 'Ventes',
-        data: [0, 0, 0, 0, 300800, 300900, 301000, 301100, 301200, 301300, 301400, 301500],
+        data: ventes.map(t => t.totalSaleAmount),
         borderColor: '#2ECC71',
         backgroundColor: '#39FF14',
-    },
-    {
+      },
+        {
         label: 'Benefice',
-        data: [0, 0, 0, 0, 0, 1000, 10, 0, 100000, 100000, 100000, 100000],
+        data: Benefice,
         borderColor: '#F1C40F',
         backgroundColor: '#F1C40F',
     }
     ]
-}  
-</script>
+  };
+});
 
+
+
+    
+
+
+
+</script>

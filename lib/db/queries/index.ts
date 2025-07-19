@@ -412,27 +412,38 @@ try {
   }
 }
 
-// this function get the stats data for a single product 
-export async function getTransactionsForProduct( transType : ("A" | "V") , year : string , idshop : string ,productId : string){
-   return await db
-    .select({
-      month: sql<number>`EXTRACT(MONTH FROM ${transactionsTable.date})`.as("month"),
-      transactionCount: sql<number>`COUNT(*)`.as("transactionCount"),
-      totalQuantity: sql<number>`SUM(${transactionsTable.qte})`.as("totalQuantity"),
-      totalPurchaseAmount: sql<number>`SUM(${transactionsTable.qte} * ${transactionsTable.pua_t})`.as("totalPurchaseAmount"),
-      totalSaleAmount: sql<number>`SUM(${transactionsTable.qte} * ${transactionsTable.puv_t})`.as("totalSaleAmount")
-    })
-    .from(transactionsTable)
-    .where(
-      and(
-        eq(transactionsTable.idShop , idshop),
-        eq(transactionsTable.idProduct, productId),
-        eq(transactionsTable.type, transType),
-        sql`EXTRACT(YEAR FROM ${transactionsTable.date}) = ${year}`
+// for my future use : THIS FUNCTION Will get all transactions for each month in the db for a specifique year
+// Used in /api/transactions/[product].get.ts
+export async function getTransactionsForProduct( productId : string , year? : number ){
+  if(!year || year === 0){
+    let currentYear = new Date().getFullYear();
+    year = currentYear
+  }
+
+  try {
+    return await db
+      .select({
+        month: sql<number>`EXTRACT(MONTH FROM ${transactionsTable.date})`.as("month"),
+        transactionCount: sql<number>`COUNT(*)`.as("transactionCount"),
+        totalQuantity: sql<number>`SUM(${transactionsTable.qte})`.as("totalQuantity"),
+        totalPurchaseAmount: sql<number>`SUM(${transactionsTable.qte} * ${transactionsTable.pua_t})`.as("totalPurchaseAmount"),
+        totalSaleAmount: sql<number>`SUM(${transactionsTable.qte} * ${transactionsTable.puv_t})`.as("totalSaleAmount"),
+        TransactionType : transactionsTable.type
+      })
+      .from(transactionsTable)
+      .where(
+        and(
+          eq(transactionsTable.idProduct, productId),
+          sql`EXTRACT(YEAR FROM ${transactionsTable.date}) = ${year}`
+        )
       )
-    )
-    .groupBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})`)
-    .orderBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})`);
+      .groupBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})` , transactionsTable.type)
+      .orderBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})`);
+
+  }catch(err){
+    throw err
+  }
+   
 }
 
 // products transactions

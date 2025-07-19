@@ -29,6 +29,19 @@ export type productsCards = {
     idShop: string;
 }
 
+export type ProductTransactionsArrayType = {
+      month : number,
+      transactionCount : number ,
+      totalQuantity : number ,
+      totalPurchaseAmount : number ,
+      totalSaleAmount : number,
+      TransactionType : "A" | "V"
+  }[]
+
+export type ProductTransactionsType = {
+  data : ProductTransactionsArrayType | []
+}
+
 export type shopProdtype = productsCards[]
 
 type OrderProducts = {
