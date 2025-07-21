@@ -42,6 +42,20 @@ export type ProductTransactionsType = {
   data : ProductTransactionsArrayType | []
 }
 
+
+export type shopProductsType = {
+    name: string;
+    image: string;
+    numberInStock: number;
+}[] | []
+
+export type dashboaerdInformationFetchresponce = {
+  transactions : ProductTransactionsArrayType | []
+  stats : shopProductsType
+}
+
+
+
 export type shopProdtype = productsCards[]
 
 type OrderProducts = {

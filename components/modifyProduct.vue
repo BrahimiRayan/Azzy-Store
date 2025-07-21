@@ -6,8 +6,9 @@
         </div>
         
         <div class=" flex items-center gap-3 rounded-xl p-2 shadow bg-white/5">
+            
             <div class="w-[400px] max-h-[400px] overflow-hidden">
-                <NuxtImg :src="produit.img" format="webp" alt="" class="w-[90%] rounded-xl" placeholder="/no-img.png"/>
+                <NuxtImg :src="produit.image" format="webp" alt="" class="w-[90%] rounded-xl" placeholder="/no-img.png"/>
             </div>
             <div class="w-[45%]">
 
