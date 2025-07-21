@@ -42,6 +42,17 @@ export type ProductTransactionsType = {
   data : ProductTransactionsArrayType | []
 }
 
+export type mvpType = {
+    name: string;
+    image: string;
+    type: category;
+    transactions: {
+        totalSoldByunit: number;
+        transactionCount: number;
+        totalSoldQuantity: number;
+        averagePuv: number;
+    };
+}
 
 export type shopProductsType = {
     name: string;
@@ -50,8 +61,10 @@ export type shopProductsType = {
 }[] | []
 
 export type dashboaerdInformationFetchresponce = {
-  transactions : ProductTransactionsArrayType | []
-  stats : shopProductsType
+  transactions : ProductTransactionsArrayType | [] ,
+  stats : shopProductsType ,
+  mvp : mvpType[]
+
 }
 
 
