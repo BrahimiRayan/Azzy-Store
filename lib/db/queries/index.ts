@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, avg, count, desc, eq, sql, sum } from "drizzle-orm";
 import { db } from "..";
 import { notesTable, orderProductsTable, ordersTable, productsTable, shopConfTable, shopsTable, transactionsTable } from "../schema";
 import { user } from "../schema/auth-schema";
@@ -553,7 +553,80 @@ export async function DeleteAllNotesByShopId(idShop : string) {
   }
 }
 
+// export async function getMvp(idShop: string) {
+//   if (!idShop) {
+//     throw new Error("Missing shop id");
+//   }
+
+//   try {
+//     return await db.select({
+//         name: productsTable.name,
+//         image: productsTable.image,
+//         type: productsTable.type,
+//         transactions: {
+//           transactionCount: count(transactionsTable.id),
+//           totalSoldQuantity: sum(transactionsTable.qte),
+//           averagePuv: avg(transactionsTable.puv_t)
+//         }
+//       })
+//       .from(productsTable)
+//       .leftJoin(
+//         transactionsTable,
+//         and(
+//           eq(productsTable.id, transactionsTable.idProduct),
+//           eq(transactionsTable.type, 'V'),
+//           eq(transactionsTable.idShop, idShop)
+//         )
+//       )
+//       .where(eq(productsTable.idShop, idShop))
+//       .groupBy(productsTable.id, productsTable.name, productsTable.image, productsTable.type)
+//       .orderBy(desc(sql`sum(${transactionsTable.qte} * ${transactionsTable.puv_t})`))
+//       .limit(1);
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
 // order_products
+
+
+export async function getMvp(idShop: string) {
+  if (!idShop) {
+    throw new Error("Missing shop id");
+  }
+
+  try {
+    const result = await db
+      .select({
+        name: productsTable.name,
+        image: productsTable.image,
+        type: productsTable.type,
+        transactions: {
+          totalSoldByunit: sql<number>`COALESCE(SUM(${transactionsTable.qte}), 0)`,
+          transactionCount: sql<number>`COALESCE(COUNT(${transactionsTable.id}), 0)`,
+          totalSoldQuantity: sql<number>`COALESCE(SUM(${transactionsTable.qte}), 0)`,
+          averagePuv: sql<number>`COALESCE(AVG(${transactionsTable.puv_t}), 0)`,
+        },
+      })
+      .from(productsTable)
+      .leftJoin(
+        transactionsTable,
+        and(
+          eq(productsTable.id, transactionsTable.idProduct),
+          eq(transactionsTable.type, 'V'),
+          eq(transactionsTable.idShop, idShop)
+        )
+      )
+      .where(eq(productsTable.idShop, idShop))
+      .groupBy(productsTable.id, productsTable.name, productsTable.image, productsTable.type)
+      .orderBy(desc(sql`COALESCE(SUM(${transactionsTable.qte} * ${transactionsTable.puv_t}), 0)`))
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 type orderProducts =  {
     idOrder: string;
     qte: number;

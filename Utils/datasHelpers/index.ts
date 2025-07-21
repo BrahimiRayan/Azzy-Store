@@ -1,4 +1,4 @@
-import type { ProductTransactionsArrayType, Transaction } from "~/types/GeneraleT";
+import type { mvpType, ProductTransactionsArrayType, Transaction } from "~/types/GeneraleT";
 type transactionType = "A" |"V";
 
 // this function will generate the benifice of eache month bases on the monthlySalles and monthlyBuyings
@@ -17,34 +17,6 @@ export function CalculateMonthlyBenifice(salles : ProductTransactionsArrayType ,
 }
 
 // get all transactions for a product
-// export function getSellesOrExpensesForMonths(transactions: ProductTransactionsArrayType, transType: transactionType): ProductTransactionsArrayType {
-//   const transactionsMap = new Map<number, ProductTransactionsArrayType[0]>();
-//   transactions.forEach(t => {
-//     if (t.TransactionType === transType) {
-//       transactionsMap.set(Number(t.month), t);
-//     }
-//   });
-
-//   const result: ProductTransactionsArrayType = [];
-//   for (let month = 1; month <= 12; month++) {
-//     const existing = transactionsMap.get(month);
-//     result.push(
-//       existing || {
-//         month,
-//         transactionCount: 0,
-//         totalQuantity: 0,
-//         totalPurchaseAmount: 0,
-//         totalSaleAmount: 0,
-//         TransactionType: transType
-//       }
-//     );
-//   }
-//   return result;
-// }
-
-
-
-// second one
 
 export function getSellesOrExpensesForMonths(
   transactions: ProductTransactionsArrayType,
@@ -53,11 +25,9 @@ export function getSellesOrExpensesForMonths(
   const transactionsMap = new Map<number, ProductTransactionsArrayType[0]>();
 
   transactions.forEach(t => {
-    // Convert month to NUMBER for consistent keys
     const monthNum = Number(t.month);
     
     if (t.TransactionType === transType && !isNaN(monthNum)) {
-      // Also convert transactionCount to number
       const processedTransaction = {
         ...t,
         month: monthNum,
@@ -67,7 +37,6 @@ export function getSellesOrExpensesForMonths(
     }
   });
 
-  // Rest of function unchanged...
   const result: ProductTransactionsArrayType = [];
   for (let month = 1; month <= 12; month++) {
     const existing = transactionsMap.get(month);
@@ -83,4 +52,24 @@ export function getSellesOrExpensesForMonths(
     );
   }
   return result;
+}
+
+export function getTheHighestByUnit(mvps : mvpType[]){
+  
+  if(mvps.length === 0){
+    return
+  }
+  let BestUnityseller : mvpType | [] = mvps[0]
+  if(mvps.length === 1){
+    return BestUnityseller
+
+  }
+
+  for(let i = 1 ; i < mvps.length ; i++){
+    if(BestUnityseller.transactions.totalSoldByunit < mvps[i].transactions.totalSoldByunit){
+      BestUnityseller = mvps[i]
+    }
+  }
+
+  return BestUnityseller
 }
