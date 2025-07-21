@@ -72,7 +72,7 @@ const chartOptions = {
 <style scoped>
 .chart-container {
     position: relative;
-    height: 450px;
+    height: 400px;
     width: 100%;
 }
 

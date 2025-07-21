@@ -333,26 +333,6 @@ try {
 }
 
 // transactions
-export async function getAllTransactions(idShop: string) {
-    try {
-        if (!idShop) {
-            throw new Error("Shop ID is required to fetch transactions");
-        }
-
-        const transactions = await db.query.transactionsTable.findMany({
-            where: eq(transactionsTable.idShop, idShop),
-        });
-
-        return transactions;
-    } catch (error : any) {
-        console.error("Error fetching transactions:", error);
-        throw createError({
-            statusCode: 500,
-            message: `Error fetching transactions: ${error.message}`,
-        })
-        
-    }
-}
 
 export async function getTransactionsByYear(transType : ("A" | "V") , year : string , idshop : string){
   const monthlyTransactions = await db
@@ -445,6 +425,42 @@ export async function getTransactionsForProduct( productId : string , year? : nu
   }
    
 }
+
+// this get all transactions for shop for dashboard
+// /api/
+export async function getTransactionsForAllProductsInAyear( shopid : string , year? : number ){
+  if(!year || year === 0){
+    let currentYear = new Date().getFullYear();
+    year = currentYear
+  }
+
+  try {
+    return await db
+      .select({
+        month: sql<number>`EXTRACT(MONTH FROM ${transactionsTable.date})`.as("month"),
+        transactionCount: sql<number>`COUNT(*)`.as("transactionCount"),
+        totalQuantity: sql<number>`SUM(${transactionsTable.qte})`.as("totalQuantity"),
+        totalPurchaseAmount: sql<number>`SUM(${transactionsTable.qte} * ${transactionsTable.pua_t})`.as("totalPurchaseAmount"),
+        totalSaleAmount: sql<number>`SUM(${transactionsTable.qte} * ${transactionsTable.puv_t})`.as("totalSaleAmount"),
+        TransactionType : transactionsTable.type
+      })
+      .from(transactionsTable)
+      .where(
+        and(
+          eq(transactionsTable.idShop, shopid),
+          sql`EXTRACT(YEAR FROM ${transactionsTable.date}) = ${year}`
+        )
+      )
+      .groupBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})` , transactionsTable.type)
+      .orderBy(sql`EXTRACT(MONTH FROM ${transactionsTable.date})`);
+
+  }catch(err){
+    throw err
+  }
+   
+}
+
+
 
 // products transactions
 export async function getAlltransactionWithProducts(){

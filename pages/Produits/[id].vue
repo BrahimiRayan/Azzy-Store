@@ -8,12 +8,11 @@
     </div>
 
     <div v-else>
-        
         <UBreadcrumb :items="item" class="my-8 " />
         <USelectMenu 
             icon="i-lucide-calendar-1"
             v-model="Monthvalue" 
-            :items="months" 
+            :items="months"
             class="w-48" 
             placeholder="Choisir un moin..."
             :ui="{
