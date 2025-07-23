@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { auth } from "~/lib/auth";
 import { db } from "~/lib/db";
 import { getMvp, getTransactionsForAllProductsInAyear } from "~/lib/db/queries";
-import { productsTable } from "~/lib/db/schema";
+import { ordersTable, productsTable } from "~/lib/db/schema";
 
 export default defineEventHandler(async (event)=>{
     
@@ -18,6 +18,10 @@ export default defineEventHandler(async (event)=>{
         
         const transactions = await getTransactionsForAllProductsInAyear(idShop);
         const mvp = await getMvp(idShop);
+        const [getTotalcommands] = await db.select({
+            total : count(ordersTable.id)
+        }).from(ordersTable)
+          .where(eq(ordersTable.idShop , idShop));
         const getstats = await db.select({
             name : productsTable.name ,
             image : productsTable.image,
@@ -29,7 +33,8 @@ export default defineEventHandler(async (event)=>{
         return {
             transactions : transactions,
             stats : getstats ,
-            mvp : mvp
+            mvp : mvp,
+            ordersNumber : getTotalcommands
         }    
 
     } catch (error) {

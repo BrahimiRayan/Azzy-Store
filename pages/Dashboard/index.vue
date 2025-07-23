@@ -1,10 +1,11 @@
 <template>
 
   <div v-if="pending">
-    <p class="text-4xl">Pending ...</p>
+    <SkeletoneDashboard />
   </div>
 
   <div v-else>
+    
     <div class="mt-8" >
 
       <UBreadcrumb :items="item" class="mb-8 "/>
@@ -83,7 +84,7 @@
             :totalStockProducts="transactions?.stats.length" 
             :totalProductSelled="ThisMonthtotalSellings" 
             :totalProductBought="ThisMonthtotalBuyings "
-            :totalCommand="34"
+            :totalCommand="transactions?.ordersNumber.total"
             :shopProducts="transactions?.stats"
             />
 
@@ -99,39 +100,49 @@
             </span>
           </p>
         <!-- les mvps -->
-        <div class="grid grid-cols-2 rounded-lg bg-white/5 p-2 mt-2" >
-
-          <div class="mt-32  flex flex-col items-center justify-center">
-        
-            <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black">
-              <div>
-                <img v-if="transactions.mvp[0].image" :src="transactions.mvp[0].image" class="w-42 h-42 rounded-full shadow-2xl shadow-green-300" :alt="transactions.mvp[0].name">
-                <img v-else src="../../assets/pics/no-image.png" class="w-42 h-42 rounded-full shadow-2xl shadow-white"  :alt="transactions.mvp[0].name">
+        <div>
+          <div v-if="mostSellesByUnite || transactions.mvp[0]" class="grid grid-cols-2 rounded-lg bg-white/5 p-2 mt-2" >
+            <div class="mt-32  flex flex-col items-center justify-center">
+              <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black">
+                <div>
+                  <img v-if="transactions.mvp[0].image" :src="transactions.mvp[0].image" class="w-42 h-42 rounded-full shadow-2xl shadow-green-300" :alt="transactions.mvp[0].name">
+                  <img v-else src="../../assets/pics/no-image.png" class="w-42 h-42 rounded-full shadow-2xl shadow-white"  :alt="transactions.mvp[0].name">
+                </div>
+              </div>
+  
+              <div class="w-68 h-54 bg-[url('/number0.png')] bg-no-repeat bg-center bg-contain "></div>
+              <div class=" text-center w-92 -mt-10">
+                <h2 class="text-2xl font-extrabold text-shadow-lg text-shadow-white/60 my-3">MVP</h2>
+                <p class="text-xs my-2 text-white/50 ">Avec <span class="text-3xl text-green-500 font-black">{{ transactions.mvp[0].transactions.averagePuv *  transactions.mvp[0].transactions.totalSoldByunit }} </span> <span> DZD</span></p>
+                <p class="text-sm text-white/50 border border-white/10 bg-white/5 p-2 rounded-lg">
+                  <span class="block text-center text-lg text-green-500 font-extrabold">{{ transactions.mvp[0].name }}</span>
+                  "Le produit leader en termes de <span class="text-white">revenus</span> sur l'année à ce jour."
+                </p>
               </div>
             </div>
-            <div class="w-68 h-54 bg-[url('/number0.png')] bg-no-repeat bg-center bg-contain "></div>
-            <div class=" text-center w-92 -mt-10">
-              <h2 class="text-2xl font-extrabold text-shadow-lg text-shadow-white/60 my-3">MVP</h2>
-              <p class="text-xs my-2 text-white/50 ">Avec <span class="text-3xl text-green-500 font-black">{{ transactions.mvp[0].transactions.averagePuv *  transactions.mvp[0].transactions.totalSoldByunit }} </span> <span> DZD</span></p>
-              <p class="text-sm text-white/50 border border-white/10 bg-white/5 p-2 rounded-lg">"Le produit leader en termes de <span class="text-white">revenus</span> sur l'année à ce jour."</p>
+  
+            <div v-if="mostSellesByUnite" class="mt-32  flex flex-col items-center justify-center" >
+          
+              <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black flex items-center justify-center">
+                <img v-if="mostSellesByUnite.image" :src="mostSellesByUnite.image" class="w-42 h-42 rounded-full shadow-2xl shadow-yellow-200" :alt="mostSellesByUnite.name">
+                  <img v-else src="../../assets/pics/no-image.png" class="w-42 h-42 rounded-full shadow-2xl shadow-white"  :alt="mostSellesByUnite.name">
+              </div>
+              <div class="w-68 h-54 bg-[url('/number0.png')] bg-no-repeat bg-center bg-contain "></div>
+              <div class=" text-center w-92 -mt-10">
+                <h2 class="text-2xl font-extrabold text-shadow-lg text-shadow-white/60 my-3">MVP</h2>
+                
+                <p class="text-xs my-2 text-white/50">Avec <span class="text-3xl font-black text-yellow-500">{{ mostSellesByUnite.transactions.totalSoldByunit }} </span> <span> Unités</span></p>
+                <p class="text-sm text-white/50 border border-white/10 bg-white/5 p-2 rounded-lg">
+                  <span class="block text-center text-lg text-yellow-500 font-extrabold">{{ mostSellesByUnite.name }}</span>
+                  "Le produit leader en nombre <span class="text-white">d'unités vendues</span> sur l'année à ce jour."
+                </p>
+              </div>
             </div>
           </div>
 
-          <div v-if="mostSellesByUnite" class="mt-32  flex flex-col items-center justify-center" >
-        
-            <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black flex items-center justify-center">
-              <img v-if="mostSellesByUnite.image" :src="mostSellesByUnite.image" class="w-42 h-42 rounded-full shadow-2xl shadow-yellow-200" :alt="mostSellesByUnite.name">
-                <img v-else src="../../assets/pics/no-image.png" class="w-42 h-42 rounded-full shadow-2xl shadow-white"  :alt="mostSellesByUnite.name">
-            </div>
-            <div class="w-68 h-54 bg-[url('/number0.png')] bg-no-repeat bg-center bg-contain "></div>
-            <div class=" text-center w-92 -mt-10">
-              <h2 class="text-2xl font-extrabold text-shadow-lg text-shadow-white/60 my-3">MVP</h2>
-              
-              <p class="text-xs my-2 text-white/50">Avec <span class="text-3xl font-black text-yellow-500">{{ mostSellesByUnite.transactions.totalSoldByunit }} </span> <span> Unités</span></p>
-              <p class="text-sm text-white/50 border border-white/10 bg-white/5 p-2 rounded-lg">"Le produit leader en nombre <span class="text-white">d'unités vendues</span> sur l'année à ce jour."</p>
-            </div>
+          <div v-else class="rounded-lg bg-white/5 p-2 mt-2">
+              <p class="text-2xl text-center text-white/60 my-20">Aucune transactions effectuées...</p>
           </div>
-
         </div>
 
     </div> 
