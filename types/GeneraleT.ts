@@ -63,8 +63,10 @@ export type shopProductsType = {
 export type dashboaerdInformationFetchresponce = {
   transactions : ProductTransactionsArrayType | [] ,
   stats : shopProductsType ,
-  mvp : mvpType[]
-
+  mvp : mvpType[],
+  ordersNumber : {
+    total : number
+  }
 }
 
 

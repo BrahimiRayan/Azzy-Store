@@ -1,19 +1,14 @@
 <template>
-        <div class="border-2 rounded-lg p-4 flex flex-col items-center CardColor relative bg-[var(--deep-dark-blue)] shadow-lg shadow-black/80 hover:shadow-white/50 transition-all duration-300 ease-in-out">
-            <div class="w-[100px] h-[100px] bg-white absolute right-0 top-0 rotate-12 -z-10" 
-                style="clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);">
-
-            </div>
-
-            <div class="mt-4 mb-2">
-                <p class="text-xl font-bold">{{ product.name }}</p>
-            </div>
-
-          
-
-            <div class="relative">
-                <img v-if="product.image" :src="product.image" :alt="product.name" class="w-[100%] h-[300px] border-2 rounded-3xl  object-contain" />
-                <UModal  
+    <div class="">
+	  <div class="relative ">
+        <span v-if="shipping" class="absolute top-2 right-20 z-20 bg-green-600 px-2 py-1 rounded-lg">
+            <UIcon name="i-carbon-delivery" class="text-white"/>
+        </span>
+		<div class="card-item mx-auto shadow-lg shadow-black hover:shadow-white/90 transition-all duration-500 ease-in-out">
+		<figure class="card-image">
+			<img :src="product.image" alt="...">
+                
+            <UModal  
                  :title="product.name || 'Product name' "
                  :description="product.description?.slice(0 , 400) || 'No descreption'"
                  fullscreen
@@ -26,36 +21,29 @@
                     wrapper:'border-0'
                 }"
                 >
-                    <UButton class="absolute bottom-2 right-4 bg-black/60 hover:bg-black/70 text-white" icon="i-majesticons-open"/>
+                    <UButton class="absolute top-2 right-4 z-10 hover:bg-black/90 text-white bg-black/80 cursor-pointer" icon="i-majesticons-open" />
 
                     <template #body>
                         <div class="w-[100%] h-[100%] flex justify-center items-center">
                             <img v-if="product.image" :src="product.image" :alt="product.name" class="w-[90%] h-[90%] object-contain" />
                         </div>
                     </template>
-                </UModal>
-            </div>
+            </UModal>
+            
+		</figure>
 
+        <div class="w-full h-full z-1 absolute top-0 p-8 flex flex-col justify-end gap-5">
 
-              <div class="w-max p-2 self-start font-[--font-style] flex items-center gap-2">
-                <UIcon name="i-grommet-icons-money" class="text-md text-yellow-400" />
-                <p class="text-[11px]"><span class="text-2xl font-extrabold ">{{ product.puv }}</span> DZD</p>
-            </div>
+			<span class="rounded-xl text-white/80 text-sm bg-green-500 px-2 py-1 w-max">{{ product.type }}</span>
+				<div>
+                    <p v-if="product.description" class="text-sm text-white/80 w-full h-22 overflow-scroll p-2 rounded-lg bg-black/20">{{ product.description }}</p>
+                    <p v-else class="text-md text-center text-white/70 w-full h-22 p-2 rounded-lg bg-black/20"> No descreption...</p>
+                </div>
+				<footer>
+                    <p class="font-extrabold text-white/80">{{ product.name }}</p>
+                    <p class="text-green-500/80 text-xl text-shadow-2xs text-shadow-amber-50/50 font-extrabold font-mono">{{product.puv}} <span class="text-xs text-white/50">DZD</span></p>
 
-            <div class="h-18 w-full overflow-y-scroll p-2 bg-white/10 rounded-lg mb-2 ">
-                <p v-if="product.description" class="indent-2 text-sm">{{ product.description }}</p>
-                <p v-else class="text-center mt-4.5 font-extrabold"> Aucune Description.</p>
-            </div>
-
-            <div class="self-start border-t-2 w-full pt-3 ">
-                <p class="font-extrabold flex items-center text-sm gap-2"><span class="flex items-center gap-1"><UIcon name="i-carbon-delivery"/> Livraison :</span>
-                    <span v-if="shipping" class="bg-green-500 text-white rounded mt-1 text-center px-1 text-sm flex items-center justify-center gap-1"> OUI <UIcon name="i-mdi-check" class="text-white" /></span>
-                    <span v-else class="bg-red-500 text-white rounded mt-1 text-center px-1 text-sm flex items-center justify-center gap-1"> NON <UIcon name="i-mdi-close" class="text-white" /></span>
-                </p>
-
-                <p class="font-extrabold flex items-center gap-2 mb-3 text-sm" v-if="address"><span class="flex items-center gap-1"><UIcon name="i-entypo-address"/> Addresse :</span> <span class="text-sm">{{ address }}</span></p>
-               
-                <ul class="flex gap-3 align-center justify-center mt-6 mb-3">
+                    <ul class="flex gap-3 align-center text-white justify-center  mt-3">
 
                     <li v-if="fb">
                         <a :href="fb" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
@@ -74,24 +62,28 @@
                            <UIcon name="i-material-symbols-mail" class="text-2xl" />
                         </a>
                     </li>
-                </ul>
 
-                
-                    <div class="mt-6">
-                        <a :href="`tel:${phone}`" target="_blank"class="flex items-center justify-center gap-2 py-2 px-3 w-[90%] bg-green-600 hover:bg-green-500 transition-all duration-300 ease-in-out mx-auto rounded-md">
-                           <UIcon name="i-lineicons-phone" class="text-2xl" />
-                            <span class="text-md font-extrabold">{{ addHyphensBetweenPairs(phone) }}</span>
-                            
+                    <li >
+                        <a :href="`tel:${phone}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
+                           <UIcon name="i-lucide-phone" class="text-2xl" />
                         </a>
-                    </div> 
-            </div>
+                    </li>
+                </ul>
+				</footer>
+			</div>
+		</div>
+	  </div>
+	</div>
 
-        </div>
+
+
+
+
 </template>
     
 <script setup lang='ts'>
 import type { productsCards } from '~/types/GeneraleT';
-import { addHyphensBetweenPairs } from '~/Utils/generalUIhelpers';
+
 
     const props = defineProps<{
         product :productsCards,
@@ -104,6 +96,118 @@ import { addHyphensBetweenPairs } from '~/Utils/generalUIhelpers';
     }>()
 </script>
     
-<style>
+<style scoped >
 
+.card-item {
+  width: 380px;
+  height: 440px;
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  
+}
+
+.card-item:hover .card-image:after {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.card-item:hover .card-image img {
+  transform: scale(1.03);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-image:after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s;
+}
+
+/* .card-content {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  row-gap: 20px;
+}
+
+.card-content .card-tags {
+  padding: 10px 20px;
+  background-color: #ff099f;
+  border-radius: 100px;
+  color: #fff;
+  font-size: 12px;
+  width: max-content;
+  letter-spacing: 0.6px;
+}
+
+.card-content .card-title {
+  font-size: 24px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.card-user {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.card-user-img {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  max-width: 36px;
+  overflow: hidden;
+  border-radius: 100px;
+}
+
+.card-user-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-time,
+.card-comment {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.card-time .icon,
+.card-comment .icon {
+  color: #e1a00f;
+} */
 </style>

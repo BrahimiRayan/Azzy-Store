@@ -338,11 +338,8 @@ watch( selectedOption , (newval)=>{
 watchEffect(()=>{
     if(shopConfig.value.isMap === false){
         shopConfig.value.xcor = 0 ;
-        shopConfig.value.ycor = 0; 
-
-        console.log("x : " ,shopConfig.value.xcor , " y : " , shopConfig.value.ycor)
+        shopConfig.value.ycor = 0;    
     }
-    console.log("triggered");
 })
 
 // this will get to me the shop products that are in the conf.
