@@ -1,5 +1,5 @@
 <template>
-     <header class="flex justify-between items-center px-2 rounded-b-md border-b border-black/20">
+     <header class="backdrop-blur-lg sticky top-0 flex justify-between items-center px-2 rounded-b-md border-b border-gray-500/20 z-20">
         <div class="flex items-center gap-8">
            <div class="w-[62px] h-[62px]">
                <NuxtLink to="/" class="w-full h-full">
@@ -39,11 +39,11 @@
         
         <div v-else>
                
-          <NuxtLink  to="/signUp" class="bg-green-500 p-2 rounded-xl text-sm text-black">
+          <NuxtLink  to="/signUp" class="bg-green-500 px-2 py-1 rounded-xl text-sm text-black hover:text-white/90 border border-transparent hover:border-white/90 transition-all duration-400 ease-in-out">
                 Inscrire
           </NuxtLink >
           
-          <NuxtLink  to="/signIn" class="text-green-500 rounded-xl border p-2 text-sm font-extrabold ml-3">
+          <NuxtLink  to="/signIn" class="text-green-500 rounded-xl border px-2 py-1 text-sm font-extrabold ml-3 hover:bg-gradient-to-r from-green-500 to-green-700 hover:text-white/90 transition-all duration-400 ease-in-out">
                 Se connecter
           </NuxtLink >
         </div>
