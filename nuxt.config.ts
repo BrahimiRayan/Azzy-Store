@@ -25,6 +25,11 @@ export default defineNuxtConfig({
   runtimeConfig : {
     public : {
       BaseUrl : process.env.MODE === 'DEV' ? process.env.OFF_URL : process.env.ON_URL,
-    }
+    },
+    smtpHost: process.env.SMTP_HOST,
+    smtpPort: process.env.SMTP_PORT,
+    smtpUser: process.env.SMTP_USER,
+    smtpPass: process.env.SMTP_PASS,
+    emailFrom: process.env.EMAIL_FROM
   }
 })
