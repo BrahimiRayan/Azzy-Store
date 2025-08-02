@@ -21,8 +21,8 @@
       <ul class="flex items-center gap-8 relative">
         <li>
           <USlideover
-           title="🔔 Mes notes "
-           description="Ajouter, supprimer et voir les notes définies par les employés du magasin"
+             title="🔔 Notifications"
+             description="Ajoutez et consultez vos notifications et vos objectifs "
            icon="i-lucide-bell"
            :ui="{
                 overlay: 'bg-black/50',
@@ -56,9 +56,13 @@
               <p class="text-sm text-gray-400">{{ session.data?.user.name }}</p>
               <p class="text-xs text-gray-500">{{ session.data?.user.email }}</p>
               <hr class="border-white/10">
-              <button class="text-left text-sm hover:text-green-400 transition-colors">
-                Profil
-              </button>
+              
+              <NuxtLink to="/settings">
+                <button class="text-left text-sm hover:text-green-400 transition-colors">
+                    Paramètre
+                </button>
+              </NuxtLink>
+
               <NuxtLink to="/logOut" >
               <button class="text-left w-full text-sm hover:text-red-400 transition-colors">
                  Déconnexion

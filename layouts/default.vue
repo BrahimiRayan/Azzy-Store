@@ -38,10 +38,6 @@
                             <UIcon class="mr-5 size-5" :name="route.icon" />
                             {{ route.name }}
                         </NuxtLink>
-                        <NuxtLink class="flex items-center w-full py-3 pl-3 rounded-xl hover:bg-[var(--green-grace)]/80 transition-all duration-350 ease-in-out" v-if="isAdmin" to="/gestion">
-                            <UIcon class="mr-5 size-5" name="i-material-symbols-person-outline-rounded" />
-                            Gestion des comptes
-                        </NuxtLink>
                     </div>
 
                     <NuxtLink
@@ -102,6 +98,11 @@ const Routes :route [] = [
             name : 'Boutique en ligne',
             path : '/OnlineShop' , 
             icon : 'i-solar-shop-linear'
+        },
+        {
+            name : 'Mes Transactions',
+            path : '/transactions' , 
+            icon : 'i-lucide-arrow-right-left'
         }
 ];
 

@@ -229,7 +229,6 @@ async function handleLogin() {
 
   } catch (err: any) {
     errorSignin.value = err.statusMessage || err.message || 'Login failed';
-    console.error('Login error:', err); // Log for debugging
   } finally {
     loading.value = false;
   }

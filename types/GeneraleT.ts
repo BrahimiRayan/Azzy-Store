@@ -22,7 +22,7 @@ export type productsCards = {
     id: string;
     description: string | null;
     image: string;
-    type: "Alimentaire" | "Electronique" | "Vêtement" | "Meuble" | "Accessoire" | "Beauté" | "Sport" | "Livre" | "Autre";
+    type: category;
     pua: number;
     puv: number;
     qte: number;
@@ -69,7 +69,37 @@ export type dashboaerdInformationFetchresponce = {
   }
 }
 
+export type TransactionProduct =  {
+  transactions : {
+    date: string;
+    type: "A" | "V";
+    qte: number;
+    idProduct: string;
+    pua_t: number;
+    puv_t: number;
+    product: {
+        name: string;
+        image: string;
+        type: category
+    };
+}
+}
 
+export type TransactionsProducts = {
+  transactions : {
+    date: string;
+    type: "A" | "V";
+    qte: number;
+    idProduct: string;
+    pua_t: number;
+    puv_t: number;
+    product: {
+        name: string;
+        image: string;
+        type: category
+    };
+}[]
+}
 
 export type shopProdtype = productsCards[]
 
