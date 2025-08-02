@@ -56,9 +56,13 @@
               <p class="text-sm text-gray-400">{{ session.data?.user.name }}</p>
               <p class="text-xs text-gray-500">{{ session.data?.user.email }}</p>
               <hr class="border-white/10">
-              <button class="text-left text-sm hover:text-green-400 transition-colors">
-                Profil
-              </button>
+              
+              <NuxtLink to="/settings">
+                <button class="text-left text-sm hover:text-green-400 transition-colors">
+                    Paramètre
+                </button>
+              </NuxtLink>
+
               <NuxtLink to="/logOut" >
               <button class="text-left w-full text-sm hover:text-red-400 transition-colors">
                  Déconnexion
