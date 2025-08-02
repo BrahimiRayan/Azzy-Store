@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   vite : {
     plugins : [tailwindcss()]
   },
-  modules: ['@nuxt/ui', "@nuxt/image" ,'@nuxtjs/leaflet' , 'nuxt-qrcode'],
+  modules: ['@nuxt/ui', "@nuxt/image", '@nuxtjs/leaflet', 'nuxt-qrcode'],
   runtimeConfig : {
     public : {
       BaseUrl : process.env.MODE === 'DEV' ? process.env.OFF_URL : process.env.ON_URL,

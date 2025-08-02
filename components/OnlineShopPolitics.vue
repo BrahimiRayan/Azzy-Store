@@ -47,7 +47,7 @@
 </template>
     
 <template #settings>
-        <ExplainCoustum/>    
+        <ExplainCoustum/>
 </template>
 
 <template #link>

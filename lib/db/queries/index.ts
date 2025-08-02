@@ -460,7 +460,31 @@ export async function getTransactionsForAllProductsInAyear( shopid : string , ye
    
 }
 
+export async function getAllshopTransactions(shopid : string){
+  if(!shopid ){
+    throw new Error("No shop id found.")
+  }
 
+  const transactions = await db.query.transactionsTable.findMany({
+    where : eq(transactionsTable.idShop , shopid),
+    columns : {
+      id : false,
+      idShop : false      
+    },
+    with : {
+      product : {
+        columns : {
+          name : true,
+          type : true,
+          image : true
+        }
+      }
+    },
+     orderBy : (transactionsTable , {desc})=> [desc(transactionsTable.date)] ,
+  })
+
+  return transactions
+}
 
 // products transactions
 export async function getAlltransactionWithProducts(){
@@ -552,42 +576,6 @@ export async function DeleteAllNotesByShopId(idShop : string) {
     throw error;   
   }
 }
-
-// export async function getMvp(idShop: string) {
-//   if (!idShop) {
-//     throw new Error("Missing shop id");
-//   }
-
-//   try {
-//     return await db.select({
-//         name: productsTable.name,
-//         image: productsTable.image,
-//         type: productsTable.type,
-//         transactions: {
-//           transactionCount: count(transactionsTable.id),
-//           totalSoldQuantity: sum(transactionsTable.qte),
-//           averagePuv: avg(transactionsTable.puv_t)
-//         }
-//       })
-//       .from(productsTable)
-//       .leftJoin(
-//         transactionsTable,
-//         and(
-//           eq(productsTable.id, transactionsTable.idProduct),
-//           eq(transactionsTable.type, 'V'),
-//           eq(transactionsTable.idShop, idShop)
-//         )
-//       )
-//       .where(eq(productsTable.idShop, idShop))
-//       .groupBy(productsTable.id, productsTable.name, productsTable.image, productsTable.type)
-//       .orderBy(desc(sql`sum(${transactionsTable.qte} * ${transactionsTable.puv_t})`))
-//       .limit(1);
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
-// order_products
 
 
 export async function getMvp(idShop: string) {

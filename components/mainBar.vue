@@ -21,8 +21,8 @@
       <ul class="flex items-center gap-8 relative">
         <li>
           <USlideover
-           title="🔔 Mes notes "
-           description="Ajouter, supprimer et voir les notes définies par les employés du magasin"
+             title="🔔 Notifications"
+             description="Ajoutez et consultez vos notifications et vos objectifs "
            icon="i-lucide-bell"
            :ui="{
                 overlay: 'bg-black/50',
