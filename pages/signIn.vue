@@ -11,7 +11,7 @@
         <div v-if="errorSignin" class="bg-rose-600/90 text-white rounded-xl p-3 mb-6 flex items-start gap-2 animate-fade-in">
           <UIcon name="i-material-symbols-warning" class="text-xl mt-0.5" />
           <span class="text-sm font-medium">
-            Email ou mot de passe incorrect ! Veuillez réessayer.
+            Email ou mot de passe incorrect , ou Email n'est pas verifier !.
           </span>
         </div>
         
