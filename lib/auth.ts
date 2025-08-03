@@ -31,6 +31,7 @@ export const auth = betterAuth({
       });
     },
     autoSignInAfterVerification : true,
+    sendOnSignUp : true,
     expiresIn : 60 * 30
   },
     advanced:{

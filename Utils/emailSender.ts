@@ -25,17 +25,17 @@ export async function sendVerificationEmail(options: {
       subject: options.subject,
       text: options.text,
       html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Email Verification</title>
-  <style>
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification de l'Email</title>
+    <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333;}
-    .container { max-width: 600px; margin: 0 auto; padding: 20px;border : 2px solid black ; border-radius : 8px; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px;border : 2px solid #00000049 ; border-radius : 8px; }
     .header { text-align: center; padding: 20px 0; }
-    .logo { max-height: 50px; }
+    .logo { max-height: 80px; max-width : 80px }
     .content { background: #f9f9f9; padding: 30px; border-radius: 8px; }
     .button { 
       display: inline-block; padding: 12px 24px; background: #2563eb; 
@@ -44,32 +44,32 @@ export async function sendVerificationEmail(options: {
       font-weight: bold; margin: 20px 0; 
     }
     .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #777; }
-  </style>
-</head>
-<body>
-  <div class="container">
+    </style>
+  </head>
+  <body>
+    <div class="container">
     <div class="header">
-      <img src="https://azzy-store.vercel.app/Logo-dark.webp" alt="Azze-store" class="logo">
+      <img src="https://azzy-store.vercel.app/emailLogo.jpg" alt="Azze-store" class="logo">
     </div>
     
     <div class="content">
-      <p>Hello ${options.to},</p>
-      <p>Thank you for signing up with ${options.to}! Please verify your email address to complete your registration.</p>
+      <p>Bonjour ${options.to},</p>
+      <p>Merci de vous être inscrit sur ${options.to} ! Veuillez vérifier votre adresse e-mail pour finaliser votre inscription.</p>
       
-      <p><a href="${options.url}" class="button">Verify Email Address</a></p>
+      <p><a href="${options.url}" class="button">Vérifier mon adresse e-mail</a></p>
       
-      <p>If the button above doesn't work, copy and paste this link into your browser:</p>
+      <p>Si le bouton ci-dessus ne fonctionne pas, copiez et collez ce lien dans votre navigateur :</p>
       <p><small>${options.url}</small></p>
       
-      <p>If you didn't request this, please ignore this email.</p>
+      <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.</p>
     </div>
     
     <div class="footer">
-      <p>&copy; 2025 Azze-Store. All rights reserved.</p>
+      <p>&copy; 2025 Azze-Store. Tous droits réservés.</p>
     </div>
-  </div>
-</body>
-</html>
+    </div>
+  </body>
+  </html>
       `
     });
     return true;
