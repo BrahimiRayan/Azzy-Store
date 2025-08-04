@@ -73,10 +73,10 @@ useHead({
     { 
       name: 'description', 
       content: () => pageMeta.description,
-      // Add key for proper updates
+      
       key: 'description'
     },
-    // Critical OG Tags
+    
     { 
       property: 'og:title', 
       content: () => pageMeta.title || 'Azzy Store',
