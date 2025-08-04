@@ -30,8 +30,8 @@
 
       <div class="flex items-center gap-3">
         <div v-if="session.data">
-         <NuxtLink  to="/dashboard" class="bg-green-600 p-2 rounded-xl text-xs text-white font-extrabold flex items-center justify-center gap-2">
-                <UAvatar :alt="session.data.user.name" size="sm" class="bg-green-800"/>
+         <NuxtLink  to="/dashboard" class="bg-green-600 px-2 py-1 rounded-xl text-xs text-white font-extrabold flex items-center justify-center gap-2">
+                <UAvatar :alt="session.data.user.name" size="xs" class="bg-green-800"/>
                 <span> Dashboard</span>
         </NuxtLink >
          

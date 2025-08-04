@@ -1,157 +1,215 @@
 <template>
 <div v-if="isAuthpending || isOnlinePending || isShopidReady " class="text-3xl">
-    Charging ....
+    <SkeletoneSettings />
 </div>
-<main v-else >
+<main v-else class="max-w-4xl mx-auto p-4">
 
-    <div class="flex items-center gap-3 my-3">
-        <UIcon name="i-lucide-settings" size="26" class="text-green-500"/>
-        <h1 class="text-3xl font-extrabold text-white/70">Paramètres généraux</h1>
+    <!-- Titre principal amélioré -->
+    <div class="flex items-center gap-3 my-6">
+        <UIcon name="i-lucide-settings" size="26" class="text-green-500 animate-pulse"/>
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-400">Paramètres généraux</h1>
     </div>
 
-    <section class="p-8 border-3 mt-3 border-white/40 rounded">
-        <div class="flex items-center gap-3">
-            <UIcon name="i-line-md-account" size="26" class="text-green-500"/>
-            <h2 class="text-xl font-bold ">Informations du profil</h2>
+    <!-- Section Profil - Style amélioré -->
+    <section class="p-6 border border-cyan-500/30 rounded-xl bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
+        <div class="flex items-center gap-3 mb-4">
+            <UIcon name="i-line-md-account" size="26" class="text-cyan-400"/>
+            <h2 class="text-xl font-bold text-cyan-100">Informations du profil</h2>
         </div>
 
-        <div class="p-4 bg-white/5 rounded-lg my-4">
+        <!-- Carte d'informations remodelée -->
+        <div class="p-4 bg-gray-800/40 rounded-lg mb-6 grid grid-cols-1 gap-4 border border-gray-700">
             <div class="flex items-center gap-2">
-                <UIcon name="i-lucide-calendar" />
-                <p v-if="createdAt" class="text-lg text-white/80">Créé le : <span class="text-sm font-extrabold text-green-600">{{ NormalDateformat(createdAt) }}</span></p>
+                <UIcon name="i-lucide-calendar" class="text-cyan-400"/>
+                <p v-if="createdAt" class="text-cyan-100">Créé le : <span class="font-medium text-cyan-300">{{ NormalDateformat(createdAt) }}</span></p>
             </div>
 
             <div class="flex items-center gap-2">
-                <UIcon name="i-lucide-clock" />
-                <p v-if="updatedAt" class="text-lg text-white/80">Dernière mise à jour : <span class="text-sm font-extrabold text-green-600">{{ NormalDateformat(updatedAt) }}</span></p>
+                <UIcon name="i-lucide-clock" class="text-cyan-400"/>
+                <p v-if="updatedAt" class="text-cyan-100">MAJ : <span class="font-medium text-cyan-300">{{ NormalDateformat(updatedAt) }}</span></p>
             </div>
 
             <div class="flex items-center gap-2" v-if="shopid">
-                <UIcon name="i-lucide-id-card-lanyard" />
-                <p class="text-lg text-white/80">Identifiant de la boutique : <span class="text-sm font-extrabold text-green-600">{{ shopid.idShop }}</span></p>
+                <UIcon name="i-lucide-id-card-lanyard" class="text-cyan-400"/>
+                <p class="text-cyan-100">ID boutique : <span class="font-mono text-cyan-300">{{ shopid.idShop }}</span></p>
             </div>
 
             <div class="flex items-center gap-2" v-if="shopid && isOnline && isOnline.res.isOnline">
-                <UIcon name="i-lucide-link" />
-                <p class="text-lg text-white/80">Lien de votre E-boutique : <a :href="`https://azze-store.vercel.app/boutique/${shopid.idShop}`" target="_blank" class="text-sm font-extrabold text-green-600 underline">https://azze-store.vercel.app/boutique/{{shopid.idShop}}</a></p>
-            </div>
-        </div>
-
-        <form @submit.prevent="modifyOldName" class="flex items-center gap-2 mb-2">
-            <label for="name" class="w-32">Votre nom</label>
-            <input id="name" type="text" required v-model="name" minlength="6" placeholder="Votre nom" :disabled="!modifyName" :class="modifyName ? 'border-2' : 'border-0'" class="px-2 py-1 text-sm rounded bg-white/10  w-78 placeholder:text-white/70">
-            <div v-if="!modifyName">
-                <button type="button" @click="toggleModifyName" class=" p-1 w-12 rounded bg-green-600 hover:bg-green-700 hover:scale-95 transition-all duration-300 ease-in-out ">
-                    <UIcon name="i-lucide-pen" />
-                </button>
-            </div>
-
-            <div v-else class="flex items-center gap-x-2 text-sm">
-                <button type="submit" class=" p-1 rounded bg-green-600"> Modifier</button>
-                <button type="button"  @click="toggleModifyName" class=" p-1 rounded bg-red-600"> Annuler</button>
-            </div>
-        </form>
-
-        <form @submit.prevent="modifyOldEmail" class="flex items-center gap-2 mb-2">
-            <label for="email" class="w-32">Votre e-mail</label>
-            <input type="email" v-model="email" required minlength="10" placeholder="Votre e-mail" :disabled="!modifyEmail" :class="modifyEmail ? 'border-2' : 'border-0'" class="px-2 py-1 text-sm bg-white/10 rounded w-78 placeholder:text-white/70">
-
-            <div v-if="!modifyEmail">
-                <button type="button" @click="toggleModifyEmail" class=" p-1 w-12 rounded bg-green-600 hover:bg-green-700 hover:scale-95 transition-all duration-300 ease-in-out">
-                    <UIcon name="i-lucide-pen" />
-                </button>
-            </div>
-
-            <div v-else class="flex items-center gap-x-2 text-sm">
-                <button type="submit" class=" p-1 rounded bg-green-600"> Modifier</button>
-                <button type="button" @click="toggleModifyEmail" class=" p-1 rounded bg-red-600"> Annuler</button>
-            </div>
-        </form>
-
-        <div class="border-2 p-2 bg-yellow-500/40 rounded-lg lg:w-[70%] mx-auto mt-6">
-            <div class="flex items-center gap-2 text-xl text-white/80 font-black">
-                <UIcon name="i-solar-danger-bold" size="26" class="text-red-500"/>
-                Note importante
-            </div>
-            <p class="text-sm">
-                Modifier votre adresse e-mail entraînera une déconnexion immédiate et vous serez redirigé vers la page d’authentification. Vous devrez alors saisir votre nouvelle adresse e-mail et votre mot de passe, puis vérifier votre boîte mail pour confirmer le changement via un lien de validation.
-            </p>
-        </div>
-    </section>
-
-    <section class="p-8 border-3 mt-3 border-white/40 rounded">
-        <div class="flex items-center gap-3">
-            <UIcon name="i-lucide-lock-open" size="26" class="text-green-500"/>
-            <h2 class="text-xl font-bold ">Sécurité</h2>
-        </div>
-
-        <form @submit.prevent="modifyOldPassword" class="flex flex-col gap-6 my-12">
-            <div class="flex items-center">
-            <label for="oldpass" class="w-70">Ancien mot de passe</label>
-            <UInput id="oldpass" v-model="passwords.old" type="text" icon="i-lucide-lock" minlength="8" placeholder="Ancien mot de passe" required
-            :ui="{
-                base : 'bg-white/10 w-80 placeholder:text-sm placeholder:text-white/70'
-            }"/>
-            </div>
-
-            <div class="flex items-center">
-            <label for="newpass" class="w-70">Nouveau mot de passe</label>
-            <UInput id="newpass" v-model="passwords.new" type="text" icon="i-material-symbols-password" minlength="8" placeholder="Nouveau mot de passe" required
-             :ui="{
-                base : 'bg-white/10 w-80 placeholder:text-sm placeholder:text-white/70'
-            }"
-            />
-            </div>
-
-            <div class="flex items-center">
-            <label for="repeat" class="w-70">Répéter le nouveau mot de passe</label>
-            <UInput id="repeat" v-model="repeatedNewPaas" type="text" icon="i-material-symbols-password" minlength="8" placeholder="Nouveau mot de passe" required
-             :ui="{
-                base : 'bg-white/10 w-80 placeholder:text-sm placeholder:text-white/70'
-            }"
-            />
-            </div>
-
-            <button type="submit" class="bg-green-500 hover:bg-green-600 rounded-lg p-2 w-max mx-auto text-sm text-black/90">Changer le mot de passe</button>
-        </form>
-        
-                <div class="border-2 p-2 bg-yellow-500/40 rounded-lg lg:w-[70%] mx-auto mt-6">
-            <div class="flex items-center gap-2 text-xl text-white/80 font-black">
-                <UIcon name="i-solar-danger-bold" size="26" class="text-red-500"/>
-                Note importante
-            </div>
-            <p class="text-sm">
-                Changer votre mot de passe entraînera une déconnexion immédiate. Vous devrez vous reconnecter avec votre nouveau mot de passe pour accéder à votre compte.
-            </p>
-        </div>
-    </section>
-
-    <section class="p-8 border-3 mt-3 border-red-600/40 rounded">
-        <div class="flex items-center gap-3">
-            <UIcon name="i-solar-danger-bold" size="26" class="text-red-500"/>
-            <h2 class="text-xl font-bold ">Zone dangereuse</h2>
-        </div>
-        
-        <div class="p-4 " v-if="isOnline && isOnline.res.isOnline">
-            <section class="border-2 rounded-lg border-white/60 p-2">
-                <h3 class="text-xl text-white">Supprimer ma e-boutique</h3>
-                <p class="text-md bg-red-500/50 p-1 rounded">
-                    Attention : Cette action est <u>irréversible</u>. La suppression de votre e-boutique entraînera la perte définitive de toutes les données associées. Veuillez confirmer uniquement si vous êtes certain(e) de vouloir supprimer votre e-boutique de façon permanente.
+                <UIcon name="i-lucide-link" class="text-cyan-400"/>
+                <p class="text-cyan-100">Lien : 
+                    <a :href="`https://azze-store.vercel.app/boutique/${shopid.idShop}`" target="_blank" 
+                       class="font-medium text-cyan-300 underline hover:text-cyan-200 transition-colors">
+                        azze-store.vercel.app/boutique/{{shopid.idShop}}
+                    </a>
                 </p>
-                <button @click="DeleteEshop" class="p-2 bg-red-600 hover:bg-red-500 text-white/90 mt-4 rounded-lg flex items-center gap-2">
-                    <UIcon name="i-lucide-trash" />
+            </div>
+        </div>
+
+        <!-- Formulaires avec meilleur espacement -->
+        <div class="space-y-4">
+            <!-- Champ Nom -->
+            <form @submit.prevent="modifyOldName" class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <label for="name" class="w-32 text-cyan-100">Votre nom</label>
+                <div class="flex-1 flex items-center gap-2">
+                    <input id="name" type="text" required v-model="name" minlength="6" placeholder="Votre nom complet" 
+                           :disabled="!modifyName"
+                           :class="modifyName 
+                                ? 'border-2 border-cyan-500/50 focus:ring-2 focus:ring-cyan-500' 
+                                : 'border-0'"
+                           class="px-4 py-2 text-base rounded-lg bg-gray-800 w-full max-w-md placeholder:text-gray-400">
+                    
+                    <div v-if="!modifyName">
+                        <button type="button" @click="toggleModifyName" 
+                                class="p-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 transition-colors duration-200">
+                            <UIcon name="i-lucide-pen" />
+                        </button>
+                    </div>
+                    <div v-else class="flex gap-2 ml-2">
+                        <button type="submit" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-sm transition-colors">
+                            Valider
+                        </button>
+                        <button type="button" @click="toggleModifyName" 
+                                class="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-500 text-sm transition-colors">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Champ Email -->
+            <form @submit.prevent="modifyOldEmail" class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <label for="email" class="w-32 text-cyan-100">Votre e-mail</label>
+                <div class="flex-1 flex items-center gap-2">
+                    <input type="email" v-model="email" required minlength="10" placeholder="email@exemple.com" 
+                           :disabled="!modifyEmail"
+                           :class="modifyEmail 
+                                ? 'border-2 border-cyan-500/50 focus:ring-2 focus:ring-cyan-500' 
+                                : 'border-0'"
+                           class="px-4 py-2 text-base rounded-lg bg-gray-800 w-full max-w-md placeholder:text-gray-400">
+                    
+                    <div v-if="!modifyEmail">
+                        <button type="button" @click="toggleModifyEmail" 
+                                class="p-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 transition-colors duration-200">
+                            <UIcon name="i-lucide-pen" />
+                        </button>
+                    </div>
+                    <div v-else class="flex gap-2 ml-2">
+                        <button type="submit" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-sm transition-colors">
+                            Valider
+                        </button>
+                        <button type="button" @click="toggleModifyEmail" 
+                                class="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-500 text-sm transition-colors">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Avertissement - Style amélioré -->
+        <div class="border border-amber-500/40 p-4 bg-gradient-to-r from-amber-900/30 to-transparent rounded-lg mt-6">
+            <div class="flex items-center gap-2 text-lg text-amber-200 font-medium">
+                <UIcon name="i-solar-danger-bold" size="24" class="text-amber-400"/>
+                Note importante
+            </div>
+            <p class="text-sm text-amber-100 mt-2">
+                Modifier votre adresse e-mail entraînera une déconnexion immédiate et nécessitera une nouvelle vérification par email.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section Sécurité - Design révisé -->
+    <section class="p-6 border border-emerald-500/30 rounded-xl bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm mt-6">
+        <div class="flex items-center gap-3 mb-4">
+            <UIcon name="i-lucide-lock-open" size="26" class="text-emerald-400"/>
+            <h2 class="text-xl font-bold text-emerald-100">Sécurité</h2>
+        </div>
+
+        <!-- Formulaire de mot de passe -->
+        <form @submit.prevent="modifyOldPassword" class="space-y-5 max-w-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] items-center gap-4">
+                <label for="oldpass" class="text-emerald-100">Ancien mot de passe</label>
+                <UInput id="oldpass" v-model="passwords.old" type="password" icon="i-lucide-lock" 
+                        minlength="8" placeholder="••••••••" required
+                        :ui="{ 
+                            base: 'bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-emerald-500',
+                        }"/>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] items-center gap-4">
+                <label for="newpass" class="text-emerald-100">Nouveau mot de passe</label>
+                <UInput id="newpass" v-model="passwords.new" type="password" icon="i-material-symbols-password" 
+                        minlength="8" placeholder="••••••••" required
+                        :ui="{ 
+                            base: 'bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-emerald-500',
+                        }"/>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] items-center gap-4">
+                <label for="repeat" class="text-emerald-100">Confirmation</label>
+                <UInput id="repeat" v-model="repeatedNewPaas" type="password" icon="i-material-symbols-password" 
+                        minlength="8" placeholder="••••••••" required
+                        :ui="{ 
+                            base: 'bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-emerald-500',
+                        }"/>
+            </div>
+
+            <div class="flex justify-center pt-2 items-center">
+                <button type="submit" 
+                    class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg font-medium text-white shadow-lg transition-all duration-300 ">
+                    Mettre à jour le mot de passe
+                </button>
+            </div>
+        </form>
+        
+        <!-- Avertissement sécurité -->
+        <div class="border border-amber-500/40 p-4 bg-gradient-to-r from-amber-900/30 to-transparent rounded-lg mt-6">
+            <div class="flex items-center gap-2 text-lg text-amber-200 font-medium">
+                <UIcon name="i-solar-danger-bold" size="24" class="text-amber-400"/>
+                Note importante
+            </div>
+            <p class="text-sm text-amber-100 mt-2">
+                Le changement de mot de passe entraînera une déconnexion immédiate.
+            </p>
+        </div>
+    </section>
+
+    <!-- Zone dangereuse - Style plus impactant -->
+    <section class="p-6 border border-red-500/40 rounded-xl bg-gradient-to-br from-red-900/30 to-gray-900/50 backdrop-blur-sm mt-6">
+        <div class="flex items-center gap-3 mb-4">
+            <UIcon name="i-solar-danger-bold" size="26" class="text-red-400 animate-pulse"/>
+            <h2 class="text-xl font-bold text-red-100">Zone dangereuse</h2>
+        </div>
+        
+        <!-- Suppression boutique -->
+        <div class="p-4" v-if="isOnline && isOnline.res.isOnline">
+            <section class="border border-red-500/50 rounded-xl p-4 bg-red-900/20">
+                <h3 class="text-lg font-semibold text-red-100 mb-2 flex items-center gap-2">
+                    <UIcon name="i-lucide-trash-2" class="text-red-400"/> 
                     Supprimer ma e-boutique
+                </h3>
+                <p class="text-sm text-red-200 mb-4">
+                    Cette action est <span class="font-bold text-white">irréversible</span> et supprimera définitivement toutes vos données boutique.
+                </p>
+                <button @click="DeleteEshop" 
+                        class="px-4 py-2.5 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white rounded-lg flex items-center gap-2 transition-all">
+                    <UIcon name="i-lucide-trash" />
+                    Confirmer la suppression
                 </button>
             </section>
         </div>
 
-        <div class="p-4">
-            <section class="border-2 rounded-lg border-white/60 p-2">
-                <h3 class="text-xl text-white">Supprimer mon compte Azze-store</h3>
-                <p class="text-md bg-red-500/50 p-1 rounded">
-                    Attention : La suppression de votre compte est <u>irréversible</u>. Toutes vos informations personnelles, commandes et données associées seront définitivement perdues. Veuillez confirmer uniquement si vous êtes certain(e) de vouloir supprimer votre compte de façon permanente.
+        <!-- Suppression compte -->
+        <div class="p-4 mt-4">
+            <section class="border border-red-500/50 rounded-xl p-4 bg-red-900/20">
+                <h3 class="text-lg font-semibold text-red-100 mb-2 flex items-center gap-2">
+                    <UIcon name="i-lucide-user-x" class="text-red-400"/>
+                    Supprimer mon compte
+                </h3>
+                <p class="text-sm text-red-200 mb-4">
+                    Suppression <span class="font-bold text-white">définitive</span> de toutes vos données personnelles.
                 </p>
-                <button class="p-2 bg-red-600 text-white/90 mt-4 rounded-lg flex items-center gap-2">
+                <button class="px-4 py-2.5 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white rounded-lg flex items-center gap-2 transition-all">
                     <UIcon name="i-lucide-trash" />
                     Supprimer mon compte
                 </button>
@@ -159,7 +217,7 @@
         </div>
     </section>
 
-    </main>
+</main>
 </template>
     
 <script setup lang='ts'>
