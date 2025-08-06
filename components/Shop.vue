@@ -1,5 +1,5 @@
 <template>
-    <div v-if="conf" :style="`--bg-color: ${conf.bgColor}B2 ;--bg-card :${conf.bgColor}50 ; --text-color: ${conf.textcolor}; --bg-pub : ${conf.bgColor}B3 ; --bg : ${conf.bgColor}`" class="wrapper p-5 border">
+    <div v-if="conf" :style="`--bg-color: ${conf.bgColor}B2 ;--bg-card :${conf.bgColor}50 ; --text-color: ${conf.textcolor}; --bg-pub : ${conf.bgColor}B3 ; --bg : ${conf.bgColor}`" class="wrapper p-5">
     
      <header class=" rounded-2xl flex items-center justify-between h-18" :style="`background-color : ${conf.bgColor};`">
         <h1 :style="`color : ${conf.textcolor};`" class="logo ml-3 font-extrabold text-3xl">{{ conf.name }}</h1>
@@ -27,11 +27,11 @@
 
     <main>
         <!-- pub -->
-        <section class="PubColor grid grid-cols-2 place-items-center gap-5 my-12 border h-120 w-[80%] mx-auto rounded-xl">
+        <section class="PubColor grid grid-cols-2 place-items-center gap-5 my-12 border-2 h-120 w-[80%] mx-auto rounded-xl">
             <!-- carosel and description-->
              <div class="w-[100%] ml-5">
                 <h2 class="logo font-extrabold text-6xl mb-10 ml-4">{{ conf.name }}</h2>
-                <p>{{ conf.description }}</p>
+                <p class="whitespace-pre-line">{{ conf.description }}</p>
                 <address v-if="conf.address" class="border border-white/40 cursor-pointer rounded-xl bg-black/20 p-2 w-max mt-8">{{ conf.address }}</address>
             </div>
                         
@@ -39,15 +39,15 @@
                 <UCarousel
                     v-slot="{ item }"
                     loop
-                    :autoplay="{ delay: 5000 }"
+                    :autoplay="{ delay: 3000  }"
                     :items="ProdPics"
                     :ui="{ item: 'w-full h-full' }"
                 >
-                    <!-- Container to constrain image dimensions -->
+                    
                     <div class="w-full h-full flex items-center justify-center p-1">
                     <img 
                         :src="item" 
-                        class="w-[500px] aspect-square object-scale-down rounded-2xl"
+                        class="w-[500px] aspect-square object-scale-down rounded-2xl bg-white"
                         alt="product image" 
                     />
                     </div>
@@ -123,7 +123,10 @@
         </div>
     </main>
 
-    <footer class="grid grid-cols-3 items-center gap-x-4 overflow-hidden mt-10 p-3 rounded-xl" :style="`background-color : ${conf.bgColor};`">
+    <footer 
+        class="grid  items-center gap-x-4 overflow-hidden mt-10 p-3 rounded-xl" 
+        :class="(conf.xcor === 0 && conf.ycor ===0 && !conf.isMap && !conf.address) ? 'grid-cols-2' : 'grid-cols-3'"
+        :style="`background-color : ${conf.bgColor};`">
         <div>
             <p class="logo text-3xl my-3 font-extrabold">{{ conf.name }}</p>
             <h2 class="py-1 px-2 rounded bg-black/30 w-max">Nos contacts</h2>
@@ -141,10 +144,8 @@
                     <li v-if="conf.ig_url">
                         <a :href="conf.ig_url" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 hover:bg-pink-600  rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
                            <UIcon name="i-hugeicons-instagram" class="text-2xl" />
-                           <span class="md:hidden">
                                <span v-if="conf.ig_url.length > 28">{{ conf.ig_url.slice(0 , 27) }}... </span>                           
-                               <span v-else> {{ conf.ig_url }}</span>                                                        
-                           </span>
+                               <span v-else> {{ conf.ig_url }}</span> 
                         </a>
                     </li>
 
@@ -175,7 +176,7 @@
         </div>
         
         <div class="w-max ml-auto">
-            <div v-if="conf.xcor !== 0 && conf.ycor !==0">
+            <div v-if="conf.xcor !== 0 && conf.ycor !==0 && conf.isMap">
                 
                 <div class=" w-[300px] rounded-2xl border overflow-hidden">
                     <Map 
@@ -194,7 +195,7 @@
                 </div>
             </div>
     
-            <div v-else>
+            <div v-else-if="conf.address">
                 <div class="flex gap-2 items-center rounded-lg p-1 bg-white/20 w-max mt-3">
                     <UIcon name="lucide-map-pin-house" size="24"/>
                     <p v-if="conf.address" class="mt-2 text-sm">

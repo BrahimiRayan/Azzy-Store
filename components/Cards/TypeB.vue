@@ -5,7 +5,7 @@
             <UIcon name="i-carbon-delivery" class="text-white"/>
         </span>
 		<div class="card-item mx-auto shadow-lg shadow-black hover:shadow-white/90 transition-all duration-500 ease-in-out">
-		<figure class="card-image">
+		<figure class="card-image ">
 			<img :src="product.image" alt="...">
                 
             <UModal  
@@ -17,7 +17,9 @@
                     body: 'bg-black/10 border-none outline-none ',
                     header: 'bg-black/90 border border-none ',
                     close : 'bg-red-500 hover:bg-red-600',
-                    content: 'border-0 rounded-sm',
+                    content: 'border-0 rounded-sm text-white',
+                    description : 'whitespace-pre-line max-h-30 overflow-scroll p-2 rounded-lg bg-white/10',
+                    title : 'text-2xl font-extrabold',
                     wrapper:'border-0'
                 }"
                 >

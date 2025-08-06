@@ -6,10 +6,15 @@
     </div>
 
     <div v-else>
+
       <div v-if="error" class="bg-red-500 rounded-xl p-4 w-max text-left text-lg my-8 text-white">
         Problème : Erreur serveur 500, veuillez rafraîchir la page.
       </div>
-      <Shop v-if="data" :conf="data.Shopconfig.shopConf" :shopProd="data.ShopProducts"/>
+      <div class=" relative">
+        <Shop v-if="data" :conf="data.Shopconfig.shopConf" :shopProd="shopProd"/>
+        <SendEmailtoShop v-if="data && data.Shopconfig.shopConf.email" :shopMail="data.Shopconfig.shopConf.email" :shopProducts="shopProdnames"/>
+
+      </div>
     </div>
 
 </template>
@@ -49,6 +54,22 @@ const { data, pending, error } = useFetch<ShopData>(
   }
 );
 
+
+// shopprods
+const shopProd = computed<shopProdtype>(() => {
+  if (!data.value?.ShopProducts) return [];
+  return data.value.ShopProducts.filter(product => 
+    data.value?.Shopconfig.shopConf.products.some(p => p === product.id)
+  );
+});
+
+
+const shopProdnames = computed<string[]>(()=>{
+  if (!shopProd.value) return [];
+  return shopProd.value.map(prod => prod.name);
+})
+
+// meta tags ... 
 
 const pageMeta = reactive({
   title: 'Azze-store',
@@ -120,3 +141,27 @@ useHead({
   titleTemplate: (title) => `${title} | Azzy-store` // Fixed brand name consistency
 });
 </script>
+
+<style>
+/* Transition styles */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active form,
+.modal-leave-active form {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-enter-from form,
+.modal-leave-to form {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+</style>

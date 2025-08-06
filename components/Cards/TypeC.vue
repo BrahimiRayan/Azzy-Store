@@ -7,9 +7,9 @@
 
           
 
-            <div class="relative">
-                <img v-if="product.image" :src="product.image" :alt="product.name" class="w-[100%] h-[300px] border-2 rounded-3xl  object-contain" />
-                <UModal  
+            <div class="relative w-full h-80">
+                <img v-if="product.image" :src="product.image" :alt="product.name" class="w-full h-full p-2 bg-amber-50/10 border-2 rounded-3xl  object-contain" />
+            <UModal  
                  :title="product.name || 'Product name' "
                  :description="product.description?.slice(0 , 400) || 'No descreption'"
                  fullscreen
@@ -18,18 +18,20 @@
                     body: 'bg-black/10 border-none outline-none ',
                     header: 'bg-black/90 border border-none ',
                     close : 'bg-red-500 hover:bg-red-600',
-                    content: 'border-0 rounded-sm',
+                    content: 'border-0 rounded-sm text-white',
+                    description : 'whitespace-pre-line max-h-30 overflow-scroll p-2 rounded-lg bg-white/10',
+                    title : 'text-2xl font-extrabold',
                     wrapper:'border-0'
                 }"
                 >
-                    <UButton class="absolute bottom-2 right-4 bg-black/60 hover:bg-black/70 text-white" icon="i-majesticons-open"/>
+                    <UButton class="absolute top-2 right-4 z-10 hover:bg-black/90 text-white bg-black/80 cursor-pointer" icon="i-majesticons-open" />
 
                     <template #body>
                         <div class="w-[100%] h-[100%] flex justify-center items-center">
                             <img v-if="product.image" :src="product.image" :alt="product.name" class="w-[90%] h-[90%] object-contain" />
                         </div>
                     </template>
-                </UModal>
+            </UModal>
             </div>
 
 
