@@ -10,6 +10,7 @@ type Produit = {
     name : string , 
     description? : string,
     img? : string , 
+    imgId? :string,
     category : category ,
     pua : number , 
     puv : number ,

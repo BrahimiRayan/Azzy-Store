@@ -57,6 +57,7 @@ export const productsTable = pgTable("products", {
   name: varchar({ length: 255 }).notNull(),
   description : text().default("") ,
   image: varchar({ length: 255 }).notNull().default("/no-image.png"),
+  imageId : varchar({ length: 255 }).default(''),
   type: ProductsTypeEnum().default("Autre").notNull(),
   pua : real().notNull(),
   puv: real().notNull(),

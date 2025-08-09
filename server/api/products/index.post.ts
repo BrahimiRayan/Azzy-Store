@@ -7,10 +7,10 @@ export default defineEventHandler(async (event) => {
     throw new Error("Not authorized.");
   }
 
-  const { name, image, description , type, pua, puv, qte, idShop } = body;
+  const { name, img, imgId, description , type, pua, puv, qte, idShop } = body;
 
   try {
-    const newProduct = await addNewProduct(idShop , name ,description ,image , type , pua , puv , qte);
+    const newProduct = await addNewProduct(idShop , name ,description ,img ,imgId, type , pua , puv , qte);
     return newProduct;
   } catch (error) {
     console.error('Error creating product:', error);

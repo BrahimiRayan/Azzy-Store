@@ -47,18 +47,19 @@
 
 
         <UFormField label="Image (optionel)" class="w-full">
-
-          <UInput 
-            label="Image du Produit" 
-            class=" w-full" 
-            type="file" 
-            accept="image/*" 
-            v-model="NewProduct.img"
-            icon="i-lucide-image" 
-            :ui="{
-                base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
-              }"
+            <p class="text-xs font-extrabold m-2 flex items-center gap-x-1 text-orange-400 w-max p-1">
+              <UIcon name="i-lucide-file-warning" />
+              Assurez-vous que la taille de l'image est inférieure à 1 Mo.
+            </p>
+            <input
+              type="file"
+              ref="fileInput"
+              accept="image/*"
+              class="block w-full text-sm text-gray-300 file:w-40 file:mr-4 file:py-2 file:px-4
+                    file:rounded-sm file:border-0 file:text-sm file:font-semibold
+                    file:bg-green-600 file:text-white hover:file:bg-green-400"
             />
+
         </UFormField>
 
         <UFormField label="Catégorie du Produit" class=" w-full" required>
@@ -120,9 +121,21 @@
         </UFormField>
 
         <USeparator class="my-4" />
-        <UButton label="Ajouter le Produit" type="submit"
-          class="bg-green-600 text-[var(--pale-moon)] text-sm hover:bg-green-400 transition duration-300 ease-in-out"
-          size="xl" />
+
+          <button
+              type="submit"
+              class="bg-green-600 text-sm hover:bg-green-700 transition duration-300 ease-in-out p-2 rounded"
+              size="xl"
+              :disabled="isPending"
+          >
+            <span v-if="!isPending">
+              Ajouter le Produit
+            </span>
+              <span v-else class="flex items-center">
+              <UIcon name="i-heroicons-arrow-path-20-solid" class="animate-spin mr-2" />
+              Attendez SVP...
+            </span>
+          </button>
 
       </form>
     </template>
@@ -148,6 +161,7 @@ const items = ref(PRODUCTS_TYPES);
 const NewProduct = ref<Produit>({
   name: '',
   img: '',
+  imgId : '',
   description : '',
   category: 'Autre',
   pua: 0,
@@ -156,6 +170,58 @@ const NewProduct = ref<Produit>({
 })
 const toast = useToast();
 
+
+const fileInput = ref<HTMLInputElement | null>(null);
+
+async function uploadFile (){
+  if(!fileInput.value || !fileInput || ! fileInput.value.files){
+    return {
+      url : '',
+      public_id : '',
+    };
+  }
+  const file = fileInput.value.files[0] || null;
+  if (!file) {
+    alert('No file selected'); // we chamge this ... 
+    return {
+      url : '',
+      public_id : '',
+    };
+  }
+
+  const maxSize = 1024 * 1024;
+  if (file.size > maxSize) {
+    alert('File too large: Maximum size is 1 MB');
+    fileInput.value.value = ''; 
+    return false;
+  }
+
+  
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      return false
+    } else {
+        return {
+          url : data.url,
+          public_id : data.public_id 
+        }
+    }
+  } catch (error) {
+    return false
+  }
+};
+
+let isPending = ref<boolean>(false)
 
 async function addProduit() {
 
@@ -174,13 +240,32 @@ async function addProduit() {
   } 
 
   try {
-
+    isPending.value = true;
+    const uploadImage = await uploadFile();
+    
+    if(uploadImage === false){
+      toast.add({
+        title: 'Erreur',
+        description: "Un problème, l'image n'a pas pu être stockée. Essayez plus tard.",
+        color: 'warning',
+        icon: 'lucide-alert-triangle',
+        ui: {
+          root: 'bg-red-500/90 rounded-lg p-4',
+        },
+      });
+      isPending.value = false
+      return
+    }else if(uploadImage.public_id && uploadImage.url){
+      NewProduct.value.img = uploadImage.url
+      NewProduct.value.imgId = uploadImage.public_id
+    }
     const data = await $fetch('/api/products',{
       method : 'POST',
       body:
        {
         name : NewProduct.value.name,
         img : NewProduct.value.img,
+        imgId : NewProduct.value.imgId,
         description : NewProduct.value.description,
         type : NewProduct.value.category,
         pua : NewProduct.value.pua,
@@ -205,7 +290,6 @@ async function addProduit() {
     },
     });
     emit('refresh-data');
-    // window.location.reload();
     return
   } catch (error) {
     toast.add({
@@ -218,6 +302,8 @@ async function addProduit() {
       },
     });
     throw new Error(`Erreur lors de l'ajout du produit: ${error}`);
+  } finally {
+    isPending.value = false
   }
     
 }

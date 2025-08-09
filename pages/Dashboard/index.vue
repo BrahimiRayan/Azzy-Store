@@ -101,7 +101,7 @@
           </p>
         <!-- les mvps -->
         <div>
-          <div v-if="mostSellesByUnite || transactions.mvp[0]" class="grid grid-cols-2 rounded-lg bg-white/5 p-2 mt-2" >
+          <div v-if="mostSellesByUnite && transactions.mvp[0] && mostSellesByUnite.transactions.totalSoldByunit !==0 && transactions.mvp[0].transactions.totalSoldByunit !==0" class="grid grid-cols-2 rounded-lg bg-white/5 p-2 mt-2" >
             <div class="mt-32  flex flex-col items-center justify-center">
               <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black">
                 <div>

@@ -175,7 +175,7 @@ export async function deleteProductById(id: string): Promise<boolean> {
 
 type productT = typeof productsTable.$inferInsert.type
 
-export async function addNewProduct(shopid : string , name : string ,description : string ,image : string , prodType : productT , pua : number , puv : number , qte : number ){
+export async function addNewProduct(shopid : string , name : string ,description : string ,image : string ,imgId : string , prodType : productT , pua : number , puv : number , qte : number ){
   
   if(!shopid){
     throw new Error("Not authaurized to POST!");
@@ -197,6 +197,7 @@ export async function addNewProduct(shopid : string , name : string ,description
         name,
         description,
         image: image || "/no-image.png",
+        imageId : imgId || "", 
         type : prodType,
         pua,
         puv,
