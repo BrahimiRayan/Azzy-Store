@@ -118,8 +118,9 @@
             </div>
         </section>
 
-        <div v-else>
-            No Products selected...
+        <div v-else class="flex flex-col items-center justify-center gap-6">
+            <div class="w-64 h-64 mx-auto bg-[url('~/assets/pics/emptyShop.png')] bg-contain bg-no-repeat bg-center"></div>
+            <p class="text-2xl font-extrabold">Pas de produits à vendre...</p>
         </div>
     </main>
 

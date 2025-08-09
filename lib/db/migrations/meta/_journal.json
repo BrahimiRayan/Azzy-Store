@@ -43,6 +43,13 @@
       "when": 1752317498710,
       "tag": "0005_tiny_quicksilver",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1754768110353,
+      "tag": "0006_yielding_kate_bishop",
+      "breakpoints": true
     }
   ]
 }

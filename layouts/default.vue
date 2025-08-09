@@ -27,7 +27,7 @@
                     <div class="flex flex-col gap-1">
                         <h1 v-if="session.data" class="text-xs font-semibold text-green-600">{{ session.data?.user.name }}</h1>
                         <h1 v-else class="text-xs font-semibold text-secondary">Welcom </h1>
-                        <p class="text-[10px] text-gray-500">Statue : {{ isAdmin? 'ADMIN' : 'Employee' }}</p>
+                        <p class="text-[10px] text-gray-500">Plan : Gratuit</p>
                         
                     </div>
                 </div>
@@ -75,7 +75,6 @@ type route = {
 }
 // refs
 const open = ref(false)
-const isAdmin = ref(true);
 
 // datas
 const Routes :route [] = [
@@ -113,6 +112,7 @@ const handleDrawerToggle = (newValue:boolean) => {
 
 const Currentroute = useRoute();
 const session = authClient.useSession();
+
 
     
     
