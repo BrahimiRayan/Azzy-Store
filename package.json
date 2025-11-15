@@ -57,7 +57,7 @@
     "@tailwindcss/vite": "^4.0.15",
     "@types/node": "^22.15.30",
     "@types/nodemailer": "^6.4.17",
-    "drizzle-kit": "^0.31.4",
+    "drizzle-kit": "^0.18.1",
     "i": "^0.3.7",
     "npm": "^11.4.1",
     "tailwindcss": "^4.0.15",

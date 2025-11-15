@@ -40,7 +40,7 @@
                 <p class="text-xl font-bold">{{ product.name }}</p>
             </div>
 
-            <div class="h-18 w-full overflow-y-scroll p-2 bg-white/10 rounded-lg mb-2 ">
+            <div class="h-18 w-full overflow-y-scroll overflow-x-hidden text-wrap p-2 bg-white/10 rounded-lg mb-2 ">
                 <p v-if="product.description" class="indent-2 text-sm">{{ product.description }}</p>
                 <p v-else class="text-center mt-4.5 font-extrabold"> Aucune Description.</p>
             </div>
