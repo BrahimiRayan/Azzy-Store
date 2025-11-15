@@ -15,11 +15,11 @@
 
             <ul class="flex items-center gap-3 mr-3">
                 <li>
-                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
+                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out Contactbutton"/>
                 </li>
                 
                 <li>
-                    <UButton icon="i-lineicons-phone" label="phone" :to="`tel:${conf.phoneNumber}`" class="bg-white/50 hover:bg-blue-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out"/>
+                    <UButton icon="i-lineicons-phone" label="phone" :to="`tel:${conf.phoneNumber}`" class="bg-white/50 hover:bg-blue-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out Contactbutton"/>
                 </li>
             </ul>
         </nav>
@@ -238,7 +238,7 @@ const ProdPics = computed(()=>{
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
 
-    *,p, h1, h2, h3, h4, h5, h6,div, span, li, a{
+    *,p, h1, h2, h3, h4, h5, h6,div, span, li, a , .Contactbutton{
         color: var(--text-color);
     }
 

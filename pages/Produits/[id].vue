@@ -16,10 +16,11 @@
             class="w-48" 
             placeholder="Choisir un moin..."
             :ui="{
+                
                 content : 'bg-[var(--deep-dark-blue)] ring-white/20',
                 item : 'border-b-1 border-white/20 hover:bg-white/10 p-2',
                 input : 'bg-[var(--deep-dark-blue)]',
-                base : 'ring-white/40 ring-2',
+                base : 'bg-[var(--deep-dark-blue)] ring-white/40 ring-2',
             }"
             />
         <div class="flex items-center justify-between my-9 gap-5">

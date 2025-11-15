@@ -42,7 +42,7 @@
                                     <!-- !!HERE IS THE INPUT MENU DEEP SEEK -->
                                     <UInputMenu v-model="Selectedproduct" :items="ProductsList" multiple placeholder="Rechercher..."
                                         :ui="{
-                                            base: 'p-3',
+                                            base: 'p-3 bg-[var(--deep-dark-blue)] ',
                                             content: 'bg-[var(--deep-dark-blue)]',
                                             item: 'hover:bg-green-500/30',
                                             tagsItemText: 'text-white/90 p-1 rounded-xl font-bold text-sm',
@@ -73,15 +73,19 @@
                                     <UFormField label="Nom " required hint="(obligatoire)" :ui="{
                                         label: 'text-white/60',
                                     }">
-                                        <UInput type="text" placeholder="Nom de la boutique" v-model="shopConfig.name" required
-                                            class="w-full" />
+                                        <UInput type="text" placeholder="Nom de la boutique" v-model="shopConfig.name" required 
+                                            class="w-full" :ui="{
+                                                base : 'bg-[var(--deep-dark-blue)]'
+                                            }" />
                                     </UFormField>
                                     <!-- description -->
                                     <UFormField label="Description " hint="(optionel)" :ui="{
                                         label: 'text-white/60',
                                     }">
                                         <UTextarea v-model="shopConfig.description" autoresize class="w-full"
-                                            placeholder="Description de votre boutique enligne ... " />
+                                            placeholder="Description de votre boutique enligne ... " :ui="{
+                                                base : 'bg-[var(--deep-dark-blue)]',
+                                            }" />
                                     </UFormField>
         
                                     <p class="text-white/60 text-md">Choisisez un type des cards </p>
@@ -138,7 +142,7 @@
                                             label: 'text-white/60',
                                         }">
                                             <UInput icon="i-stash-link-light" size="md" type="url" placeholder="Facebook URL"
-                                                v-model="shopConfig.fb_url" class="w-full" />
+                                                v-model="shopConfig.fb_url" class="w-full" :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
         
                                         <!-- instagram -->
@@ -146,14 +150,14 @@
                                             label: 'text-white/60',
                                         }">
                                             <UInput icon="i-stash-link-light" size="md" type="url" placeholder="Instagram URL"
-                                                v-model="shopConfig.ig_url" class="w-full" />
+                                                v-model="shopConfig.ig_url" class="w-full" :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
         
                                         <UFormField label="Téléphone" required hint="(obligatoire)" :ui="{
                                             label: 'text-white/60',
                                         }">
                                             <UInput icon="i-proicons-phone" size="md" type="tel" placeholder="Téléphone"
-                                                v-model="shopConfig.phoneNumber" required class="w-full" />
+                                                v-model="shopConfig.phoneNumber" required class="w-full" :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
         
                                         <UFormField label="Email de contact" required hint="(obligatoire)" :ui="{
@@ -161,7 +165,7 @@
                                         }">
                                             <UInput icon="i-stash-link-light" size-md type="email"
                                                 placeholder="Email de boutique" v-model="shopConfig.email" required
-                                                class="w-full" />
+                                                class="w-full" :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
         
                                     </div>
@@ -174,7 +178,7 @@
                                         label: 'text-white/60',
                                     }">
                                         <UInput type='text' placeholder='Adresse de la boutique' v-model="shopConfig.address"
-                                            class="w-60" />
+                                            class="w-60" :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                     </UFormField>
         
                                     <USwitch v-model="shopConfig.isMap" label="Vous sohaitez d'ajouter une map ? "
@@ -191,13 +195,13 @@
                                             label: 'text-white/60',
                                         }">
                                             <UInput type="number" placeholder="Coordonnées X" v-model="shopConfig.xcor"
-                                                required />
+                                                required :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
                                         <UFormField label="Coordonnées Y" required :ui="{
                                             label: 'text-white/60',
                                         }">
                                             <UInput type="number" placeholder="Coordonnées Y" v-model="shopConfig.ycor"
-                                                required />
+                                                required :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
                                     </div>
         
@@ -205,7 +209,7 @@
                                 <USeparator class="w-full mb-5" />
                                 <div class="mb-10">
                                     <UButton label="Confirmer" type="submit"
-                                        class="bg-green-500 hover:bg-green-600 font-bold ml-4" />
+                                        class="bg-green-500 text-white/90 px-8  hover:bg-green-600 font-bold ml-4" />
                                     
                                 </div>
                             </form>
