@@ -5,13 +5,7 @@
         <h1 :style="`color : ${conf.textcolor};`" class="logo ml-3 font-extrabold text-3xl">{{ conf.name }}</h1>
 
         <nav class="flex items-center justify-around gap-10">
-            <UInput type="text" icon="i-line-md-search" placeholder="Rechercher ... " class="cursor-pointer"
-                variant="none"
-                :ui="{
-                    base: `rounded-md placeholder:text-[${conf.textcolor}] text-[${conf.textcolor}] text-sm`,
-                    root: `border-2 rounded-lg hover:border-[${conf.textcolor}] focus-within:border-[${conf.textcolor}] transition-all duration-300 ease-in-out `,
-                }"
-            />
+
 
             <ul class="flex items-center gap-3 mr-3">
                 <li>
@@ -26,34 +20,74 @@
      </header>
 
     <main>
-        <!-- pub -->
-        <section class="PubColor grid grid-cols-2 place-items-center gap-5 my-12 border-2 h-120 w-[80%] mx-auto rounded-xl">
-            <!-- carosel and description-->
-             <div class="w-[100%] ml-5">
-                <h2 class="logo font-extrabold text-6xl mb-10 ml-4">{{ conf.name }}</h2>
-                <p class="whitespace-pre-line">{{ conf.description }}</p>
-                <address v-if="conf.address" class="border border-white/40 cursor-pointer rounded-xl bg-black/20 p-2 w-max mt-8">{{ conf.address }}</address>
+
+      <section class="mb-12 border-2 rounded-2xl mt-6 bg-gradient-to-r from-inherit to-gray-800">
+        <div class="glass-effect rounded-2xl overflow-hidden border border-gray-700/50 shadow-xl">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+            <!-- Store Info -->
+            <div class="space-y-6">
+              <div>
+                <h2 class="text-4xl font-bold  text-white mb-4 leading-tight">
+                    Bienvenue à <span class="logo bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{ conf.name }}</span>
+                </h2>
+                <p class="text-gray-300 leading-relaxed whitespace-pre-line">{{ conf.description }}</p>
+              </div>
+
+              <!-- Store Stats -->
+              <div class="grid grid-cols-3 gap-4">
+                <div class="text-center p-4 rounded-xl bg-gray-800/50 backdrop-blur-sm">
+                  <p class="text-2xl font-bold text-white">{{ shopProd.length }}</p>
+                  <p class="text-sm text-gray-400">Produits</p>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-gray-800/50 backdrop-blur-sm">
+                  <p class="text-2xl font-bold text-white">24/7</p>
+                  <p class="text-sm text-gray-400">Support</p>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-gray-800/50 backdrop-blur-sm">
+                  <p class="text-2xl font-bold text-white">{{ conf.Livrison ? 'Oui' : 'No' }}</p>
+                  <p class="text-sm text-gray-400">Livraison</p>
+                </div>
+              </div>
+
+              <!-- Address -->
+              <div v-if="conf.address" class="flex w-max items-start gap-3 p-4 rounded-xl bg-gradient-to-r  from-blue-900/20 to-blue-800/20 border border-blue-800">
+                <UIcon name="i-mdi-map-marker-outline" class=" text-blue-400 text-xl mt-2 size-8" />
+                <div>
+                  <p class="font-medium mb-1">Localisation</p>
+                  <p class="text-sm">{{ conf.address }}</p>
+                </div>
+              </div>
             </div>
-                        
-            <div class="border-l-2 border-white/30 border-dashed w-full h-full overflow-hidden flex items-center justify-center ">
+
+            
+            <div class="relative">
+              <div class="relative h-full rounded-xl overflow-hidden bg-white/10">
                 <UCarousel
-                    v-slot="{ item }"
-                    loop
-                    :autoplay="{ delay: 3000  }"
-                    :items="ProdPics"
-                    :ui="{ item: 'w-full h-full' }"
-                >
+                  v-slot="{ item }"
+                  loop
+                  :autoplay="{ delay: 3000 }"
+                  :items="ProdPics"
+                  :ui="{ 
+                    item: 'w-full h-full',
+                    container: 'h-full',
                     
-                    <div class="w-full h-full flex items-center justify-center p-1">
+                  }"
+                  arrows
+                  class="h-full"
+                >
+                  <div class="h-full flex items-center justify-center p-8">
                     <img 
-                        :src="item" 
-                        class="w-[500px] aspect-square object-scale-down rounded-2xl bg-white"
-                        alt="product image" 
+                      :src="item" 
+                      class="w-full h-auto max-h-96 object-contain rounded-lg bg-white p-4 shadow-lg"
+                      alt="product image" 
                     />
-                    </div>
+                  </div>
                 </UCarousel>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
         <section v-if="shopProd.length > 0">
             <h2 class="logo font-extrabold text-6xl mb-10 ml-4 underline">Nos produits</h2>
