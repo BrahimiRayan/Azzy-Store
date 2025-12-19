@@ -39,7 +39,6 @@
                                             boutique ... </p>
                                     </div>
                                     
-                                    <!-- !!HERE IS THE INPUT MENU DEEP SEEK -->
                                     <UInputMenu v-model="Selectedproduct" :items="ProductsList" multiple placeholder="Rechercher..."
                                         :ui="{
                                             base: 'p-3 bg-[var(--deep-dark-blue)] ',
@@ -181,7 +180,7 @@
                                             class="w-60" :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                     </UFormField>
         
-                                    <USwitch v-model="shopConfig.isMap" label="Vous sohaitez d'ajouter une map ? "
+                                    <!-- <USwitch v-model="shopConfig.isMap" label="Vous sohaitez d'ajouter une map ? "
                                      unchecked-icon="i-lucide-x" checked-icon="i-lucide-check"
                                      :ui="{
                                         label: 'text-white/60',
@@ -203,16 +202,69 @@
                                             <UInput type="number" placeholder="Coordonnées Y" v-model="shopConfig.ycor"
                                                 required :ui="{base : 'bg-[var(--deep-dark-blue)]'}"/>
                                         </UFormField>
-                                    </div>
-        
-                                </div>
-                                <USeparator class="w-full mb-5" />
-                                <div class="mb-10">
-                                    <UButton label="Confirmer" type="submit"
-                                        class="bg-green-500 text-white/90 px-8  hover:bg-green-600 font-bold ml-4" />
-                                    
-                                </div>
-                            </form>
+                                    </div> -->
+                                                    <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                      <UIcon name="i-mdi-google-maps" class="text-green-500 text-xl" />
+                      <div>
+                        <p class="font-medium text-white">Google Maps Integration</p>
+                        <p class="text-sm text-white/60">Display store location on map</p>
+                      </div>
+                    </div>
+                    <USwitch 
+                      v-model="shopConfig.isMap" 
+                      unchecked-icon="i-mdi-close" 
+                      checked-icon="i-mdi-check" 
+                      :ui="{
+                        label: 'text-white/60',
+                        container: shopConfig.isMap ? 'bg-green-600 rounded-xl' : 'bg-gray-700 rounded-xl',
+                        thumb: 'bg-white rounded-full shadow-lg',
+                      }"
+                    />
+                  </div>
+
+                  <div v-if="shopConfig.isMap" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <UFormField label="Latitude" required class="space-y-2">
+                      <template #label>
+                        <span class="text-white/80 text-sm">Latitude (X)</span>
+                      </template>
+                      <UInput 
+                        v-model="shopConfig.xcor" 
+                        type="number"
+                        placeholder="36.752887"
+                        required
+                        step="0.000001"
+                        :ui="{
+                          base: 'bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:ring-2 focus:ring-green-500 focus:border-transparent'
+                        }"
+                      />
+                    </UFormField>
+
+                    <UFormField label="Longitude" required class="space-y-2">
+                      <template #label>
+                        <span class="text-white/80 text-sm">Longitude (Y)</span>
+                      </template>
+                      <UInput 
+                        v-model="shopConfig.ycor" 
+                        type="number"
+                        placeholder="3.042048"
+                        required
+                        step="0.000001"
+                        :ui="{
+                          base: 'bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:ring-2 focus:ring-green-500 focus:border-transparent'
+                        }"
+                      />
+                    </UFormField>
+                  </div>
+                </div>
+            </div>
+                <USeparator class="w-full mb-5" />
+                  <div class="mb-10">
+                     <UButton label="Confirmer" type="submit" :disabled="Iswaiting"
+                        class="bg-green-500 text-white/90 px-8 hover:bg-green-600 font-bold ml-4" />                  
+                  </div>                                
+            </form>
         
                         </div>
                     </template>
@@ -243,7 +295,7 @@ const LoyoutOptions :{value: card_t , label :string , src : string}[] = [
   { value: 'C', label: 'Option C'  , src : desing3},
   { value: 'D', label: 'Option D' , src : desing4},
 ];
-
+const Iswaiting = ref<boolean>(false);
 let HostUrl = useRuntimeConfig().public.BaseUrl
 
 export type ProductsLResp = {
@@ -358,6 +410,7 @@ const shopProd = computed<shopProdtype>(() => {
 const toast = useToast();
 const SubmitConfig = async ()=>{
     // i need only the id's of the products that selected
+    Iswaiting.value = true;
     shopConfig.value.products = Selectedproduct.value.map((p)=>{
         return p.id
     });
@@ -377,6 +430,7 @@ const SubmitConfig = async ()=>{
             progress : 'bg-red-600'
             },
         });
+        Iswaiting.value = false;
         return 
     }
 
@@ -391,6 +445,7 @@ const SubmitConfig = async ()=>{
             progress : 'bg-red-600'
             },
         });
+        Iswaiting.value = false;
         return 
     }
 
@@ -406,6 +461,7 @@ const SubmitConfig = async ()=>{
             progress : 'bg-red-600'
             },
         });
+        Iswaiting.value = false;
             return 
         }
     }
@@ -432,6 +488,8 @@ const SubmitConfig = async ()=>{
         return
     } catch (error ) {
         throw error
+    }finally{
+        Iswaiting.value = false;
     }
  
 

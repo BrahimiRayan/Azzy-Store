@@ -14,7 +14,7 @@
                  fullscreen
                 :ui="{
                     overlay: 'bg-black/80',
-                    body: 'bg-black/10 border-none outline-none ',
+                    body: 'bg-black/90 border-none outline-none ',
                     header: 'bg-black/90 border border-none ',
                     close : 'bg-red-500 hover:bg-red-600',
                     content: 'border-0 rounded-sm text-white',

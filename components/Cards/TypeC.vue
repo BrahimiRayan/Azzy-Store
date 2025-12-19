@@ -1,21 +1,78 @@
 <template>
-        <div class="border-2 rounded-lg p-4 flex flex-col items-center CardColor relative shadow-lg shadow-black/80 hover:shadow-white/50 transition-all duration-300 ease-in-out" >
-            <div class="w-[100px] h-[100px] bg-white absolute right-0 bottom-50 rotate-12 -z-10" 
-                style="clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);">
+  <div class="group relative h-full rounded-xl bg-gradient-to-bl from-inherit to-gray-700 border border-gray-800 overflow-hidden hover:scale-105 hover:shadow-2xl hover:shadow-white/30 transition-all duration-300">
+    
+    <div class="absolute top-4 right-4 z-10 hover:scale-105  transition-all duration-300">
+      <div class="px-3 py-1.5 bg-blue-600 text-white rounded-lg shadow-md">
+        <div class="flex items-baseline gap-0.5">
+          <span class="text-lg font-black">{{ product.puv }}</span>
+          <span class="text-xs font-medium">DZD</span>
+        </div>
+      </div>
+    </div>
 
-            </div>
+    <div class="relative h-48 bg-black/70 border-b">
+      <img 
+        v-if="product.image" 
+        :src="product.image" 
+        :alt="product.name" 
+        class="w-full h-full p-4 object-contain"
+      />
+    </div>
 
-          
+    <!-- Content -->
+    <div class="p-4">
+      
+      <h3 class="font-semibold  text-white mb-2 line-clamp-2">
+        {{ product.name }}
+      </h3>
 
-            <div class="relative w-full h-80">
-                <img v-if="product.image" :src="product.image" :alt="product.name" class="w-full h-full p-2 bg-amber-50/10 border-2 rounded-3xl  object-contain" />
-            <UModal  
+      <!-- Description -->
+      <p v-if="product.description" class="text-sm text-gray-300 mb-3 line-clamp-2">
+        {{ product.description }}
+      </p>
+
+      <!-- Features -->
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-1">
+          <UIcon 
+            :name="shipping ? 'i-mdi-check-circle' : 'i-mdi-close-circle'" 
+            :class="shipping ? 'text-green-500' : 'text-red-500'" 
+            class="text-sm" 
+          />
+          <span class="text-xs text-gray-500">Livraison</span>
+        </div>
+        
+        <div v-if="address" class="flex items-center gap-1">
+          <UIcon name="i-mdi-map-marker" class="text-blue-500 text-sm" />
+          <span class="text-xs text-gray-500 truncate max-w-[80px]">{{ getCity(address) }}</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between">
+        <div class="flex gap-2">
+          <a v-if="fb" :href="fb" target="_blank" class="p-1.5 text-gray-500 hover:text-blue-600">
+            <UIcon name="i-mdi-facebook" class="text-lg" />
+          </a>
+          <a v-if="ig" :href="ig" target="_blank" class="p-1.5 text-gray-500 hover:text-pink-600">
+            <UIcon name="i-mdi-instagram" class="text-lg" />
+          </a>
+          <a :href="`mailto:${email}`" class="p-1.5 text-gray-500 hover:text-red-600">
+            <UIcon name="i-mdi-email" class="text-lg" />
+          </a>
+        </div>
+        
+        <a :href="`tel:${phone}`" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors">
+          Appellez !
+        </a>
+      </div>
+        <UModal  
                  :title="product.name || 'Product name' "
                  :description="product.description?.slice(0 , 400) || 'No descreption'"
                  fullscreen
                 :ui="{
                     overlay: 'bg-black/80',
-                    body: 'bg-black/10 border-none outline-none ',
+                    body: 'bg-black/90 border-none outline-none ',
                     header: 'bg-black/90 border border-none ',
                     close : 'bg-red-500 hover:bg-red-600',
                     content: 'border-0 rounded-sm text-white',
@@ -24,88 +81,34 @@
                     wrapper:'border-0'
                 }"
                 >
-                    <UButton class="absolute top-2 right-4 z-10 hover:bg-black/90 text-white bg-black/80 cursor-pointer" icon="i-majesticons-open" />
+                    <UButton class="absolute top-2 left-4 z-10 hover:bg-black/90 text-white bg-black/80 cursor-pointer" icon="i-majesticons-open" />
 
                     <template #body>
                         <div class="w-[100%] h-[100%] flex justify-center items-center">
                             <img v-if="product.image" :src="product.image" :alt="product.name" class="w-[90%] h-[90%] object-contain" />
                         </div>
                     </template>
-            </UModal>
-            </div>
-
-
-            <div class="mt-4 mb-2">
-                <p class="text-xl font-bold">{{ product.name }}</p>
-            </div>
-
-              <div class="w-max p-2 self-start font-[--font-style] flex items-center gap-2">
-                <UIcon name="i-grommet-icons-money" class="text-md text-yellow-400" />
-                <p class="text-[11px]"><span class="text-2xl font-extrabold ">{{ product.puv }}</span> DZD</p>
-            </div>
-
-            <div class="h-18 w-full overflow-y-scroll p-2 bg-white/10 rounded-lg mb-2 ">
-                <p v-if="product.description" class="indent-2 text-sm">{{ product.description }}</p>
-                <p v-else class="text-center mt-4.5 font-extrabold"> Aucune Description.</p>
-            </div>
-
-            <div class="self-start border-t-2 w-full pt-3 ">
-                <p class="font-extrabold flex items-center gap-2"><span class="flex items-center gap-1 text-sm"><UIcon name="i-carbon-delivery"/> Livraison :</span>
-                    <span v-if="shipping" class="bg-green-500 text-white rounded mt-1 text-center px-1 text-sm flex items-center justify-center gap-1"> OUI <UIcon name="i-mdi-check" class="text-white" /></span>
-                    <span v-else class="bg-red-500 text-white rounded mt-1 text-center px-1 text-sm flex items-center justify-center gap-1"> NON <UIcon name="i-mdi-close" class="text-white" /></span>
-                </p>
-
-                <p class="font-extrabold flex items-center gap-2 mb-3 text-sm" v-if="address"><span class="flex items-center gap-1"><UIcon name="i-entypo-address"/> Addresse :</span> <span class="text-sm">{{ address }}</span></p>
-               
-                <ul class="flex gap-3 align-center justify-center mt-6 mb-3">
-
-                    <li v-if="fb">
-                        <a :href="fb" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-1 transition-all duration-300 ease-in-out">
-                            <UIcon name="i-mdi-facebook" class="text-2xl" />                            
-                        </a>
-                    </li>
-
-                    <li v-if="ig">
-                        <a :href="ig" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-1.5 transition-all duration-300 ease-in-out">
-                           <UIcon name="i-hugeicons-instagram" class="text-2xl" />                                                        
-                        </a>
-                    </li>
-
-                     <li >
-                        <a :href="`mailto:${email}`" target="_blank" class="flex items-center gap-2 py-1 px-2 bg-white/20 rounded-md hover:-translate-y-2 transition-all duration-300 ease-in-out">
-                           <UIcon name="i-material-symbols-mail" class="text-2xl" />
-                        </a>
-                    </li>
-                </ul>
-
-                    
-                    <div class="mt-6">
-                        <a :href="`tel:${phone}`" target="_blank"class="flex items-center justify-center gap-2 py-2 px-3 w-[90%] bg-green-600 hover:bg-green-500 transition-all duration-300 ease-in-out mx-auto rounded-md">
-                           <UIcon name="i-lineicons-phone" class="text-2xl" />
-                            <span class="text-md font-extrabold">{{ addHyphensBetweenPairs(phone) }}</span>
-                            
-                        </a>
-                    </div> 
-            </div>
-
-        </div>
+        </UModal>
+    </div>
+  </div>
 </template>
-    
+
 <script setup lang='ts'>
 import type { productsCards } from '~/types/GeneraleT';
-import { addHyphensBetweenPairs } from '~/Utils/generalUIhelpers';
 
-    const props = defineProps<{
-        product :productsCards,
-        fb : string | null,
-        ig : string | null,
-        email : string,
-        phone : string,
-        address : string | null,
-        shipping : boolean,
-    }>()
+const props = defineProps<{
+  product: productsCards,
+  fb: string | null,
+  ig: string | null,
+  email: string,
+  phone: string,
+  address: string | null,
+  shipping: boolean,
+}>()
+
+// Helper function
+const getCity = (address: string) => {
+  const parts = address.split(',')
+  return parts[0].trim()
+}
 </script>
-    
-<style>
-
-</style>
