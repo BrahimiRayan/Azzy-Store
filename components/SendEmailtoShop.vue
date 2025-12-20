@@ -1,24 +1,32 @@
 <template>
-<div class="fixed bottom-3 right-3 z-40">
- 
+
   <div class="relative group">
-    
-    <div 
-      class="absolute inset-0 rounded-full bg-amber-400 animate-ping opacity-0 group-hover:opacity-75"
-      style="animation-duration: 1.5s; animation-iteration-count: 3"
-    ></div>
-    
-    
+       
     <button
+      v-if="buttonType === 'Floating'"
       @click="ToggleFormVisible"
-      class="w-10 h-10 rounded-full flex items-center justify-center shadow-md shadow-black/70 bg-gradient-to-br from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 transform group-hover:scale-110 group-hover:shadow-xl cursor-pointer border-2 border-white/20 focus:outline-none focus:ring-4 focus:ring-amber-300/50"
+      class="fixed z-800 top-3/4 right-4 w-14 h-14 opacity-75 rounded-full flex items-center justify-center shadow-md shadow-black/70 bg-gradient-to-br from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 transform group-hover:scale-110 group-hover:shadow-xl cursor-pointer border-2 border-white/20 focus:outline-none focus:ring-4 focus:ring-amber-300/50"
       title="Envoyer un message"
       aria-label="Ouvrir le formulaire de contact"
     >
       <UIcon name="i-lucide-send" size="22" class="text-white" />
     </button>
+
+    <button 
+      v-else
+      @click="ToggleFormVisible"
+      class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 hover:from-green-600 hover:to-emerald-600 text-white"
+      title="Envoyer un message"
+      aria-label="Ouvrir le formulaire de contact"
+    >
+      <span class="flex items-center justify-center">
+        <UIcon name="i-lucide-send" class="mr-2" />
+        Contacter la boutique
+      </span>
+    </button>
+
   </div>
-</div>
+
 <Transition name="modal">
   <div
       v-if="isFormShowing" 
@@ -89,43 +97,71 @@
             />
           </div>
 
-        <div class="flex items-center gap-x-2">
+          <!-- Products Selection - Multi-select -->
+          <div>
+            <label class="block text-sm font-medium mb-2 text-gray-300" for="products">
+              Produits <span class="text-sm text-red-600">*</span>
+            </label>
+            <USelectMenu 
+              v-model=" selectedProducts"
+              :items="items" 
+              multiple
+              placeholder="Choisir un ou plusieurs produits"
+              class="w-full bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition"
+              :ui="{
+                content: 'bg-gray-800 border border-gray-600',
+                item: 'bg-gray-800 hover:bg-gray-700 text-white',
+              }"
+            />
+          </div>
 
-            <div class="flex-11/12">
-                <label class="block text-sm font-medium mb-2 text-gray-300" for="product">
-                  Produits <span class="text-sm text-red-600">*</span>
-                </label>
-                <USelectMenu 
-                      v-model="form.product" 
-                      id="product" 
-                      :items="items" 
-                      class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition"
-                      :ui="{
-                        base : 'bg-red-500',
-                        content : 'bg-gray-800',
-                        item : 'bg-gray-800 border-b border-white/20 hover:bg-gray-700'
-                      }"
-                />
-            </div> 
-
-            <div >
-                <label class="block text-sm font-medium mb-2 text-gray-300" for="qte">
-                  Quantité <span class="text-sm text-red-600">*</span>
-                </label>
-                <input
-                  v-model.number="form.quantite"
-                  id="qte"
-                  type="number"
-                  min="1"
-                  class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition"
-                  required
-                  placeholder="Quantité"
-                />
-                
+          <!-- Products with Quantities -->
+          <div v-if="selectedProducts.length > 0" class="space-y-3">
+            <div class="text-sm font-medium text-gray-300 mb-2">
+              Quantités pour les produits sélectionnés:
             </div>
             
-            <div>
+            <div 
+              v-for="(product, index) in selectedProducts" 
+              :key="index"
+              class="flex items-center gap-3 p-3 bg-gray-700/30 rounded-lg border border-gray-600"
+            >
+              <div class="flex-1">
+                <span class="text-white font-medium">{{ product }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  type="button"
+                  @click="decrementQuantity(product)"
+                  class="w-8 h-8 rounded bg-gray-600 hover:bg-gray-500 flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  :disabled="getProductQuantity(product) <= 1"
+                >
+                  <UIcon name="i-lucide-minus" class="text-sm" />
+                </button>
+                <span class="w-10 text-center text-white font-bold">
+                  {{ getProductQuantity(product) }}
+                </span>
+                <button 
+                  type="button"
+                  @click="incrementQuantity(product)"
+                  class="w-8 h-8 rounded bg-gray-600 hover:bg-gray-500 flex items-center justify-center text-white"
+                >
+                  <UIcon name="i-lucide-plus" class="text-sm" />
+                </button>
+              </div>
+              <button
+                type="button"
+                @click="removeProduct(product)"
+                class="text-red-400 hover:text-red-300 p-1"
+                title="Retirer ce produit"
+              >
+                <UIcon name="i-lucide-x" class="text-sm" />
+              </button>
+            </div>
 
+            <div class="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+              <span class="text-sm text-gray-300">Quantité totale:</span>
+              <span class="text-lg font-bold text-green-400">{{ totalQuantity }} unités</span>
             </div>
           </div>
 
@@ -158,7 +194,7 @@
         <button
           type="submit"
           class="mt-2 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold rounded-lg px-4 py-3 shadow-lg transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-amber-500 disabled:opacity-70 disabled:cursor-not-allowed"
-          :disabled="formPending"
+          :disabled="formPending || selectedProducts.length === 0"
         >
           <span v-if="formPending" class="flex items-center justify-center">
             <UIcon name="i-lucide-loader-circle" class="animate-spin mr-2" />
@@ -166,7 +202,7 @@
           </span>
           <span v-else class="flex items-center justify-center">
             <UIcon name="i-lucide-send" class="mr-2" />
-            Envoyer
+            Envoyer la commande
           </span>
         </button>
       </form>
@@ -175,80 +211,148 @@
 </template>
     
 <script setup lang='ts'>
+import type { T_Button } from '~/types/GeneraleT';
 
 const props = defineProps<{
-        shopMail : string,
-        shopProducts : string[];
+  shopMail: string,
+  shopProducts: string[];
+  buttonType: T_Button;
 }>()
 
 const isFormShowing = ref<boolean>(false);
 
-function ToggleFormVisible(){
-  isFormShowing.value = !isFormShowing.value
-  
+function ToggleFormVisible() {
+  isFormShowing.value = !isFormShowing.value;
+  if (!isFormShowing.value) {
+    resetForm();
+  }
 }
 
-const items = ref(props.shopProducts)
+const items = ref(props.shopProducts.map(product => product));
+
 
 const form = reactive({
-    name: '',
-    email: '',
-    phone : '',
-    product : 'Choisir le produit',
-    message: '',
-    quantite : 0
+  name: '',
+  email: '',
+  phone: '',
+  message: '',
 });
+
+
+const selectedProducts = ref<string[]>([]);
+const productQuantities = ref<Record<string, number>>({});
+
 
 const formPending = ref(false);
 const formError = ref('');
 const formSuccess = ref('');
 
+
+watch(selectedProducts, (newProducts) => {
+  newProducts.forEach(product => {
+    if (!productQuantities.value[product]) {
+      productQuantities.value[product] = 1;
+    }
+  });
+  
+  
+  Object.keys(productQuantities.value).forEach(product => {
+    if (!newProducts.includes(product)) {
+      delete productQuantities.value[product];
+    }
+  });
+});
+
+
+const getProductQuantity = (product: string) => {
+  return productQuantities.value[product] || 1;
+};
+
+const incrementQuantity = (product: string) => {
+  productQuantities.value[product] = (productQuantities.value[product] || 1) + 1;
+};
+
+const decrementQuantity = (product: string) => {
+  if (productQuantities.value[product] > 1) {
+    productQuantities.value[product]--;
+  }
+};
+
+const removeProduct = (product: string) => {
+  selectedProducts.value = selectedProducts.value.filter(p => p !== product);
+};
+
+// Calculate total quantity
+const totalQuantity = computed(() => {
+  return Object.values(productQuantities.value).reduce((sum, qty) => sum + qty, 0);
+});
+
+// Reset form
+const resetForm = () => {
+  form.name = '';
+  form.email = '';
+  form.message = '';
+  form.phone = '';
+  selectedProducts.value = [];
+  productQuantities.value = {};
+  formError.value = '';
+  formSuccess.value = '';
+};
+
+// Submit form
 async function submitForm() {
-          formError.value = '';
-          formSuccess.value = '';
-          formPending.value = true;
+  formError.value = '';
+  formSuccess.value = '';
+  formPending.value = true;
 
-        if(!form.email || !form.name || !form.phone || !form.product || form.product ==='Choisir le produit' || !form.quantite || form.quantite === 0){
-          console.log('messing input ... ');
-          return
-        }
+  // Validation
+  if (!form.email || !form.name || !form.phone || !form.message) {
+    formError.value = 'Veuillez remplir tous les champs obligatoires';
+    formPending.value = false;
+    return;
+  }
 
-        if(!props.shopMail){
-          console.log('Internal erreur please try again');
-          return
-        }
+  if (selectedProducts.value.length === 0) {
+    formError.value = 'Veuillez sélectionner au moins un produit';
+    formPending.value = false;
+    return;
+  }
 
-        try {
+  if (!props.shopMail) {
+    formError.value = 'Erreur interne, veuillez réessayer plus tard';
+    formPending.value = false;
+    return;
+  }
 
-            await $fetch('/api/email/message', {
-              method: 'POST',
-              body: { 
-                to : props.shopMail,
-                name : form.name,
-                email : form.email,
-                phone : form.phone,
-                product : form.product,
-                message : form.message,
-                quantite : form.quantite,
-              }
-            });
+  try {
 
-            formSuccess.value = 'Message envoyé avec succès !';
-            form.name = '';
-            form.email = '';
-            form.message = '';
-            form.phone = '';
-            form.product = 'Choisir le produit';
-            form.quantite = 0
-            setTimeout(() => {
-              ToggleFormVisible()
-              formSuccess.value = '';
-            }, 2000);
-          } catch (e: any) {
-            formError.value = e?.data?.message || 'Erreur lors de l\'envoi du message.';
-          } finally {
-            formPending.value = false;
-          }
+
+    const productsData = selectedProducts.value.map(product => ({
+      product: product, 
+      quantity: productQuantities.value[product] || 1
+    }));
+
+    await $fetch('/api/email/message', {
+      method: 'POST',
+      body: { 
+        to: props.shopMail,
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        products: productsData,
+        message: form.message
       }
+    });
+
+    formSuccess.value = 'Commande envoyée avec succès !';
+    setTimeout(() => {
+      resetForm();
+      ToggleFormVisible();
+    }, 2000);
+  } catch (e: any) {
+    formError.value = e?.data?.message || 'Erreur lors de l\'envoi de la commande.';
+  } finally {
+    formPending.value = false;
+  }
+}
 </script>
-    

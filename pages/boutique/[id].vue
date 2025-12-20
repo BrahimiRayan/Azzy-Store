@@ -10,9 +10,9 @@
       <div v-if="error" class="bg-red-500 rounded-xl p-4 w-max text-left text-lg my-8 text-white">
         Problème : Erreur serveur 500, veuillez rafraîchir la page.
       </div>
-      <div class=" relative">
+      <div class="relative">
         <Shop v-if="data" :conf="data.Shopconfig.shopConf" :shopProd="shopProd"/>
-        <SendEmailtoShop v-if="data && data.Shopconfig.shopConf.email" :shopMail="data.Shopconfig.shopConf.email" :shopProducts="shopProdnames"/>
+        <SendEmailtoShop v-if="data && data.Shopconfig.shopConf.email" :shopMail="data.Shopconfig.shopConf.email" :shopProducts="shopProdnames" :buttonType ="'Floating'"/>
 
       </div>
     </div>
