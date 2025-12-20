@@ -9,7 +9,7 @@
 
             <ul class="flex items-center gap-3 mr-3">
                 <li>
-                    <UButton icon="i-mynaui-envelope" label="email" :to="`mailto:${conf.email}`" class="bg-white/50 hover:bg-red-500 hover:text-white font-extrabold shadow shadow-black/70 hover:translate-y-1 transition-all duration-300 ease-in-out Contactbutton"/>
+                    <SendEmailtoShop v-if="conf.email" :shopMail="conf.email" :shopProducts="shopProd.map(p=>p.name)" :buttonType ="'Simple'"/>
                 </li>
                 
                 <li>

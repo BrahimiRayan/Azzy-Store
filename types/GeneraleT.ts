@@ -182,4 +182,6 @@ type datasetType = {
     ycor? : number
 }
 
-export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t , category , OrderProducts} ;
+type T_Button = 'Simple' | 'Floating'
+
+export type { Produit , Transaction ,chartData , LinechartData , Cammande ,shopConfT , card_t , category , OrderProducts ,T_Button} ;

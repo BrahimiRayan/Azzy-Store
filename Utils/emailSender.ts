@@ -86,7 +86,7 @@ export async function sendShopCustumerMessage(options: {
   name: string,
   email: string,
   phone : string,
-  product : string,
+  products : string[],
   message: string,
   quantite : number
 }) {
@@ -138,7 +138,9 @@ export async function sendShopCustumerMessage(options: {
         </tr>
         <tr>
         <th>Produit:</th>
-        <td>${options.product}</td>
+        <td>
+        ${options.products.map(p => `• ${p}`).join('<br/>')}
+        </td>
         </tr>
         <tr>
         <th>Quantité:</th>
