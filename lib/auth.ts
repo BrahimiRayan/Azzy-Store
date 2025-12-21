@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
-import { sendVerificationEmail } from "~/Utils/emailSender";
+import { sendVerificationEmail , sendForForgotPassword } from "~/Utils/emailSender";
 
  
 export const auth = betterAuth({
@@ -19,7 +19,15 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled : true,
         requireEmailVerification: true,
-        minPasswordLength : 8
+        minPasswordLength : 8,  
+        sendResetPassword : async ( { user, url, token }, request) => {
+          await sendForForgotPassword({
+            to: user.email,
+            subject: "Reset your password",
+            text: `Click the link to reset your password: ${url}`,
+            url : url
+          });
+        }
     },
     emailVerification: {
     sendVerificationEmail: async ( { user, url, token }, request) => {

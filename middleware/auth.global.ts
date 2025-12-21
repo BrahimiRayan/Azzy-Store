@@ -1,7 +1,7 @@
 import { authClient } from "~/lib/auth/auth-client";
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const publicRoutes = ['/', '/signUp', '/signIn','/verify-creation'];
+  const publicRoutes = ['/', '/signUp', '/signIn','/verify-creation' , '/forgot-password' , '/reset-password'];
   const publicPrefixes = ['/boutique']; // paths that start with these are public
   
   try {

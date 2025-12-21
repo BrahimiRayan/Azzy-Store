@@ -12,6 +12,8 @@ import nodemailer from 'nodemailer'
     },
   } as nodemailer.TransportOptions)
 
+  // Function to send verification email when we creeate an account
+
 export async function sendVerificationEmail(options: {
   to: string;
   subject: string;
@@ -78,7 +80,7 @@ export async function sendVerificationEmail(options: {
   }
 }
 
-
+ // Function to send email when a customer places an order in a shop
 export async function sendShopCustumerMessage(options: {
   to: string;
   subject: string;
@@ -159,6 +161,73 @@ export async function sendShopCustumerMessage(options: {
     </div>
     </body>
     </html>
+      `
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+ // Function to send email when a user forgots password
+ export async function sendForForgotPassword(options: {
+  to: string;
+  subject: string;
+  text: string;
+  url: string;
+}) {
+  try {
+    await transporter.sendMail({
+      from: config.emailFrom,
+      to: options.to,
+      subject: options.subject,
+      text: options.text,
+      html: `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification de l'Email</title>
+    <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333;}
+    .container { max-width: 600px; margin: 0 auto; padding: 20px;border : 2px solid #00000049 ; border-radius : 8px; }
+    .header { text-align: center; padding: 20px 0; }
+    .logo { max-height: 80px; max-width : 80px }
+    .content { background: #f9f9f9; padding: 30px; border-radius: 8px; }
+    .button { 
+      display: inline-block; padding: 12px 24px; background: #2563eb; 
+      margin : 0 auto;
+      color: white !important; text-decoration: none; border-radius: 6px; 
+      font-weight: bold; margin: 20px 0; 
+    }
+    .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #777; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+    <div class="header">
+      <img src="https://azzy-store.vercel.app/emailLogo.jpg" alt="Azze-store" class="logo">
+    </div>
+    
+    <div class="content">
+      <p>Bonjour ${options.to},</p>
+      <p>Merci de vous vérifiez votre adresse mail pour renitialiser votre mot de passe.</p>
+      
+      <p><a href="${options.url}" class="button">Vérifier mon adresse e-mail</a></p>
+      
+      <p>Si le bouton ci-dessus ne fonctionne pas, copiez et collez ce lien dans votre navigateur :</p>
+      <p><small>${options.url}</small></p>
+      
+      <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.</p>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2025 Azze-Store. Tous droits réservés.</p>
+    </div>
+    </div>
+  </body>
+  </html>
       `
     });
     return true;
