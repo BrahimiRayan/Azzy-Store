@@ -106,7 +106,7 @@
             </form>
         </div>
 
-        <!-- Avertissement - Style amélioré -->
+        
         <div class="border border-amber-500/40 p-4 bg-gradient-to-r from-amber-900/30 to-transparent rounded-lg mt-6">
             <div class="flex items-center gap-2 text-lg text-amber-200 font-medium">
                 <UIcon name="i-solar-danger-bold" size="24" class="text-amber-400"/>
@@ -118,14 +118,14 @@
         </div>
     </section>
 
-    <!-- Section Sécurité - Design révisé -->
+    
     <section class="p-6 border border-emerald-500/30 rounded-xl bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm mt-6">
         <div class="flex items-center gap-3 mb-4">
             <UIcon name="i-lucide-lock-open" size="26" class="text-emerald-400"/>
             <h2 class="text-xl font-bold text-emerald-100">Sécurité</h2>
         </div>
 
-        <!-- Formulaire de mot de passe -->
+        
         <form @submit.prevent="modifyOldPassword" class="space-y-5 max-w-2xl">
             <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] items-center gap-4">
                 <label for="oldpass" class="text-emerald-100">Ancien mot de passe</label>
@@ -191,11 +191,38 @@
                 <p class="text-sm text-red-200 mb-4">
                     Cette action est <span class="font-bold text-white">irréversible</span> et supprimera définitivement toutes vos données boutique.
                 </p>
-                <button @click="DeleteEshop" 
-                        class="px-4 py-2.5 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white rounded-lg flex items-center gap-2 transition-all">
-                    <UIcon name="i-lucide-trash" />
-                    Confirmer la suppression
-                </button>
+
+                <UModal :ui="{
+                    content : 'bg-gradient-to-r from-red-800 to-red-700',
+                    title : 'text-white text-xl font-bold',
+                    close : 'border rounded-full'
+                    }"
+                    title="Confirmer la suppression de votre e-boutique"
+                >
+                    <button class="px-4 py-2.5 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white rounded-lg flex items-center gap-2 transition-all" label="Open">
+                            <UIcon name="i-lucide-trash" />
+                            Supprimer ma e-boutique
+                     </button>
+
+                    <template #body>
+                        <div>
+
+                            <p class="text-sm text-white font-bold mb-6">
+                                Êtes-vous sûr de vouloir supprimer votre e-boutique ? Cette action est <span class="font-black underline">irréversible</span> et entraînera la perte de toutes vos données boutique.
+
+                                <span class="text-gray-300 text-sm block mt-3">Note : la suppression de votre e-boutique n'affectera pas la suppression de votre compte utilisateur.</span>
+                            </p>
+
+                                <button @click="DeleteEshop" 
+                                    class="px-4 py-2.5 text-red-800 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg flex items-center gap-2 transition-all">
+                                    <UIcon name="i-lucide-trash" />
+                                    Confirmer la suppression
+                                </button>
+
+                        </div>
+                    </template>
+                </UModal>
+
             </section>
         </div>
 
@@ -209,10 +236,37 @@
                 <p class="text-sm text-red-200 mb-4">
                     Suppression <span class="font-bold text-white">définitive</span> de toutes vos données personnelles.
                 </p>
-                <button class="px-4 py-2.5 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white rounded-lg flex items-center gap-2 transition-all">
-                    <UIcon name="i-lucide-trash" />
-                    Supprimer mon compte
-                </button>
+
+                <UModal :ui="{
+                    content : 'bg-gradient-to-r from-red-800 to-red-700',
+                    title : 'text-white text-xl font-bold',
+                    close : 'border rounded-full'
+                    }"
+
+                    title="Confirmer la suppression de votre compte"
+                >
+                    <button class="px-4 py-2.5 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 text-white rounded-lg flex items-center gap-2 transition-all" label="Open">
+                            <UIcon name="i-lucide-trash" />
+                            Supprimer mon compte
+                     </button>
+
+                    <template #body>
+                        <div>
+
+                            <p class="text-sm text-white font-bold mb-6">
+                                Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est <span class="font-black underline">irréversible</span> et entraînera la perte de toutes vos données.
+                            </p>
+
+                                <button  @click="DeleteAccount"
+                                    class="px-4 py-2.5 text-red-800 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg flex items-center gap-2 transition-all">
+                                    <UIcon name="i-lucide-trash" />
+                                    Confirmer la suppression
+                                </button>
+
+                        </div>
+                    </template>
+                </UModal>
+
             </section>
         </div>
     </section>
@@ -475,6 +529,36 @@ async function DeleteEshop(){
         toast.add({
             title: 'Echéc',
             description: "La suppression de la E-boutique a échoué !",
+            color: 'error',
+            icon: 'lucide-alert-triangle',
+            ui: {
+                root: 'bg-gray-800 rounded-lg p-4',
+                progress : 'text-red-500'
+            },
+        });
+        throw error;
+    }
+}
+
+async function DeleteAccount(){
+    try {
+        await authClient.deleteUser();
+        toast.add({
+                    title: 'Succès',
+                    description: `Le compte a été supprimé avec succès !`,
+                    color: 'success',
+                    icon: 'lucide-check-circle',
+                    ui: {
+                    root: 'bg-gray-800 rounded-lg p-4',
+                    progress : 'text-green-500'
+                    },
+        });
+        await authClient.revokeSessions();
+        return await navigateTo('/logOut');
+    } catch (error) {
+        toast.add({
+            title: 'Echéc',
+            description: "La suppression du compte a échoué !",
             color: 'error',
             icon: 'lucide-alert-triangle',
             ui: {

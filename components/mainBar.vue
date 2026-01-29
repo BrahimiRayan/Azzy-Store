@@ -38,45 +38,17 @@
           </USlideover>
         </li>
 
-        <li>
-          <button @click="showBox = !showBox" class="cursor-pointer">
-            <UAvatar :alt="showBox ? 'X' : session.data?.user.name "
-              class=" hover:shadow-md hover:scale-130  transition-all duration-300 ease-in-out" 
-              :class="showBox ? 'bg-red-600 text-white shadow-red-500' : 'text-[var(--deep-dark-blue)] bg-[var(--green-grace)] shadow-green-500'"
-              :ui="{
-              fallback : 'font-extrabold'
-              }"
-            />
-          </button>
-
-          <div v-if="showBox" 
-               class="absolute top-10 right-0 bg-[var(--deep-dark-blue)] border border-white/10 rounded-lg shadow-lg p-4 z-50 min-w-48"
-               @click.stop>
-            <div class="flex flex-col gap-2">
-              <p class="text-sm text-gray-400">{{ session.data?.user.name }}</p>
-              <p class="text-xs text-gray-500">{{ session.data?.user.email }}</p>
-              <hr class="border-white/10">
-              
-              <NuxtLink to="/settings">
-                <button class="text-left text-sm hover:text-green-400 transition-colors">
-                    Paramètre
-                </button>
-              </NuxtLink>
-
-              <NuxtLink to="/logOut" >
-              <button class="text-left w-full text-sm hover:text-red-400 transition-colors">
-                 Déconnexion
-                </button>
-              </NuxtLink>
-            </div>
+        <li class="mr-4">
+          <div class="absolute top-0 right-0 z-50 ">
+            <Popover />
           </div>
-
         </li>
       </ul>
     </nav>
   </template>
   
   <script setup lang="ts">
+
 import { authClient } from '~/lib/auth/auth-client';
 
 const showBox =ref<boolean>(false);

@@ -161,7 +161,6 @@ import { CalculateMonthlyBenifice, getSellesOrExpensesForMonths, getTheHighestBy
 
 const month = new Date().getMonth()
 
-
 const item: BreadcrumbItem[] =
   [
     {
