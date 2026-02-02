@@ -4,7 +4,7 @@
     <SkeletoneDashboard />
   </div>
 
-  <div v-else>
+  <div v-else class="sm:px-8 sm:py-6 lg:px-0 lg:py-0">
     
     <div class="mt-8" >
 
@@ -21,30 +21,30 @@
       </p>
 
       <!-- chart  -->
-      <div class="p-4 border-2 border-white/20 rounded-lg flex gap-8">
+      <div class="p-4 border-2 border-white/20 rounded-lg lg:flex gap-8">
 
-        <div class="w-82 bg-white/5 rounded-lg flex items-center justify-center flex-col gap-8">
+        <div class="lg:w-82 bg-white/5 rounded-lg flex items-center justify-center lg:flex-col gap-8 mb-4 lg:mb-0">
           
           <div class="w-[90%]">
               <span class="flex items-center ">
                 <UAvatar icon="i-lucide-banknote-arrow-up" class="text-green-400 " size="lg"/>
-                <h2 class="text-sm text-white/50 font-extrabold">Chiffre d'affaires Annuel</h2>
+                <h2 class="text-xs lg:text-sm text-white/50 font-extrabold">Chiffre d'affaires Annuel</h2>
             </span>
 
             <span>
-              <p v-if="AnnuelSellings" class="text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelSellings }} <span class="text-xs">DZD</span></p> 
+              <p v-if="AnnuelSellings" class="text-xl lg:text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelSellings }} <span class="text-xs">DZD</span></p> 
               <p v-else class="text-3xl text-center mt-2 text-extraboald text-white">--</p> 
             </span>
           </div>
 
-          <div class="w-[90%]">
+          <div class="w-[90%] border-l border-r px-4 border-white/20 lg:border-l-0 lg:border-r-0 lg:p-0">
             <span class="flex items-center ">
               <UAvatar icon="i-lucide-hand-coins" class="text-red-400 " size="lg"/>
-              <h2 class="text-sm text-white/50 font-extrabold">Coût d'achat Annuel</h2>
+              <h2 class="text-xs lg:text-sm text-white/50 font-extrabold">Coût d'achat Annuel</h2>
             </span>
 
             <span>
-              <p v-if="Annuelbuyings" class="text-3xl text-center mt-2 text-extraboald text-white">{{ Annuelbuyings }} <span class="text-xs">DZD</span></p> 
+              <p v-if="Annuelbuyings" class="text-xl lg:text-3xl text-center mt-2 text-extraboald text-white">{{ Annuelbuyings }} <span class="text-xs">DZD</span></p> 
               <p v-else class="text-3xl text-center mt-2 text-extraboald text-white">--</p> 
             </span>
           </div>
@@ -53,11 +53,11 @@
           <div class="w-[90%]">
             <span class="flex items-center ">
               <UAvatar icon="i-lucide-trending-up-down" class="text-yellow-400 " size="lg"/>
-              <h2 class="text-sm text-white/50 font-extrabold">{{AnnuelBenifice >= 0 ? "Benifice Annuel" : "Pert"}}</h2>
+              <h2 class="text-xs lg:text-sm text-white/50 font-extrabold">{{AnnuelBenifice >= 0 ? "Benifice Annuel" : "Pert"}}</h2>
             </span>
 
             <span>
-              <p v-if="AnnuelBenifice" class="text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelBenifice }} <span class="text-xs">DZD</span></p> 
+              <p v-if="AnnuelBenifice" class="text-xl lg:text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelBenifice }} <span class="text-xs">DZD</span></p> 
               <p v-else class="text-3xl text-center mt-2 text-extraboald text-white">--</p> 
             </span>
           
@@ -88,7 +88,7 @@
             :shopProducts="transactions?.stats"
             />
 
-    <div v-if="transactions?.mvp">
+    <div v-if="transactions?.mvp" class="block">
 
         <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Les MVPs"
           :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
@@ -101,7 +101,7 @@
           </p>
         <!-- les mvps -->
         <div>
-          <div v-if="mostSellesByUnite && transactions.mvp[0] && mostSellesByUnite.transactions.totalSoldByunit !==0 && transactions.mvp[0].transactions.totalSoldByunit !==0" class="grid grid-cols-2 rounded-lg bg-white/5 p-2 mt-2" >
+          <div v-if="mostSellesByUnite && transactions.mvp[0] && mostSellesByUnite.transactions.totalSoldByunit !==0 && transactions.mvp[0].transactions.totalSoldByunit !==0" class="grid grid-cols-1 lg:grid-col-2 rounded-lg bg-white/5 p-2 mt-2" >
             <div class="mt-32  flex flex-col items-center justify-center">
               <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black">
                 <div>
@@ -111,7 +111,7 @@
               </div>
   
               <div class="w-68 h-54 bg-[url('/number0.png')] bg-no-repeat bg-center bg-contain "></div>
-              <div class=" text-center w-92 -mt-10">
+              <div class=" text-center lg:w-92 -mt-10">
                 <h2 class="text-2xl font-extrabold text-shadow-lg text-shadow-white/60 my-3">MVP</h2>
                 <p class="text-xs my-2 text-white/50 ">Avec <span class="text-3xl text-green-500 font-black">{{ transactions.mvp[0].transactions.averagePuv *  transactions.mvp[0].transactions.totalSoldByunit }} </span> <span> DZD</span></p>
                 <p class="text-sm text-white/50 border border-white/10 bg-white/5 p-2 rounded-lg">
@@ -128,7 +128,7 @@
                   <img v-else src="../../assets/pics/no-image.png" class="w-42 h-42 rounded-full shadow-2xl shadow-white"  :alt="mostSellesByUnite.name">
               </div>
               <div class="w-68 h-54 bg-[url('/number0.png')] bg-no-repeat bg-center bg-contain "></div>
-              <div class=" text-center w-92 -mt-10">
+              <div class=" text-center lg:w-92 -mt-10">
                 <h2 class="text-2xl font-extrabold text-shadow-lg text-shadow-white/60 my-3">MVP</h2>
                 
                 <p class="text-xs my-2 text-white/50">Avec <span class="text-3xl font-black text-yellow-500">{{ mostSellesByUnite.transactions.totalSoldByunit }} </span> <span> Unités</span></p>
@@ -160,7 +160,6 @@ import type { dashboaerdInformationFetchresponce, mvpType, ProductTransactionsAr
 import { CalculateMonthlyBenifice, getSellesOrExpensesForMonths, getTheHighestByUnit } from '~/Utils/datasHelpers';
 
 const month = new Date().getMonth()
-
 
 const item: BreadcrumbItem[] =
   [

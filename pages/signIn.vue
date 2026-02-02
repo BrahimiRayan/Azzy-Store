@@ -16,6 +16,9 @@
         </div>
         
         <div class="relative z-10">
+                    <div class="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-400/30">
+            <UIcon name="i-lucide-user-star" class="text-4xl text-emerald-300" />
+          </div>
           <h1 class="text-4xl font-bold mb-6 tracking-tight">Bon retour&nbsp;!</h1>
           <p class="text-lg mb-6 text-white/90">Veuillez vous connecter pour continuer</p>
           
@@ -35,7 +38,7 @@
 
     
     <div class="flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-slate-900/80 to-slate-800/80">
-      <div class="backdrop-blur-sm bg-white/5 rounded-2xl shadow-xl shadow-black/30 p-8 w-full max-w-md transition-all duration-300 ease-in-out hover:shadow-white/40 border border-white/10">
+      <div class="bg-white/5 rounded-2xl shadow-xl shadow-black/30 p-8 w-full max-w-md transition-all duration-300 ease-in-out hover:shadow-white/40 border border-white/10">
         <div class="text-center mb-8">
           <h1 class="text-3xl font-bold text-white mb-2">Connexion</h1>
           <p class="text-white/70">Accédez à votre espace personnel</p>

@@ -1,5 +1,5 @@
 <template>
-  <main class=" fixed inset-0 max-w-[1440px] bg-gradient-to-br from-emerald-900 to-blue-900 flex items-center justify-center p-4 -z-10 overflow-scroll">
+  <main class=" max-w-[1440px] bg-gradient-to-br from-emerald-900 to-blue-900 flex items-center justify-center p-4 -z-10 overflow-scroll">
     <section class="max-w-4xl w-full bg-white/10 backdrop-blur-md rounded-2xl overflow-scroll shadow-2xl flex flex-col md:flex-row mt-20">
       <div class="p-8 md:p-12 flex-1 flex flex-col justify-center">
         <div class="mb-8">
