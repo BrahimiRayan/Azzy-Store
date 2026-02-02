@@ -11,7 +11,7 @@
         side: 'bottom',
     }"
     >
-        <button @click="toggleshowBox" label="Open" class="cursor-pointer">
+        <button label="Open" class="cursor-pointer">
                    <UAvatar :alt="showBox ? 'X' : session.data?.user.name "
                      class=" hover:shadow-md hover:scale-130  transition-all duration-300 ease-in-out" 
                      :class="showBox ? 'bg-red-600 text-white shadow-red-500' : 'text-[var(--deep-dark-blue)] bg-[var(--green-grace)] shadow-green-500'"
@@ -19,7 +19,7 @@
                      fallback : 'font-extrabold'
                      }"
                    />
-           </button>
+        </button>
 
         <template #content>
 
@@ -60,7 +60,19 @@
 import { authClient } from '~/lib/auth/auth-client';
 let showBox = ref<boolean>(false);
 const toggleshowBox = () => {
-    showBox.value = !showBox.value;
+    // showBox.value = !showBox.value;
+    if(showBox.value){
+        showBox.value = false;
+    }else{
+        showBox.value = true;
+    }
+    console.log("Toggled showBox to ", showBox.value);
 };
 const session = authClient.useSession();
+
+defineShortcuts({
+    'o': () => {
+        toggleshowBox();
+    }
+});
 </script>

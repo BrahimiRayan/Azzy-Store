@@ -3,7 +3,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 rounded-2xl overflow-hidden my-3 shadow-2xl/30 shadow-white max-w-6xl mx-auto min-h-screen">
    
     <div class="flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-slate-900/80 to-slate-800/80 order-last lg:order-first">
-      <div class="backdrop-blur-sm bg-white/5 rounded-2xl shadow-xl shadow-black/30 p-8 w-full max-w-md transition-all duration-300 ease-in-out hover:shadow-white/40 border border-white/10">
+      <div class=" bg-white/5 rounded-2xl shadow-xl shadow-black/30 p-8 w-full max-w-md transition-all duration-300 ease-in-out hover:shadow-white/40 border border-white/10">
         <div class="text-center mb-8">
           <h1 class="text-3xl font-bold text-white mb-2">Créer un compte</h1>
           <p class="text-white/70">Commencez votre voyage avec nous</p>
