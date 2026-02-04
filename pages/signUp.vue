@@ -187,7 +187,7 @@ async function handleSignUp() {
     if (!data?.user || !data.user.id) {
     toast.add({
       title: 'Echéc',
-      description: 'Produit ajouté avec succès',
+      description: 'Les champs sont invalides ou Email est déjà utilisés, veuillez réessayer. ',
       color: 'error',
       icon: 'lucide-alert-triangle',
       ui: {

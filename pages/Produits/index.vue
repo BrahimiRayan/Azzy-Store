@@ -3,48 +3,58 @@
     <SkeletoneProducts />
   </div>
 
-  <div v-else>
-  <UBreadcrumb :items="item" class="mt-8 " />
+  <div v-else class="max-sm:px-8 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
+  <UBreadcrumb :items="item" class="mt-8" :ui="{
+    linkLabel : 'max-sm:text-xs',
+  }"/>
   <div class="flex justify-between ">
     <div class="ml-4">
       <AddProduct @refresh-data="handleRefresh"/>
       <SelledProduct :produits="produits" @refresh-data="handleRefresh"/>
       <BoughtProduct :produits="produits" @refresh-data="handleRefresh"/>
     </div>
-    <div class=" w-[20%] bg-[url('/state.png')] bg-no-repeat bg-contain bg-right">
+    <div class="max-sm:hidden w-[20%] bg-[url('/state.png')] bg-no-repeat bg-contain bg-right">
     </div>
 
   </div>
 
-  <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Informations de Stock"
+  <USeparator class="text-(--green-grace) lg:w-xl my-10 mx-auto " label="Informations de Stock"
     :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
   <!-- the table  -->
 
   <div class="flex flex-col flex-1 w-full mt-10 top-0 bg-[#1d1d1d]/30 ">
 
     <div class="flex items-center justify-between px-4 py-3.5 border border-[var(--pale-moon)] rounded-t-lg">
-      <p class="text-white/70 font-bold">Totale produits : <span class="text-red-500/70">{{ produits.length }}</span></p>
+      <p class="text-white/70 font-bold text-xs lg:text-lg">Totale produits : <span class="text-red-500/70">{{ produits.length }}</span></p>
       <div class="flex items-center gap-3">
-        <UInput v-model="globalFilter" class="max-w-sm" placeholder="Chercher un produit ... " icon="i-ci-filter" :ui="{base:'bg-[var(--deep-dark-blue)] placeholder:text-white/60'}"/>
+        <UInput v-model="globalFilter" class="max-sm:hidden sm:max-w-sm" placeholder="Chercher un produit ... " icon="i-ci-filter" :ui="{base:'bg-[var(--deep-dark-blue)] placeholder:text-white/60'}"/>
         <UButton 
-        label="Exporter en PDF"
           class="bg-red-600 text-white font-bold hover:bg-red-700 text-sm "
           size="sm"
           icon="i-dashicons-pdf"
           @click="DownloadPdf"
-        />
-        <UButton 
-        label="Exporter en CSV"
+        ><span class="hidden lg:inline">
+            Exporter en PDF
+        </span>
+      </UButton>
+
+      <UButton 
+        
           class="bg-green-600 text-white font-bold hover:bg-green-700 text-sm "
           size="sm"
           icon="i-bi-filetype-csv"
           @click="DownloadCsv"
-        />
-        <UIcon name="i-ph-mouse-scroll-fill" class=" size-6" />
+        >
+          <span class="hidden lg:inline">
+              Exporter en CSV
+          </span>
+      </UButton>
+        <UIcon name="i-ph-mouse-scroll-fill" class="max-sm:hidden size-6" />
       </div>
+      
     </div>
-
-    <UTable class="border-x border-b border-[var(--pale-moon)] rounded-b-lg backdrop-blur-md lg:max-h-[400px] overflow-auto"
+    <p class="sm:hidden text-xs text-white bg-red-500 border-l border-r p-1 font-bold">pour une meilleure expérience de navigation dans le tableau, utilisez le scroll horizontal / vertical ou changez la taille de votre fenêtre.</p>
+    <UTable class="border-x border-b border-(--pale-moon) rounded-b-lg backdrop-blur-md lg:max-h-[400px] overflow-auto"
       ref="table" v-model:global-filter="globalFilter" :data="produits" :columns="ProduitColumns" :ui="{
         tr: 'hover:bg-white/10 transition-all duration-300 ease-in-out',
         th: 'border-b border-green-500 bg-[var(--deep-dark-blue)]',
@@ -52,7 +62,7 @@
   </div>
 
 
-  <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Catalogue"
+  <USeparator class="text-(--green-grace) lg:w-xl my-10 mx-auto " label="Catalogue"
     :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
   <!-- search the product by name -->
 
@@ -62,14 +72,14 @@
       :ui="{
         base: 'rounded-l rounded-r-none bg-[var(--deep-dark-blue)] placeholder:text-white/60',
       }" />
-    <UButton label="Chercher" class="bg-green-600 text-[var(--pale-moon)] h-8 border hover:bg-green-700 text-sm "
+    <UButton label="Chercher" class="bg-green-600 text-(--pale-moon) h-8 border hover:bg-green-700 text-sm "
       size="sm" 
       icon="i-lucide-search"
       type="submit"
        :ui="{
         base: 'rounded-none',
       }" />
-      <UButton label="Reset" class="bg-green-600 text-[var(--pale-moon)] h-8 border hover:bg-green-700 text-sm "
+      <UButton label="Reset" class="bg-green-600 text-(--pale-moon) h-8 border hover:bg-green-700 text-sm "
       size="sm" 
       type="reset"
       @click="resetProducts"
@@ -81,7 +91,7 @@
 
   <!-- the cards -->
   <div ref="expandContainer"
-    class="grid grid-cols-3 gap-2 mt-10 bg-[var(--deep-dark-blue)] transition-all duration-300 ease-in-out"
+    class="grid lg:grid-cols-3 gap-2 mt-10 bg-(--deep-dark-blue) transition-all duration-300 ease-in-out sm:max-h-none max-sm:max-h-none"
     :class="isExpanded ? 'max-h-none' : 'max-h-[646px] overflow-hidden'">
     <!-- the card  -->
       <div v-if="cardProducts.length === 0"> Vous n'avez pas de produits dans le stock.</div>
