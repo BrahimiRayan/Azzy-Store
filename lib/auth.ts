@@ -6,6 +6,12 @@ import { sendVerificationEmail , sendForForgotPassword } from "~/Utils/emailSend
 
 
 export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET!,
+
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://azzy-store.vercel.app",
+  ],
     database: drizzleAdapter(db, {
         provider: "pg",
     }),
