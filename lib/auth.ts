@@ -44,7 +44,7 @@ export const auth = betterAuth({
     expiresIn : 60 * 30
   },
     advanced:{
-        generateId : false
+        // generateId : true
     },
     user : {
         additionalFields : {

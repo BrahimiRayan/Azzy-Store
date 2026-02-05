@@ -3,15 +3,16 @@
     <SkeletoneProducts />
   </div>
 
-  <div v-else class="max-sm:px-8 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
-  <UBreadcrumb :items="item" class="mt-8" :ui="{
+  <div v-else class="max-sm:px-4 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
+  <UBreadcrumb :items="item" class="sm:mt-8 mt-2" :ui="{
     linkLabel : 'max-sm:text-xs',
   }"/>
   <div class="flex justify-between ">
-    <div class="ml-4">
+    <div class="max-sm:flex max-sm:items-center max-sm:justify-between sm:ml-4 max-sm:w-full">
       <AddProduct @refresh-data="handleRefresh"/>
       <SelledProduct :produits="produits" @refresh-data="handleRefresh"/>
       <BoughtProduct :produits="produits" @refresh-data="handleRefresh"/>
+    
     </div>
     <div class="max-sm:hidden w-[20%] bg-[url('/state.png')] bg-no-repeat bg-contain bg-right">
     </div>
@@ -24,7 +25,7 @@
 
   <div class="flex flex-col flex-1 w-full mt-10 top-0 bg-[#1d1d1d]/30 ">
 
-    <div class="flex items-center justify-between px-4 py-3.5 border border-[var(--pale-moon)] rounded-t-lg">
+    <div class="flex items-center justify-between px-4 py-3.5 border border-(--pale-moon) rounded-t-lg">
       <p class="text-white/70 font-bold text-xs lg:text-lg">Totale produits : <span class="text-red-500/70">{{ produits.length }}</span></p>
       <div class="flex items-center gap-3">
         <UInput v-model="globalFilter" class="max-sm:hidden sm:max-w-sm" placeholder="Chercher un produit ... " icon="i-ci-filter" :ui="{base:'bg-[var(--deep-dark-blue)] placeholder:text-white/60'}"/>
@@ -95,11 +96,12 @@
     :class="isExpanded ? 'max-h-none' : 'max-h-[646px] overflow-hidden'">
     <!-- the card  -->
       <div v-if="cardProducts.length === 0"> Vous n'avez pas de produits dans le stock.</div>
-        <CardsProducts v-else :cardProducts="cardProducts"/>
+        
+      <CardsProducts v-else :cardProducts="cardProducts"/>
     </div>
 
-    <div v-if="cardProducts.length > 9" class="flex items-center justify-center">
-
+  <div v-if="cardProducts.length > 9" class="max-sm:hidden flex items-center justify-center">
+    
     <UButton id="expandBtn" :icon="cardProducts.length > 9 ? 'i-lucide-more-horizontal' : ''"
       class="text-white/50 hover:text-white bg-transparent hover:bg-transparent transition-colors duration-300 ease-in-out size-10"
       size="xl" @click="toggleExpand" />

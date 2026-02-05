@@ -4,11 +4,16 @@
     <SkeletoneDashboard />
   </div>
 
-  <div v-else class="max-sm:px-8 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
+  <div v-else class="max-sm:px-4 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
     
     <div class="mt-8" >
 
-      <UBreadcrumb :items="item" class="mb-8 "/>
+      <UBreadcrumb :items="item" 
+        class="sm:mt-8 mt-2" 
+        :ui="{
+          linkLabel : 'max-sm:text-xs',
+        }"
+      />
 
       <USeparator class="text-(--green-grace) lg:w-xl mt-10 mx-auto " label="Statistiques des ventes et achats"
         :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />

@@ -3,9 +3,12 @@
           <SkeletoneOrders/>
         </div>
 
-        <div v-else>
-          <UBreadcrumb :items="item" class="my-8 " /> 
-          <div class="lg:w-[90%]">
+        <div v-else class="max-sm:px-4 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
+          <UBreadcrumb :items="item" class="sm:mt-8 mt-2"
+           :ui="{
+              linkLabel : 'max-sm:text-xs',
+            }"/>
+          <div class="lg:w-[90%] mt-4">
                   <LineChart :chartData :chartTitle="title"/>
           </div>
           <div class="w-full mt-16">

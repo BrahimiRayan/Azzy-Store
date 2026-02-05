@@ -1,1 +1,0 @@
-ALTER TABLE "shops" ALTER COLUMN "idConf" DROP NOT NULL;

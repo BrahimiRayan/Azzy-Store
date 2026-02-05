@@ -6,21 +6,30 @@
      :ui="{
         description : 'text-sm text-gray-400',
         title : 'text-lg font-semibold',
-        body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-        header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+        body : 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
+        header : 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
         overlay :'bg-black/70',
         content :'rounded-xl ring-white/40 ',
         close : 'bg-red-600 hover:bg-red-700'
       }">
             
             <!-- the open button  -->
-        <div class="mt-8 ">
+        <div class="mt-8 max-sm:w-full max-sm:text-center">
             
-            <UButton 
-                icon="i-healthicons-low-income-level" 
-                label="Vente d'un Produit" 
-                class="bg-yellow-600 text-[var(--pale-moon)] text-sm hover:bg-yellow-400 transition duration-300 ease-in-out" 
-                size="xl" />
+            <UButton  
+                class="bg-yellow-600 text-(--pale-moon) text-sm hover:bg-yellow-400 transition duration-300 ease-in-out max-sm:w-[80%] max-sm:font-extrabold max-sm:py-2" 
+                >
+               <span class="max-sm:hidden flex items-center">
+                  <UIcon name="i-healthicons-low-income-level" class="mr-2 size-6"  />
+                  <p>Vente d'un Produit</p>
+                </span>
+
+                <span class="sm:hidden text-xs flex items-center">
+                  <UIcon name="i-healthicons-low-income-level" class="mr-2 size-4"  />
+                  <p>Vente</p>
+                </span>
+            </UButton>
+              
         </div>
         
         <!-- the modal content -->
@@ -30,10 +39,10 @@
           <!-- choix de produit  -->
           <UFormField label="Catégorie du Produit" class=" w-full mb-5" required>
           <USelectMenu id="cat" v-model="product" :items="Selleditem" placeholder="Selectioner un produit ..." :ui="{
-          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] ring-white/70',
+          base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) ring-white/70',
           label: 'text-sm text-gray-400',
           input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)] ',
-          item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] hover:bg-blue-900',
+          item: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) hover:bg-blue-900',
           placeholder : 'text-white/60',
           group: 'p-0',
         }" class="w-[80%]" />
@@ -41,12 +50,12 @@
         <!-- la Quantité de produuit vendu -->
         <UFormField label="Quantité vendu" class=" w-full mb-3" required>
           <UInputNumber v-model="selledQ" placeholder="Quantité vendue" :min="0" :ui="{
-            base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/60 ring-white/70',
+            base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) placeholder:text-white/60 ring-white/70',
           }" class="w-[80%]" />
         </UFormField>
 
-        <USeparator class="text-[var(--green-grace)] w-full my-5"/>
-        <UButton label="Valider" class="bg-green-600 text-[var(--pale-moon)] hover:bg-green-700 text-sm " size="sm"
+        <USeparator class="text-(--green-grace) w-full my-5"/>
+        <UButton label="Valider" class="bg-green-600 text-(--pale-moon) hover:bg-green-700 text-sm " size="sm"
           icon="i-lucide-check" type="submit" :ui="{
             base: 'rounded-lg',            
           }" />

@@ -14,7 +14,7 @@
       <div class="sm:w-1/3 border-r border-gray-100">
         <div class="p-6 h-full flex flex-col max-sm:items-center">
           <!-- Image -->
-          <div class="relative w-full h-32 mb-4 overflow-hidden rounded-lg">
+          <div class="relative w-full max-sm:max-h-60 sm:h-32 mb-4 overflow-hidden rounded-lg">
             <NuxtImg 
               :src="product.img" 
               class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
@@ -32,14 +32,14 @@
                 {{ TitleLimit(product.name, 35) }}
               </h3>
               <div 
-                class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white"
+                class="inline-block max-sm:block max-sm:mx-auto max-sm:w-max px-3 py-1 rounded-full text-xs font-bold text-white"
                 :class="Catecolor(product.category)"
               >
                 {{ product.category }}
               </div>
             </div>
             
-            <div class="flex flex-col items-center gap-2 text-gray-200">
+            <div class="flex sm:flex-col items-center gap-2 text-gray-200">
               <div class="flex items-center gap-2">
                 <UIcon name="i-mdi-cube-outline" class="text-sm" />
                 <h2 class="text-sm font-bold">{{ product.quantity }} </h2> 
@@ -114,7 +114,6 @@
         </div>
       </div>
 
-      <!-- Right Column - Totals -->
       <div class="sm:w-1/3">
         <div class="p-6 h-full flex flex-col">
           <h4 class="text-sm font-semibold text-gray-300 mb-4 uppercase tracking-wide">Valeurs totales</h4>

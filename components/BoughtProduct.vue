@@ -6,21 +6,30 @@
    :ui="{
       description : 'text-sm text-gray-400',
       title : 'text-lg font-semibold',
-      body : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-      header : 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+      body : 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
+      header : 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
       overlay :'bg-black/70',
       content :'rounded-xl ring-white/40 ',
       close : 'bg-red-600 hover:bg-red-700'
     }">
           
           <!-- the open button  -->
-      <div class="mt-8 ">
+      <div class="mt-8 max-sm:w-full max-sm:text-center">
           
           <UButton 
-              icon="i-healthicons-low-income-level" 
-              label="Achat d'un Produit" 
-              class="bg-red-600 text-[var(--pale-moon)] text-sm hover:bg-red-400 transition duration-300 ease-in-out" 
-              size="xl" />
+              class="bg-red-600 text-(--pale-moon) text-sm hover:bg-red-400 transition duration-300 ease-in-out max-sm:w-[80%] max-sm:font-extrabold max-sm:py-2" 
+             >
+
+                <span class="max-sm:hidden flex items-center">
+                  <UIcon name="i-healthicons-low-income-level" class="mr-2 size-6"  />
+                  <p>Achat d'un Produit</p>
+                </span>
+
+                <span class="sm:hidden text-xs flex items-center">
+                  <UIcon name="i-healthicons-low-income-level" class="mr-2 size-4"  />
+                  <p>Achat</p>
+                </span>  
+          </UButton>
       </div>
       
       <!-- the modal content -->
@@ -30,10 +39,10 @@
         <!-- choix de produit  -->
         <UFormField label="Selectionez un produits dans la liste" class=" w-full mb-5" required>
         <USelectMenu id="cat" v-model="Bproduct" :items="Boughtitems" placeholder="Selectioner un produit ..." :ui="{
-          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+          base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
           label: 'text-sm text-gray-400',
           input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
-          item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] hover:bg-blue-900',
+          item: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) hover:bg-blue-900',
           group: 'p-0',
         }" class="w-[80%]" />
       </UFormField>
@@ -41,21 +50,21 @@
       <!-- la Quantité de produit acheté -->
       <UFormField label="la Quantité de produit acheté" class=" w-full mb-3" required>
         <UInput v-model="BoughtQ" type="number" placeholder="la Quantité de produit acheté " min="0" :ui="{
-          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+          base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
         }" class="w-[80%]" />
       </UFormField>
 
       <!-- prix unitaire d'achat -->
       <UFormField label="Prix Unitaire d'achat" class=" w-full mb-3" required>
         <UInput v-model="pua" type="number" placeholder="Prix Unitaire d'achat" min="0" :ui="{
-          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+          base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
         }" class="w-[80%]" />
       </UFormField>
 
       <!-- prix unitaire de vente -->
       <UFormField label="prix unitaire de vente" class=" w-full mb-3" required>
         <UInput v-model="puv" type="number" placeholder="prix unitaire de vente" min="0" :ui="{
-          base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+          base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
         }" class="w-[80%]" />
       </UFormField>
 
@@ -65,8 +74,8 @@
       </div>
       
 
-      <USeparator class="text-[var(--green-grace)] w-full my-5"/>
-      <UButton label="Valider" class="bg-green-600 text-[var(--pale-moon)] hover:bg-green-700 text-sm " size="sm"
+      <USeparator class="text-(--green-grace) w-full my-5"/>
+      <UButton label="Valider" class="bg-green-600 text-(--pale-moon) hover:bg-green-700 text-sm " size="sm"
         icon="i-lucide-check" type="submit" :ui="{
           base: 'rounded-lg',            
         }" />
