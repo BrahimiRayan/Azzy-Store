@@ -1,50 +1,57 @@
+import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { uuid } from "drizzle-orm/pg-core";
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
+/* ===================== USER ===================== */
 export const user = pgTable("user", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	name: text().notNull(),
-	email: text().notNull().unique(),
-	emailVerified: boolean().$defaultFn(() => false).notNull(),
-	image: text(),
-	shopId: uuid("shop_id"),
-	createdAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
-	updatedAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date()).notNull()
+  id: text("id").primaryKey().notNull(), // ✅ text
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("emailVerified").default(false).notNull(),
+  image: text("image"),
+  shopId: uuid("shop_id"), // ✅ OK (your domain)
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
+/* ===================== SESSION ===================== */
 export const session = pgTable("session", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	expiresAt: timestamp('expires_at').notNull(),
-	token: text('token').notNull().unique(),
-	createdAt: timestamp('created_at').notNull(),
-	updatedAt: timestamp('updated_at').notNull(),
-	ipAddress: text('ip_address'),
-	userAgent: text('user_agent'),
-	userId: uuid().notNull().references(()=> user.id, { onDelete: 'cascade' })
+  id: text("id").primaryKey().notNull(), // already correct
+  expiresAt: timestamp("expires_at").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  userId: text("userId") // ✅ must match user.id
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
 });
 
+/* ===================== ACCOUNT ===================== */
 export const account = pgTable("account", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	accountId: text().notNull(),
-	providerId: text().notNull(),
-	userId: uuid().notNull().references(()=> user.id, { onDelete: 'cascade' }),
-	accessToken: text(),
-	refreshToken: text(),
-	idToken: text(),
-	accessTokenExpiresAt: timestamp(),
-	refreshTokenExpiresAt: timestamp(),
-	scope: text(),
-	password: text(),
-	createdAt: timestamp().notNull(),
-	updatedAt: timestamp().notNull()
+  id: text("id").primaryKey().notNull(), // ✅ text
+  accountId: text("accountId").notNull(),
+  providerId: text("providerId").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  idToken: text("idToken"),
+  accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
+  refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
 });
 
+/* ===================== VERIFICATION ===================== */
 export const verification = pgTable("verification", {
-	id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
-	identifier: text().notNull(),
-	value: text().notNull(),
-	expiresAt: timestamp().notNull(),
-	createdAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date()),
-	updatedAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date())
+  id: text("id").primaryKey().notNull(), 
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
 });

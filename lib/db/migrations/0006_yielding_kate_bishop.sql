@@ -1,1 +1,0 @@
-ALTER TABLE "products" ADD COLUMN "imageId" varchar(255) DEFAULT '';

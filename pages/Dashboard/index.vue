@@ -4,17 +4,22 @@
     <SkeletoneDashboard />
   </div>
 
-  <div v-else class="sm:px-8 sm:py-6 lg:px-0 lg:py-0">
+  <div v-else class="max-sm:px-4 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
     
     <div class="mt-8" >
 
-      <UBreadcrumb :items="item" class="mb-8 "/>
+      <UBreadcrumb :items="item" 
+        class="sm:mt-8 mt-2" 
+        :ui="{
+          linkLabel : 'max-sm:text-xs',
+        }"
+      />
 
-      <USeparator class="text-[var(--green-grace)] w-xl mt-10 mx-auto " label="Statistiques des ventes et achats"
+      <USeparator class="text-(--green-grace) lg:w-xl mt-10 mx-auto " label="Statistiques des ventes et achats"
         :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
 
       <p class="mb-10 mt-3 flex items-center">
-        <UIcon name="i-game-icons-chart" class="text-[var(--green-grace)] size-5 mr-2" />
+        <UIcon name="i-game-icons-chart" class="text-(--green-grace) size-5 mr-2" />
         <span class="text-gray-400 text-sm font-bold ">
           Inspecter et suivre vos dépenses, ventes et bénéfices pour cette année.
         </span>
@@ -23,41 +28,41 @@
       <!-- chart  -->
       <div class="p-4 border-2 border-white/20 rounded-lg lg:flex gap-8">
 
-        <div class="lg:w-82 bg-white/5 rounded-lg flex items-center justify-center lg:flex-col gap-8 mb-4 lg:mb-0">
+        <div class="lg:w-82 bg-white/5 rounded-lg sm:flex items-center justify-center lg:flex-col gap-8 mb-4 lg:mb-0">
           
-          <div class="w-[90%]">
+          <div class="max-sm:flex max-sm:justify-between max-sm:w-full max-sm:mb-4 max-sm:p-1 w-[90%]">
               <span class="flex items-center ">
                 <UAvatar icon="i-lucide-banknote-arrow-up" class="text-green-400 " size="lg"/>
                 <h2 class="text-xs lg:text-sm text-white/50 font-extrabold">Chiffre d'affaires Annuel</h2>
             </span>
 
             <span>
-              <p v-if="AnnuelSellings" class="text-xl lg:text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelSellings }} <span class="text-xs">DZD</span></p> 
+              <p v-if="AnnuelSellings" class="text-xl max-sm:text-sm lg:text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelSellings }} <span class="max-sm:hidden text-xs">DZD</span></p> 
               <p v-else class="text-3xl text-center mt-2 text-extraboald text-white">--</p> 
             </span>
           </div>
 
-          <div class="w-[90%] border-l border-r px-4 border-white/20 lg:border-l-0 lg:border-r-0 lg:p-0">
+          <div class="w-[90%] sm:border-l sm:border-r px-4 border-white/20 lg:border-l-0 lg:border-r-0 lg:p-0 max-sm:flex max-sm:justify-between max-sm:w-full max-sm:mb-4 max-sm:p-1">
             <span class="flex items-center ">
               <UAvatar icon="i-lucide-hand-coins" class="text-red-400 " size="lg"/>
               <h2 class="text-xs lg:text-sm text-white/50 font-extrabold">Coût d'achat Annuel</h2>
             </span>
 
             <span>
-              <p v-if="Annuelbuyings" class="text-xl lg:text-3xl text-center mt-2 text-extraboald text-white">{{ Annuelbuyings }} <span class="text-xs">DZD</span></p> 
+              <p v-if="Annuelbuyings" class="text-xl max-sm:text-sm lg:text-3xl text-center mt-2 text-extraboald text-white">{{ Annuelbuyings }} <span class="max-sm:hidden text-xs">DZD</span></p> 
               <p v-else class="text-3xl text-center mt-2 text-extraboald text-white">--</p> 
             </span>
           </div>
 
 
-          <div class="w-[90%]">
+          <div class="max-sm:flex max-sm:justify-between max-sm:w-full max-sm:mb-4 max-sm:p-1 w-[90%]">
             <span class="flex items-center ">
               <UAvatar icon="i-lucide-trending-up-down" class="text-yellow-400 " size="lg"/>
               <h2 class="text-xs lg:text-sm text-white/50 font-extrabold">{{AnnuelBenifice >= 0 ? "Benifice Annuel" : "Pert"}}</h2>
             </span>
 
             <span>
-              <p v-if="AnnuelBenifice" class="text-xl lg:text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelBenifice }} <span class="text-xs">DZD</span></p> 
+              <p v-if="AnnuelBenifice" class="text-xl max-sm:text-sm lg:text-3xl text-center mt-2 text-extraboald text-white">{{ AnnuelBenifice }} <span class="max-sm:hidden text-xs">DZD</span></p> 
               <p v-else class="text-3xl text-center mt-2 text-extraboald text-white">--</p> 
             </span>
           
@@ -70,11 +75,11 @@
 
     </div>
 
-    <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Informations de mois courant"
+    <USeparator class="text-(--green-grace) lg:w-xl my-10 mx-auto " label="Informations de mois courant"
       :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
 
     <p class="mt-2 flex items-center">
-      <UIcon name="i-game-icons-info" class="text-[var(--green-grace)] size-5 mr-2" />
+      <UIcon name="i-game-icons-info" class="text-(--green-grace) size-5 mr-2" />
       <span class="text-gray-400 text-sm font-bold">
         Vous trouverez ici les Informations générales de votre stock de produits pour ce mois.
       </span>
@@ -90,18 +95,18 @@
 
     <div v-if="transactions?.mvp" class="block">
 
-        <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Les MVPs"
+        <USeparator class="text-(--green-grace) lg:w-xl my-10 mx-auto " label="Les MVPs"
           :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
 
           <p class="mt-2 flex items-center ">
-            <UIcon name="i-game-icons-podium-winner" class="text-[var(--green-grace)] size-5 mr-2" />
+            <UIcon name="i-game-icons-podium-winner" class="text-(--green-grace) size-5 mr-2" />
             <span class="text-gray-400 text-sm font-bold">
               Les produits ayant généré le plus de chiffre d'affaires et vendu le plus d'unités cette année.
             </span>
           </p>
         <!-- les mvps -->
         <div>
-          <div v-if="mostSellesByUnite && transactions.mvp[0] && mostSellesByUnite.transactions.totalSoldByunit !==0 && transactions.mvp[0].transactions.totalSoldByunit !==0" class="grid grid-cols-1 lg:grid-col-2 rounded-lg bg-white/5 p-2 mt-2" >
+          <div v-if="mostSellesByUnite && transactions.mvp[0] && mostSellesByUnite.transactions.totalSoldByunit !==0 && transactions.mvp[0].transactions.totalSoldByunit !==0" class="grid grid-cols-1 lg:grid-cols-2 rounded-lg bg-white/5 p-2 mt-4 lg:mt-12" >
             <div class="mt-32  flex flex-col items-center justify-center">
               <div class="w-42 h-42 bg-blue-400/30 rounded-full -mb-30 animate-bounce duration-4000 shadow-xl shadow-black">
                 <div>

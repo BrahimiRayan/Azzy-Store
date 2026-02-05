@@ -3,18 +3,28 @@
     description="remplisser tous les champs essentielle (*) pour ajouter un produit." :overlay="true" :ui="{
       description: 'text-sm text-gray-400',
       title: 'text-lg font-semibold',
-      body: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
-      header: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+      body: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
+      header: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
       overlay: 'bg-black/70',
       content :'rounded-xl ring-white/40 ',
       close : 'bg-red-600 hover:bg-red-700'
     }">
 
     <!-- the open button  -->
-    <div class="mt-8 ">
-      <UButton icon="i-lucide-plus" label="Ajouter un Produit"
-        class="bg-green-600 text-[var(--pale-moon)] text-sm hover:bg-green-400 transition duration-300 ease-in-out"
-        size="xl" />
+    <div class="mt-8 max-sm:w-full max-sm:text-center">
+      <UButton 
+        class="bg-green-600 text-(--pale-moon) text-sm hover:bg-green-400 transition duration-300 ease-in-out max-sm:w-[80%] max-sm:font-extrabold max-sm:py-2"
+         >
+        <span class="max-sm:hidden flex items-center">
+          <UIcon name="i-lucide-plus" class="mr-2 size-6"  />
+           <p>Ajouter un Produit</p>
+        </span>
+
+        <span class="sm:hidden text-xs flex items-center">
+          <UIcon name="i-lucide-plus" class="mr-2 size-4"  />
+          <p>Ajouter</p>
+        </span>
+      </UButton>
     </div>
 
     <template #body>
@@ -28,7 +38,7 @@
             type="text"
             v-model="NewProduct.name" 
             :ui="{
-              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+              base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) placeholder:text-white/70',
             }"
             />
         </UFormField>
@@ -40,7 +50,7 @@
             class="w-full"
             v-model="NewProduct.description" 
             :ui="{
-              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+              base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) placeholder:text-white/70',
             }"
             />
         </UFormField>
@@ -65,10 +75,10 @@
         <UFormField label="Catégorie du Produit" class=" w-full" required>
           <div class="flex items-center justify-between">
             <USelectMenu id="cat" v-model="NewProduct.category" :items="items" :ui="{
-              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+              base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
               label: 'text-sm text-gray-400 ',
               input: 'text-sm text-gray-400 bg-[var(--deep-dark-blue)]',
-              item: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)]',
+              item: 'bg-[var(--deep-dark-blue)] text-(--pale-moon)',
               group: 'bg-[var(--deep-dark-blue)] ',
             }" class="w-48" />
   
@@ -86,7 +96,7 @@
             v-model="NewProduct.pua" 
             icon="i-icons8-buy" 
             :ui="{
-              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+              base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) placeholder:text-white/70',
             }"/>
         </UFormField>
 
@@ -100,7 +110,7 @@
             v-model="NewProduct.puv" 
             icon="i-material-symbols-sell-outline"
             :ui="{
-              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+              base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) placeholder:text-white/70',
             }"
             />
         </UFormField>
@@ -115,7 +125,7 @@
             v-model="NewProduct.quantity" 
             icon="i-material-symbols-sell-outline" 
             :ui="{
-              base: 'bg-[var(--deep-dark-blue)] text-[var(--pale-moon)] placeholder:text-white/70',
+              base: 'bg-[var(--deep-dark-blue)] text-(--pale-moon) placeholder:text-white/70',
             }"
             />
         </UFormField>

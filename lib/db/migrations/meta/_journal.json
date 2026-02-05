@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1749427057484,
-      "tag": "0000_happy_klaw",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1749664643830,
-      "tag": "0001_acoustic_moondragon",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1750361958225,
-      "tag": "0002_bouncy_franklin_storm",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1750370131792,
-      "tag": "0003_steep_cassandra_nova",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1750686520911,
-      "tag": "0004_eminent_colleen_wing",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1752317498710,
-      "tag": "0005_tiny_quicksilver",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1754768110353,
-      "tag": "0006_yielding_kate_bishop",
+      "when": 1770244262625,
+      "tag": "0000_sleepy_rachel_grey",
       "breakpoints": true
     }
   ]

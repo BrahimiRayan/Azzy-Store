@@ -12,7 +12,7 @@
       <div class=" flex justify-between ">
         <form @submit.prevent="addCommand" class="w-[60%] border-r-2 border-white/10 px-3">
 
-          <div class="flex justify-end items-center mb-4">
+          <div class="flex lg:justify-end items-center mb-4">
             <p class="text-sm">Produits ajouter <span class="font-extrabold text-green-600">x{{ formData.length}}</span></p>
           </div>
 

@@ -28,7 +28,7 @@ export const shopsTable = pgTable("shops", {
   id: uuid().default(sql`uuid_generate_v4()`).primaryKey().notNull(),
   isOnline : boolean().default(false).notNull(),
   subcreptionType : SubTypeEnum().default("Free").notNull(),
-  idOwner: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
+  idOwner: text().notNull().references(() => user.id, { onDelete: "cascade" }),
 });
 
 
@@ -38,7 +38,7 @@ export const employeesTable = pgTable("employees", {
   email: varchar({ length: 255 }).notNull().unique(),
   password: varchar({ length: 255 }),
   idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
-  idOwner: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
+  idOwner: text().notNull().references(() => user.id, { onDelete: "cascade" }),
 });
 
 export const notesTable = pgTable("notes", {
@@ -49,7 +49,7 @@ export const notesTable = pgTable("notes", {
   type: NoteTypeEnum().default("Important").notNull(),
   idShop: uuid().notNull().references(() => shopsTable.id, { onDelete: "cascade" }),
   idEmployee: uuid().references(() => employeesTable.id, { onDelete: "cascade" }),
-  idOwner: uuid().references(() => user.id, { onDelete: "cascade" }),
+  idOwner: text().references(() => user.id, { onDelete: "cascade" }),
 });
 
 export const productsTable = pgTable("products", {

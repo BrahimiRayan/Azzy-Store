@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[var(--deep-dark-blue)] via-[var(--deep-dark-blue)] to-slate-900 text-white/90 overflow-hidden">
+  <div class="min-h-screen bg-linear-to-br from-(--deep-dark-blue) via-(--deep-dark-blue) to-slate-900 text-white/90 overflow-hidden">
     
     <!-- My hero section -->
     <section class="min-h-screen flex items-center justify-center pt-2 animate-section">
