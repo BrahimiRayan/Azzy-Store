@@ -41,7 +41,7 @@
         </div>
         
         <div class="pt-8 border-t border-white/10 text-center text-white/40 text-sm">
-          &copy; 2024 AzzyStore. Tous droits réservés. | 
+          &copy; 2026 AzzyStore. Tous droits réservés. | 
           <a href="#" class="hover:text-green-500 transition-colors duration-300">Mentions légales</a> | 
           <a href="#" class="hover:text-green-500 transition-colors duration-300">Confidentialité</a>
         </div>

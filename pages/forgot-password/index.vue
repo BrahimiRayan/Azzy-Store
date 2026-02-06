@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-900 p-4">
+    <div class="lg:min-h-screen flex items-center justify-center bg-gray-900 p-4">
         <!-- Main Container -->
         <div class="w-full max-w-md">
             <!-- Card -->
@@ -45,7 +45,7 @@
                     <!-- Links -->
                     <div class="pt-4 border-t border-gray-700/50">
                         <div class="flex items-center justify-between text-sm">
-                            <NuxtLink to="/login"
+                            <NuxtLink to="/signIn"
                                 class="text-green-500 hover:text-green-400 hover:underline transition-colors inline-flex items-center gap-1">
                                 <UIcon name="i-lucide-arrow-left" class="size-4" />
                                 Retour à la connexion

@@ -1,8 +1,8 @@
 <template>
-  <div class="fixed inset-0 bg-gradient-to-br from-emerald-900 to-blue-900 -z-10"></div>
+  <div class="fixed inset-0 bg-linear-to-br from-emerald-900 to-blue-900 -z-10"></div>
   <div class="grid grid-cols-1 lg:grid-cols-2 rounded-2xl overflow-hidden my-3 shadow-2xl/30 shadow-white max-w-6xl mx-auto">
     
-    <div class="border-b-2 lg:border-r-2 lg:border-b-0 border-white/20 bg-gradient-to-bl from-emerald-700/90 to-emerald-900/90 flex items-center justify-center p-6 lg:p-12">
+    <div class="max-lg:hidden border-b-2 lg:border-r-2 lg:border-b-0 border-white/20 bg-gradient-to-bl from-emerald-700/90 to-emerald-900/90 flex items-center justify-center p-6 lg:p-12">
       <div class="text-white text-center p-8 backdrop-blur-sm bg-black/20 rounded-2xl shadow-lg w-full max-w-md relative overflow-hidden">
         <!-- Decorative elements -->
         <div class="absolute -top-20 -right-20 w-40 h-40 bg-emerald-400/10 rounded-full filter blur-xl"></div>
@@ -118,6 +118,15 @@
               Connexion...
             </span>
           </button>
+
+          <NuxtLink 
+            to="/signUp" 
+            class="lg:hidden flex items-center"
+          >
+            <span class="underline text-green-400 text-center text-sm">
+              Nouveau ici ? Créer un compte
+            </span>
+          </NuxtLink>
         </form>
 
         <div class="mt-8 pt-6 border-t border-white/10">

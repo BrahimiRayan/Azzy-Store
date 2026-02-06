@@ -5,12 +5,12 @@
             <UButton icon="i-lucide-x" class="size-5 ml-auto w-8 h-8 text-center bg-red-800 hover:bg-red-600" @click="error = null" />
         </div>
         
-        <div class=" flex items-center gap-3 rounded-xl p-2 shadow bg-white/5">
+        <div class="flex flex-col lg:items-center gap-3 rounded-xl p-2 shadow bg-white/5">
             
-            <div class="w-[400px] max-h-[400px] overflow-hidden">
-                <NuxtImg :src="produit.image" format="webp" alt="" class="w-[90%] rounded-xl" placeholder="/no-img.png"/>
+            <div class="lg:w-[400px] lg:max-h-[400px] overflow-hidden">
+                <NuxtImg :src="produit.image" format="webp" alt="" class="w-[90%] max-sm:mx-auto sm:mx-auto rounded-xl" placeholder="/no-img.png"/>
             </div>
-            <div class="w-[45%]">
+            <div class="lg:w-[45%]">
 
             <form @submit.prevent="ModifyProduct">
 
@@ -57,7 +57,7 @@
                     }" class="w-full" />
                 </UFormField>
 
-                <UButton :label="pending ? 'chargement...' :'Modifier' " :disabled="pending" class=" mx-auto bg-green-600 text-[var(--pale-moon)] hover:bg-green-700 text-sm w-[50%] flex items-center justify-center"
+                <UButton :label="pending ? 'chargement...' :'Modifier' " :disabled="pending" class=" mx-auto bg-green-600 text-(--pale-moon) hover:bg-green-700 text-sm w-[50%] flex items-center justify-center"
                     icon="i-lucide-check" type="submit" :ui="{
                         base: 'rounded-lg',
                         label : 'font-extrabold text-center',

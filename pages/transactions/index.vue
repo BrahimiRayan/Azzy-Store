@@ -189,12 +189,14 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-300 mb-2">Aucune transaction</h3>
                     <p class="text-gray-300 mb-6">Commencez à enregistrer vos premières transactions</p>
-                    <UButton
-                      icon="i-mdi-plus"
-                      class="bg-gradient-to-r from-emerald-600 to-green-600"
+                    
+                    <ULink to="/products"
+                      
+                      class="bg-linear-to-r from-emerald-600 to-green-600 p-2 rounded-xl"
                     >
+                      <UIcon name="i-mdi-plus" class="text-white text-sm" />
                       Ajouter une transaction
-                    </UButton>
+                    </ULink>
                   </div>
                 </td>
               </tr>
