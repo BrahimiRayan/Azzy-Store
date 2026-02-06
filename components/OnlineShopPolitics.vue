@@ -1,15 +1,15 @@
 <template>
-    <div class="flex gap-3 items-center mb-3">
+    <div class="flex gap-3 items-center mb-3 mt-5">
         <UIcon name="lucide-shopping-basket" class="bg-green-500 " size="24" />
-        <h1 class="text-xl text-white/90 font-bold ">Lancez votre boutique en ligne !</h1>
+        <h1 class="text-lg sm:text-xl text-white/90 font-bold ">Lancez votre boutique en ligne !</h1>
     </div>
-    <UStepper :items="items" class="w-full " orientation="vertical" :ui="{
-        separator : 'bg-gray-500 h-full transition-all duration-500 ease-in-out',
+    <UStepper :items="items" class="flex flex-col w-full " orientation="horizontal" :ui="{
+        separator : ' bg-gray-500 transition-all duration-500 ease-in-out',
         trigger : 'ring-2 ring-white/30 bg-red-500 focus:bg-green-500 cursor-pointer transition-all duration-500 ease-in-out',
-        header : ' h-120 p-3 border-r-2 border-gray-600',
-        item : 'h-full mt-8',
-        title : 'text-md font-extrabold',
-        description : 'text-white/70 text-xs',
+        header : ' p-3 border-gray-600',
+        item : 'h-full mt-8 ',
+        title : 'text-xs sm:text-md sm:font-extrabold mt-2',
+        description : 'max-sm:hidden mx-auto text-white/70 text-xs max-w-30 text-center mt-1',
         wrapper : '-mt-0.5',
         root : 'border rounded-lg border-gray-500 mt-8',
         
@@ -21,7 +21,7 @@
   <div class="p-6 space-y-4">
 
     <h2 class="text-2xl font-bold text-green-400">Conditions d'utilisation</h2>
-    <div class=" max-w-none ml-3">
+    <div class="max-w-none ml-3">
       <p>Pour activer votre boutique, veuillez accepter nos conditions :</p>
       <ul class="space-y-2 ml-5 my-3 text-sm list-disc">
         <li><strong>Respecté Les règles :</strong> Votre boutique respectera nos guidelines</li>
@@ -62,13 +62,13 @@
             </ul>
             <p>Le plus dur est fait, place maintenant à la personnalisation !</p>
         </div>
-        <UButton label="Créer ma e-boutique" @click="OpenMyShop" class="bg-green-600 mx-auto block h-12 mt-15 disabled:bg-gray-600" :disabled="!isAgree"/>
+        <UButton label="Créer ma e-boutique" @click="OpenMyShop" class="bg-green-600 mx-auto block h-12 mt-15 disabled:bg-gray-600 my-3" :disabled="!isAgree"/>
 
         <div v-if="pending" class="w-full mt-8">
           <p class="text-white/70 text-2xl font-bold text-center">Chargement...</p>
         </div>
         
-        <div v-if="!isAgree" class="flex p-4 bg-red-500 rounded-lg w-max items-center gap-3 mt-4 mx-auto">
+        <div v-if="!isAgree" class="flex p-4 bg-red-500 rounded-lg w-max items-center gap-3 my-4 mx-auto">
             <UIcon name="lucide-triangle-alert" size="24" />
             <p>Vous devez accepter les droits d'utilisation !</p>
         </div>

@@ -2,18 +2,20 @@
     <div v-if="pending || isTransactionsPending">
         <SkeletoneProduct />
     </div>
-    <!-- //TODO: MAKE A COMPONENT FOR THIS LATER -->
+    
     <div v-else-if="error || !product" class="flex items-center justify-center h-screen">
         <h1 class="text-2xl text-red-500 font-extrabold">Produit non trouvé</h1>
     </div>
 
-    <div v-else>
-        <UBreadcrumb :items="item" class="my-8 " />
+    <div v-else class="max-sm:px-4 sm:px-8 max-sm:py-6 sm:py-6 lg:px-0 lg:py-0">
+        <UBreadcrumb :items="item" class="sm:mt-8 mt-2" :ui="{
+            linkLabel : 'max-sm:text-xs',
+        }"/>
         <USelectMenu 
             icon="i-lucide-calendar-1"
             v-model="Monthvalue" 
             :items="months"
-            class="w-48" 
+            class="w-48 mt-4 lg:mt-0" 
             placeholder="Choisir un moin..."
             :ui="{
                 
@@ -23,21 +25,21 @@
                 base : 'bg-[var(--deep-dark-blue)] ring-white/40 ring-2',
             }"
             />
-        <div class="flex items-center justify-between my-9 gap-5">
+        <div class="flex max-sm:flex-col sm:flex-col items-center justify-between my-9 gap-y-3 ">
 
-            <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
-                <h1 class="text-xl text-green-500 font-extrabold">Nombre vendus ce mois</h1>
+            <div class="flex lg:flex-col sm:justify-between max-sm:justify-between items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1 sm:w-full max-sm:w-full">
+                <h1 class="text-sm lg:text-xl text-green-500 font-extrabold">Nombre vendus ce mois</h1>
                 <div class="flex items-baseline gap-1">
-                    <span v-if="NumberOfmonthSelles" class="text-3xl font-extrabold">{{NumberOfmonthSelles}}</span>
+                    <span v-if="NumberOfmonthSelles" class="text-lg lg:text-3xl font-extrabold">{{NumberOfmonthSelles}}</span>
                     <span v-else class="text-3xl font-extrabold">--</span>
                     <p class="text-xs text-gray-400 ">unite</p>
                 </div>
-                <UIcon name="i-ic-outline-sell" class="text-[var(--green-grace)] size-6 mr-2" />
+                <UIcon name="i-ic-outline-sell" class="text-(--green-grace) size-4 lg:size-6 mr-2" />
             </div>
 
-            <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
+            <div class="flex lg:flex-col sm:justify-between max-sm:justify-between items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1 sm:w-full max-sm:w-full">
                 
-                    <h1 class="text-xl font-extrabold" :class="MonthBenifice < 0 ? 'text-red-500' : MonthBenifice > 0 ? 'text-green-500' : 'text-gray-400' ">Situation financière : 
+                    <h1 class="text-sm lg:text-xl font-extrabold" :class="MonthBenifice < 0 ? 'text-red-500' : MonthBenifice > 0 ? 'text-green-500' : 'text-gray-400' ">Situation financière : 
                         {{ 
                             MonthBenifice < 0 ? 'Perte' : MonthBenifice > 0 ? 'Bénéfice' : 'Équilibre' 
                         }}
@@ -50,18 +52,18 @@
                 </div>
                 <UIcon 
                 :name="MonthBenifice < 0 ? 'i-hugeicons-trade-down' : MonthBenifice > 0 ? 'i-hugeicons-trade-up' : 'i-tdesign-money' "
-                class="size-6 mr-2" 
+                class="lg:size-6 size-4 mr-2" 
                 :class="MonthBenifice < 0 ? 'text-red-500' : MonthBenifice > 0 ? 'text-green-500' : 'text-gray-400' "
                 />
             </div>
 
-            <div class="flex flex-col items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1">
-                <h1 class="text-xl text-green-500 font-extrabold">Chiffre d'affaires brut</h1>
+            <div class="flex lg:flex-col sm:justify-between max-sm:justify-between items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1 sm:w-full max-sm:w-full">
+                <h1 class="text-sm lg:text-xl text-green-500 font-extrabold">Chiffre d'affaires brut</h1>
                 <div class="flex items-baseline gap-1">
-                    <p class="text-3xl font-extrabold">{{BruteSum}}</p>
+                    <p class="text-lg lg:text-3xl font-extrabold">{{BruteSum}}</p>
                     <p class="text-xs text-gray-400 ">DZD</p>
                 </div>
-                <UIcon name="i-bx-stats" class="text-[var(--green-grace)] size-6 mr-2" />
+                <UIcon name="i-bx-stats" class="text-(--green-grace) size-4 lg:size-6 mr-2" />
             </div>
 
         </div>
@@ -71,7 +73,7 @@
 
         </div>
 
-        <USeparator class="text-[var(--green-grace)] w-xl my-10 mx-auto " label="Informations de produit"
+        <USeparator class="text-(--green-grace) lg:w-xl my-10 mx-auto " label="Informations de produit"
             :ui="{ label: 'font-extrabold p-2 rounded-xl border border-transparent hover:text-[--deep-green] hover:border-[var(--deep-green)] cursor-pointer transition-all duration-300 ease-in-out' }" />
 
         <ModifyProduct :produit="product" @refresh-product="refresh" />

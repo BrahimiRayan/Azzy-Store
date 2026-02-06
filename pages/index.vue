@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
   <div class="min-h-screen bg-linear-to-br from-(--deep-dark-blue) via-(--deep-dark-blue) to-slate-900 text-white/90 overflow-hidden">
     
     <!-- My hero section -->
-    <section class="min-h-screen flex items-center justify-center pt-2 animate-section">
+    <section class="lg:min-h-screen flex items-center justify-center pt-2 animate-section">
       <div class="max-w-7xl mx-auto px-6 py-6 lg:py-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div class="space-y-8 stagger-parent">

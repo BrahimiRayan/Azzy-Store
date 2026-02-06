@@ -29,7 +29,7 @@ const item: BreadcrumbItem[] =
         {
                 label: 'Dashboard',
                 icon: 'i-material-symbols-dashboard-outline',
-                to: '/'
+                to: '/dashboard'
         },
         {
                 label: 'Commandes',

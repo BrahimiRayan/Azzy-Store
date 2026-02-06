@@ -5,7 +5,7 @@
             <p class="ml-1 text-sm text-white/80">Après création, vous pourrez modifier tous ces éléments à tout moment depuis votre tableau de bord </p>
         </div>
 
-        <div class="grid grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <div class="border-2 rounded-lg border-white/10 p-6">
 

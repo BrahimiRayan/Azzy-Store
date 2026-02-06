@@ -9,8 +9,8 @@
 
     <template #addCommand="{ item }">
       
-      <div class=" flex justify-between ">
-        <form @submit.prevent="addCommand" class="w-[60%] border-r-2 border-white/10 px-3">
+      <div class=" lg:flex justify-between ">
+        <form @submit.prevent="addCommand" class="lg:w-[60%] border-r-2 border-white/10 px-3">
 
           <div class="flex lg:justify-end items-center mb-4">
             <p class="text-sm">Produits ajouter <span class="font-extrabold text-green-600">x{{ formData.length}}</span></p>
@@ -22,13 +22,13 @@
               <UInput type="text" placeholder="le fournisseur" v-model="fournisseur" class="w-60 mb-5" />
           </UFormField>
 
-          <div v-for="(item, index) in formData" :key="index" class="flex gap-5 my-4">
+          <div v-for="(item, index) in formData" :key="index" class="flex max-sm:flex-col gap-5 my-4">
             <UFormField label="Produit" required :ui="{
               label: 'text-white/60',
             }">
               <USelectMenu v-model="item.product" :items="Products" placeholder="choisissez ..." :content="{
                 align: 'start',
-                side: 'left',
+                side: 'bottom',
                 sideOffset: 8
               }" :ui="{
                 input: 'bg-[var(--deep-dark-blue)]',
@@ -57,15 +57,15 @@
               @click="formData = []" />
           </div>
 
-          <div v-else class="text-center h-60 text-white/60 flex flex-col items-center justify-between">
+          <div v-else class="text-center lg:h-60 text-white/60 flex flex-col items-center justify-between">
             <span></span>
-            <p class="text-2xl">Aucune commande ajoutée..</p>
+            <p class="text-2xl mb-8 lg:mb-0">Aucune commande ajoutée..</p>
 
-            <div class="bg-gray-700 text-white self-end p-4 rounded-md flex justify-center items-center gap-3">
-              <div class="">
+            <div class="bg-gray-700 text-white self-end p-4 rounded-md flex flex-col justify-center items-center gap-3">
+              <div >
                 <UIcon name="lucide-alert-triangle" class="text-red-400 animate-pulse " size="40"/>
               </div>
-              <div class="border-l-2 border-white/80">
+              <div >
                 <p class="font-semibold text-xl my-2">Remarque importante</p>
                 <p class="text-sm text-left px-2 text-white/90">Seuls les produits inscrits dans votre base de données peuvent être commandés. Si vous souhaitez demander à votre fournisseur un produit non répertorié, vous devez d'abord l'ajouter à votre catalogue pour qu'il apparaisse dans les options de sélection.</p>
               </div>
@@ -73,7 +73,8 @@
 
           </div>
         </form>
-        <div class="w-[38%]">
+
+        <div class="lg:w-[38%]">
           <div class="flex flex-col gap-3">
             <div v-for="item in formData" :key="item.product?.id"
               class="bg-white/10 border-2 border-white/10 rounded-lg p-4">
@@ -89,7 +90,7 @@
                   <span v-else class="font-bold text-red-500 ml-1"> vous devez choisir une quantité superieur a 0</span>
               </p>
             </div>
-            <div v-if="formData.length === 0" class="text-center text-sm text-white/60">
+            <div v-if="formData.length === 0" class="hidden lg:block text-center text-sm text-white/60">
               Aucune commande ajoutée
             </div>
           </div>
@@ -107,14 +108,16 @@
       
       <div v-else>
         <div v-if="transformedData.length > 0" class="flex flex-col gap-5">
-          <div class="flex justify-between items-center mb-6">
+          <div class="flex max-sm:flex-col sm:justify-between sm:items-center mb-6 gap-4">
             <p class="text-sm">Total des commandes: 
               <span class="font-bold text-green-500 ml-1">{{ transformedData.length }}</span>
             </p>
     
             <URadioGroup orientation="horizontal" v-model="orderChoise" :items="order" :ui="{
-              indicator : 'bg-green-600'
-            }"/>
+              indicator : 'bg-green-600',
+            }"
+            
+            />
           </div>
   
           <div v-for="(item, index) in transformedData" :key="index"
@@ -129,7 +132,9 @@
                 </p>
               </div>
   
-              <UButton label="Imprimer" icon="lucide-printer" @click="exportCommand(index)" class="bg-red-500 hover:bg-red-600 font-bold" />
+              <UButton icon="lucide-printer" @click="exportCommand(index)" class="bg-red-500 hover:bg-red-600 font-bold">
+                <span class="max-sm:hidden">Imprimer</span>
+              </UButton>
             </div>
   
   

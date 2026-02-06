@@ -1,6 +1,6 @@
 <template>
   <div class="fixed inset-0 bg-gradient-to-br from-emerald-900 to-blue-900 -z-10"></div>
-  <div class="grid grid-cols-1 lg:grid-cols-2 rounded-2xl overflow-hidden my-3 shadow-2xl/30 shadow-white max-w-6xl mx-auto min-h-screen">
+  <div class="grid grid-cols-1 lg:grid-cols-2 rounded-2xl overflow-hidden my-3 shadow-2xl/30 shadow-white max-w-6xl mx-auto lg:min-h-screen">
    
     <div class="flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-slate-900/80 to-slate-800/80 order-last lg:order-first">
       <div class=" bg-white/5 rounded-2xl shadow-xl shadow-black/30 p-8 w-full max-w-md transition-all duration-300 ease-in-out hover:shadow-white/40 border border-white/10">
@@ -85,6 +85,18 @@
               </span>
             </button>
           </div>
+
+                  <div class="space-y-4">
+          
+          <NuxtLink 
+            to="/signIn" 
+            class="lg:hidden flex items-center"
+          >
+            <span class="underline text-green-400 text-center text-sm">
+              Déjà inscrit ? Se connecter
+            </span>
+          </NuxtLink>
+        </div>
         </form>
 
         <div class="mt-6 pt-6 border-t border-white/10">
@@ -96,9 +108,8 @@
       </div>
     </div>
 
-    <!-- Right Column - Welcome Section -->
-    <div class="border-b-2 lg:border-r-0 lg:border-b-0 border-white/20 bg-gradient-to-bl from-emerald-700/90 to-emerald-900/90 flex items-center justify-center p-6 lg:p-12 relative overflow-hidden">
-      <!-- Decorative elements -->
+    
+    <div class="max-lg:hidden border-b-2 lg:border-r-0 lg:border-b-0 border-white/20 bg-linear-to-bl from-emerald-700/90 to-emerald-900/90 flex items-center justify-center p-6 lg:p-12 relative overflow-hidden">
       <div class="absolute -top-20 -right-20 w-40 h-40 bg-emerald-400/10 rounded-full filter blur-xl"></div>
       <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-400/10 rounded-full filter blur-xl"></div>
       
