@@ -30,12 +30,8 @@
 <script setup lang="ts">
 const faqs = [
   {
-    question: 'Puis-je importer mes produits existants ?',
-    answer: 'Absolument ! Azzy-store supporte l\'import CSV pour migrer facilement vos produits, stocks et historiques.'
-  },
-  {
-    question: 'Mes données sont-elles sécurisées ?',
-    answer: 'Oui, nous utilisons un chiffrement de niveau bancaire et sauvegardons vos données quotidiennement sur des serveurs sécurisés en Europe.'
+    question: 'L\'utilisation d\'Azzy-store est-elle simple et intuitive ?',
+    answer: 'Absolument ! Azzy-store est conçue pour être conviviale et accessible aux débutants.'
   },
   {
     question: 'Puis-je utiliser Azzy-store sur mobile ?',

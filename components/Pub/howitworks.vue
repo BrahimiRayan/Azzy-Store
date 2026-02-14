@@ -14,7 +14,7 @@
             
             <div class="space-y-6">
               <div v-for="step in [1,2,3,4]" :key="step" class="flex gap-6 stagger-child group">
-                <div class="flex-shrink-0 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center font-bold text-lg group-hover:scale-110 transition-transform duration-300">
+                <div class="shrink-0 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center font-bold text-lg group-hover:scale-110 transition-transform duration-300">
                   {{ step }}
                 </div>
                 <div>
@@ -22,15 +22,15 @@
                     {{ [
                       'Inscrivez-vous en 30 secondes',
                       'Importez vos produits',
-                      'Configurez votre boutique',
+                      'Créez et configurez votre e-boutique',
                       'Commencez à vendre !'
                     ][step-1] }}
                   </h3>
                   <p class="text-white/70">
                     {{ [
                       'Créez votre compte gratuit, aucune carte de crédit requise',
-                      'Ajoutez manuellement ou importez en masse via CSV',
-                      'Personnalisez les couleurs et l\'apparence de votre boutique',
+                      'Ajout simple et rapide',
+                      'Personnalisez les couleurs et l\'apparence de votre boutique...',
                       'Partagez votre lien et recevez vos premières commandes'
                     ][step-1] }}
                   </p>
@@ -40,7 +40,7 @@
           </div>
 
           <div class="relative stagger-child">
-            <div class="relative z-10 bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 backdrop-blur-xl border border-white/10 shadow-2xl">
+            <div class="relative z-10 bg-linear-to-br from-white/10 to-white/5 rounded-3xl p-8 backdrop-blur-xl border border-white/10 shadow-2xl">
               <div class="bg-slate-800 rounded-2xl p-6 h-80 flex items-center justify-center">
                 <div class="text-center space-y-4">
                   <div class="text-6xl">🚀</div>

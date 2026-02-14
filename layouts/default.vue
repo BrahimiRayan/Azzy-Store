@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <nav class="flex items-start flex-col justify-between mt-10 h-[380px]">
+                <nav class="flex items-start flex-col justify-between mt-10 h-110">
                     <div class="flex items-start flex-col justify-around w-full">
                         <NuxtLink class=" mb-2 flex items-center w-full py-3 pl-3 rounded-xl hover:bg-[var(--green-grace)]/80 transition-all duration-350 ease-in-out" :class=" Currentroute.path === route.path ? 'bg-green-700' : ''" v-for="(route, index) in Routes" :key="index" :to="route.path">
                             <UIcon class="mr-5 size-5" :name="route.icon" />
