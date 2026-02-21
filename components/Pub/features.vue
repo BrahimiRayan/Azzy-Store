@@ -1,5 +1,5 @@
 <template>
-      <div class="max-w-7xl mx-auto px-6">
+      <div class="sm:max-w-7xl mx-auto px-6 ">
         <div class="text-center mb-16 stagger-parent">
           <div class="stagger-child">
             <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -15,79 +15,66 @@
         </div>
 
         <!-- Interactive Features Showcase -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
+        <div class="mb-16 w-full">
           <div class="space-y-6">
             <div 
               v-for="(feature, index) in features" 
               :key="index"
               @click="setActiveFeature(index)"
               :class="[
-                'p-6 rounded-2xl cursor-pointer transition-all duration-500 border-2',
+                'group max-sm:p-2 p-6 rounded-2xl cursor-pointer transition-all duration-500 border-2',
                 activeFeature === index 
                   ? 'bg-gradient-to-r from-white/10 to-white/5 border-green-500/50 shadow-lg' 
                   : 'bg-white/5 border-transparent hover:border-white/10'
               ]"
-            >
-              <div class="flex items-center gap-4">
-                <div class="text-3xl">{{ feature.icon }}</div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white mb-2">{{ feature.title }}</h3>
-                  <p class="text-white/70">{{ feature.description }}</p>
-                </div>
-              </div>
-              <div v-if="activeFeature === index" class="mt-4 space-y-2">
-                <div 
-                  v-for="(detail, detailIndex) in feature.details" 
-                  :key="detailIndex"
-                  class="flex items-center gap-3 text-white/80 text-sm"
-                >
-                  <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                  {{ detail }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="relative h-96 bg-gradient-to-br overflow-hidden from-white/10 to-white/5 rounded-3xl p-8 backdrop-blur-xl border border-white/10">
-            <div class="">
-              <div class="">
-                <video 
-                  :src="features[activeFeature].video" 
-                  autoplay 
-                  muted 
-                  class="rounded-xl w-full h-64 border-2 border-white/40 shadow-2xl object-cover"
-                />
-                <h2 class="text-white text-center mt-4 font-semibold text-xl">{{ features[activeFeature].title }}</h2>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Features Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 stagger-parent">
-          <div v-for="(feature, index) in features" :key="index" class="stagger-child">
-            <div class="group relative h-full bg-gradient-to-br from-white/5 to-white/0 rounded-2xl p-8 backdrop-blur-sm border border-white/10 hover:border-green-500/30 transition-all duration-500 hover:transform hover:-translate-y-2">
-              <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" :class="feature.color"></div>
               
-              <div class="relative z-10">
-                <div class="text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                  {{ feature.icon }}
+            >
+                <div class="flex items-center gap-4">
+                  <div class="text-3xl">{{ feature.icon }}</div>
+                  <div class="w-full">
+                    <h3 class="text-xl font-semibold text-white mb-2 flex justify-between"><span>{{ feature.title }}</span> <UIcon name="i-tabler-click" class="group-hover:animate-bounce " size="24"/> </h3>
+                    <p class="text-white/70 max-sm:text-sm">{{ feature.description }}</p>
+                  </div>
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-3">{{ feature.title }}</h3>
-                <p class="text-white/70 leading-relaxed mb-4">{{ feature.description }}</p>
-                <ul class="space-y-2">
-                  <li v-for="(detail, detailIndex) in feature.details.slice(0, 2)" :key="detailIndex" class="text-white/60 text-sm flex items-center gap-2">
-                    <div class="w-1 h-1 bg-green-500 rounded-full"></div>
+                
+                <div v-if="activeFeature === index" class=" flex max-md:flex-col p-4 lg:items-center justify-between">
+                  <div class="max-md:my-4 ml-4 space-y-2 ">
+                    <h1 class="text-2xl text-green-500 font-black">propriétés </h1>
+                  <div 
+                    v-for="(detail, detailIndex) in feature.details" 
+                    :key="detailIndex"
+                    class="flex items-center gap-3 lg:py-1 text-white/80 text-sm lg:text-lg lg:hover:-translate-y-2.5 lg:hover:my-5  lg:hover:translate-x-2.5 transition-all ease-in-out duration-300"
+                  >
+                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                     {{ detail }}
-                  </li>
-                </ul>
+                  </div>
+                  </div>
+                    <!-- video player  -->
+                  <div class="relative max-h-96 bg-gradient-to-br overflow-hidden from-white/10 to-white/5 rounded-3xl p-2 lg:p-8  backdrop-blur-xl border border-white/10">
+                        <div class="">
+                          <div class="">
+                            <video 
+                              :src="features[activeFeature].video" 
+                              autoplay 
+                              muted 
+                              class="rounded-xl w-full lg:h-64 border-2 border-white/40 shadow-2xl object-cover"
+                            />
+                            <h2 class="text-white text-center mt-4 font-semibold text-md lg:text-xl">{{ features[activeFeature].title }}</h2>
+    
+                          </div>
+                        </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        
+
       </div>
 </template>
+
+
 <script setup lang='ts'>
 const activeFeature = ref(0);
 const setActiveFeature = (index: number) => {
