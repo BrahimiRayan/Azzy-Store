@@ -1,8 +1,8 @@
 <template>
   <div class="relative h-full">
     
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-    <div class="h-full bg-gradient-to-br  to-inherit from-gray-800 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02] hover:border-slate-600/50 transition-all duration-300 flex flex-col">
+    <div class="absolute inset-0 bg-linear-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+    <div class="h-full bg-linear-to-br  to-inherit from-gray-800 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02] hover:border-slate-600/50 transition-all duration-300 flex flex-col">
       <div class="absolute -top-3 right-4 z-20">
         <div class="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full shadow-lg shadow-emerald-500/30">
           <UIcon name="i-mdi-tag" class="text-amber-200 text-sm" />

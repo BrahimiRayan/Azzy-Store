@@ -97,6 +97,7 @@ const features = [
   {
     icon: '📦',
     title: 'Gestion de Stock Avancée',
+    video : '/demo-products.mp4',
     description: 'Suivez chaque produit, valeur du stock, quantités. Import/export PDF/CSV et statistiques détaillées par produit.',
     details: [
       'Gestion multi-entrepôts',
@@ -109,6 +110,7 @@ const features = [
   {
     icon: '🛒',
     title: 'Commandes & Fournisseurs',
+    video : '/demo-commandes.mp4',
     description: 'Gérez vos commandes, générez des PDF professionnels pour vos fournisseurs et analysez vos habitudes d\'achat.',
     details: [
       'Génération de bons de commande PDF',
@@ -121,6 +123,7 @@ const features = [
   {
     icon: '🌐',
     title: 'Boutique en Ligne',
+    video : '/demo-eshop.mp4',
     description: 'Créez une page de vente personnalisable en quelques clics. Partagez sur les réseaux et vendez directement.',
     details: [
       'Design responsive automatique',

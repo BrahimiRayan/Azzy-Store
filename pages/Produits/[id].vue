@@ -15,7 +15,7 @@
             icon="i-lucide-calendar-1"
             v-model="Monthvalue" 
             :items="months"
-            class="w-48 mt-4 lg:mt-0" 
+            class="w-48 mt-4 lg:mt-10" 
             placeholder="Choisir un moin..."
             :ui="{
                 
@@ -25,7 +25,7 @@
                 base : 'bg-[var(--deep-dark-blue)] ring-white/40 ring-2',
             }"
             />
-        <div class="flex max-sm:flex-col sm:flex-col items-center justify-between my-9 gap-y-3 ">
+        <div class="flex max-sm:flex-col max-md:flex-col items-center justify-between my-9 gap-y-3 gap-x-3 ">
 
             <div class="flex lg:flex-col sm:justify-between max-sm:justify-between items-center gap-2 border bg-black/10 rounded-xl p-5 flex-1 sm:w-full max-sm:w-full">
                 <h1 class="text-sm lg:text-xl text-green-500 font-extrabold">Nombre vendus ce mois</h1>
