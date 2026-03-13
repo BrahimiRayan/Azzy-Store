@@ -56,5 +56,4 @@ Pour toute question ou suggestion, ouvre une [issue](https://github.com/BrahimiR
 
 ---
 
-<p align="center">Fait avec ❤️ par <a href="https://github.com/BrahimiRayan">BRAHIMI Rayan![Logo-dark](https://github.com/user-attachments/assets/652416ae-5aa2-460d-b6ab-76f526aeba96)
-</a></p>
+<p align="center">Fait avec ❤️ par <a href="https://github.com/BrahimiRayan">BRAHIMI Rayan!</a></p>
