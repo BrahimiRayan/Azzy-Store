@@ -107,8 +107,8 @@
 
             <section v-if="shopProd.length > 0">
                 <h2 class="logo font-extrabold text-6xl mb-10 ml-4 underline">Nos produits</h2>
-                <div id="products_holder" class="grid grid-cols-3 gap-5">
-                    <div v-for="product in shopProd" :key="product.id">
+                <div id="products_holder" class="grid grid-cols-3 max-[1350px]:grid-cols-2 max-[970px]:grid-cols-1 gap-5">
+                    <div v-for="product in shopProd" :key="product.id" class="">
                         <div v-if="conf.cardtype === 'A'">
                             <CardsTypeA :product="product" :fb="conf.fb_url" :ig="conf.ig_url" :email="conf.email"
                                 :phone="conf.phoneNumber" :address="conf.address" :shipping="conf.Livrison"
@@ -210,4 +210,5 @@ a,
 .CardColor {
     background-color: var(--bg-card);
 }
+
 </style>

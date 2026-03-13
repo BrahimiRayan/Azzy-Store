@@ -5,14 +5,14 @@
             <UButton icon="i-lucide-x" class="size-5 ml-auto w-8 h-8 text-center bg-red-800 hover:bg-red-600" @click="error = null" />
         </div>
         
-        <div class="flex flex-col lg:items-center gap-3 rounded-xl p-2 shadow bg-white/5">
+        <div class="flex max-lg:flex-col lg:items-center gap-3 rounded-xl p-2 shadow bg-white/5">
             
-            <div class="lg:w-[400px] lg:max-h-[400px] overflow-hidden">
-                <NuxtImg :src="produit.image" format="webp" alt="" class="w-[90%] max-sm:mx-auto sm:mx-auto rounded-xl" placeholder="/no-img.png"/>
+            <div class="lg:w-100 lg:max-h-100  max-lg:flex items-center justify-center overflow-hidden">
+                <NuxtImg :src="produit.image" format="webp" alt="" class="w-[90%] max-lg:max-h-70 max-lg:max-w-70 max-sm:mx-auto sm:mx-auto rounded-xl" placeholder="/no-img.png"/>
             </div>
             <div class="lg:w-[45%]">
 
-            <form @submit.prevent="ModifyProduct">
+            <form @submit.prevent="ModifyProduct" class="max-lg:px-30 max-md:px-7">
 
                 <UFormField label="Nom du produit" class=" w-full mb-5" required :ui="{
                     label : 'text-white/70 font-bold'

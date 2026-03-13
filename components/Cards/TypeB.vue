@@ -1,10 +1,10 @@
 <template>
     <div class="">
-	  <div class="relative ">
-        <span v-if="shipping" class="absolute top-2 right-20 z-20 bg-green-600 px-2 py-1 rounded-lg">
+	  <div class="relative mx-auto w-max">
+        <span v-if="shipping" class="absolute top-2 right-15 z-20 bg-green-600 px-2 py-1 max-md:size-7.5 rounded-lg">
             <UIcon name="i-carbon-delivery" class="text-white"/>
         </span>
-		<div class="card-item mx-auto shadow-lg shadow-black hover:shadow-white/90 transition-all duration-500 ease-in-out">
+		<div class="card-item max-sm:w-75 sm:w-sm mx-auto shadow-lg shadow-black hover:shadow-white/90 transition-all duration-500 ease-in-out">
 		<figure class="card-image ">
 			<img :src="product.image" alt="...">
                 
@@ -23,10 +23,10 @@
                     wrapper:'border-0'
                 }"
                 >
-                    <UButton class="absolute top-2 right-4 z-10 hover:bg-black/90 text-white bg-black/80 cursor-pointer" icon="i-majesticons-open" />
+                    <UButton class="absolute top-2 right-4 z-10 hover:bg-black/90 text-white bg-black/80 cursor-pointer max-md:size-7.5" icon="i-majesticons-open" />
 
                     <template #body>
-                        <div class="w-[100%] h-[100%] flex justify-center items-center">
+                        <div class="w-full h-full flex justify-center items-center">
                             <img v-if="product.image" :src="product.image" :alt="product.name" class="w-[90%] h-[90%] object-contain" />
                         </div>
                     </template>
@@ -34,7 +34,7 @@
             
 		</figure>
 
-        <div class="w-full h-full z-1 absolute top-0 p-8 flex flex-col justify-end gap-5">
+    <div class="w-full h-full z-1 absolute top-0 md:p-8 max-md:p-3 flex flex-col justify-end gap-5">
 
 			<span class="rounded-xl text-white/80 text-sm bg-green-500 px-2 py-1 w-max">{{ product.type }}</span>
 				<div>
@@ -72,15 +72,11 @@
                     </li>
                 </ul>
 				</footer>
-			</div>
+		</div>
+
 		</div>
 	  </div>
 	</div>
-
-
-
-
-
 </template>
     
 <script setup lang='ts'>
@@ -101,7 +97,7 @@ import type { productsCards } from '~/types/GeneraleT';
 <style scoped >
 
 .card-item {
-  width: 380px;
+  /* max-width: 380px; */
   height: 440px;
   position: relative;
   border-radius: 32px;
